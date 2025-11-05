@@ -19,7 +19,7 @@ dev_dependencies:
     sdk: flutter
   mocktail: ^1.0.4
   very_good_analysis: ^9.0.0
-  flutter_lints: ^3.0.0
+  flutter_lints: ">=3.0.0 <7.0.0"
   csv: ^6.0.0
 
 flutter:
