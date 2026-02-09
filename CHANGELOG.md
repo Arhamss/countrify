@@ -1,3 +1,8 @@
+## 1.0.1
+
+- Added contributors section to documentation
+- Updated Codeable branding and package metadata
+
 ## 1.0.0
 
 Initial release of Countrify.
