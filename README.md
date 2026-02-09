@@ -11,7 +11,7 @@
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.0.0-02569B?style=for-the-badge&logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-%3E%3D3.0.0-0175C2?style=for-the-badge&logo=dart)](https://dart.dev)
 
-**[API Docs](https://pub.dev/documentation/countrify/latest/)** | **[Example](https://github.com/codeable-dev/countrify/tree/main/example)** | **[Pub.dev](https://pub.dev/packages/countrify)**
+**[GitHub](https://github.com/Arhamss/countrify)** | **[Example](https://github.com/Arhamss/countrify/tree/main/example)** | **[Codeable](https://gocodeable.com)**
 
 ---
 
@@ -1187,7 +1187,7 @@ Contributions are welcome! Here's how to get started:
 
 ```bash
 # Clone the repository
-git clone https://github.com/codeable-dev/countrify.git
+git clone https://github.com/Arhamss/countrify.git
 cd countrify
 
 # Install dependencies
@@ -1219,8 +1219,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 <div align="center">
 
-**[Pub.dev](https://pub.dev/packages/countrify)** | **[API Docs](https://pub.dev/documentation/countrify/latest/)** | **[GitHub](https://github.com/codeable-dev/countrify)** | **[Issues](https://github.com/codeable-dev/countrify/issues)**
+**[GitHub](https://github.com/Arhamss/countrify)** | **[Issues](https://github.com/Arhamss/countrify/issues)** | **[Codeable](https://gocodeable.com)**
 
-Made with care for the Flutter community.
+Built with ❤️ by **[Codeable](https://gocodeable.com)**
 
 </div>
