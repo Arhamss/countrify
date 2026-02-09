@@ -1233,6 +1233,35 @@ flutter analyze
 <br />
 <a href="https://linkedin.com/in/abdullah-zeb-65095b226/">LinkedIn</a>
 </td>
+<td align="center">
+<a href="https://github.com/Manas1255">
+<img src="https://github.com/Manas1255.png" width="80" style="border-radius:50%;" alt="Muhammad Anas Akhtar"/>
+<br />
+<b>Muhammad Anas Akhtar</b>
+</a>
+<br />
+<a href="https://www.linkedin.com/feed/update/urn:li:activity:7426607827072413697/">LinkedIn</a>
+</td>
+</tr>
+<tr>
+<td align="center">
+<a href="https://github.com/ShoaibIrfan">
+<img src="https://github.com/ShoaibIrfan.png" width="80" style="border-radius:50%;" alt="Muhammad Shoaib Irfan"/>
+<br />
+<b>Muhammad Shoaib Irfan</b>
+</a>
+<br />
+<a href="https://www.linkedin.com/in/shoaib-irfan-2ba9991b9/">LinkedIn</a>
+</td>
+<td align="center">
+<a href="https://github.com/ShoaibIrfan">
+<img src="https://github.com/ShoaibIrfan.png" width="80" style="border-radius:50%;" alt="Shahab Arif"/>
+<br />
+<b>Shahab Arif</b>
+</a>
+<br />
+<a href="https://www.linkedin.com/in/shahab-arif-b272721b7/">LinkedIn</a>
+</td>
 </tr>
 </table>
 

@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Added new contributors: Muhammad Anas Akhtar, Muhammad Shoaib Irfan, Shahab Arif
+
 ## 1.0.2
 
 - Fixed README screenshots not rendering on pub.dev (use absolute GitHub URLs)
