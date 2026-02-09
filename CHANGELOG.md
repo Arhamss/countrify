@@ -1,3 +1,8 @@
+## 1.0.4
+
+- Host screenshots externally to reduce package size (~2 MB → ~1 MB)
+- Updated README to use externally hosted screenshot URLs
+
 ## 1.0.3
 
 - Added new contributors: Muhammad Anas Akhtar, Muhammad Shoaib Irfan, Shahab Arif
