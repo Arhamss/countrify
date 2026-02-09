@@ -1211,6 +1211,33 @@ flutter analyze
 
 ---
 
+## Contributors
+
+<table>
+<tr>
+<td align="center">
+<a href="https://github.com/Arhamss">
+<img src="https://github.com/Arhamss.png" width="80" style="border-radius:50%;" alt="Arham Imran"/>
+<br />
+<b>Syed Arham Imran</b>
+</a>
+<br />
+<a href="https://www.linkedin.com/in/syed-arham">LinkedIn</a>
+</td>
+<td align="center">
+<a href="https://github.com/Abdullah-Zeb-0301">
+<img src="https://github.com/Abdullah-Zeb-0301.png" width="80" style="border-radius:50%;" alt="Abdullah Zeb"/>
+<br />
+<b>Abdullah Zeb</b>
+</a>
+<br />
+<a href="https://linkedin.com/in/abdullah-zeb-65095b226/">LinkedIn</a>
+</td>
+</tr>
+</table>
+
+---
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
