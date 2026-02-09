@@ -1,3 +1,10 @@
+## 1.0.5
+
+- Fixed deprecated `RadioListTile.groupValue`/`onChanged` usage — migrated to `RadioGroup` widget
+- Fixed all deprecated `withOpacity` calls — migrated to `withValues(alpha:)`
+- Fixed Shahab Arif's contributor GitHub link
+- Updated installation version in README
+
 ## 1.0.4
 
 - Host screenshots externally to reduce package size (~2 MB → ~1 MB)

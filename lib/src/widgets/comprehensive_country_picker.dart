@@ -1026,18 +1026,23 @@ class _FilterDialogState extends State<_FilterDialog> {
         children: [
           // Sort options
           Text('Sort by:', style: widget.theme.filterTextStyle),
-          ...CountrySortBy.values.map((sortBy) {
-            return RadioListTile<CountrySortBy>(
-              title: Text(sortBy.name.toUpperCase()),
-              value: sortBy,
-              groupValue: _filter.sortBy,
-              onChanged: (value) {
-                setState(() {
-                  _filter = _filter.copyWith(sortBy: value);
-                });
-              },
-            );
-          }),
+          RadioGroup<CountrySortBy>(
+            groupValue: _filter.sortBy,
+            onChanged: (CountrySortBy? value) {
+              setState(() {
+                _filter = _filter.copyWith(sortBy: value);
+              });
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: CountrySortBy.values.map((sortBy) {
+                return RadioListTile<CountrySortBy>(
+                  title: Text(sortBy.name.toUpperCase()),
+                  value: sortBy,
+                );
+              }).toList(),
+            ),
+          ),
 
           const Divider(),
 

@@ -128,7 +128,7 @@ Add `countrify` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  countrify: ^1.0.2
+  countrify: ^1.0.5
 ```
 
 Then run:
@@ -1254,8 +1254,8 @@ flutter analyze
 <a href="https://www.linkedin.com/in/shoaib-irfan-2ba9991b9/">LinkedIn</a>
 </td>
 <td align="center">
-<a href="https://github.com/ShoaibIrfan">
-<img src="https://github.com/ShoaibIrfan.png" width="80" style="border-radius:50%;" alt="Shahab Arif"/>
+<a href="https://github.com/shahab699">
+<img src="https://github.com/shahab699.png" width="80" style="border-radius:50%;" alt="Shahab Arif"/>
 <br />
 <b>Shahab Arif</b>
 </a>
