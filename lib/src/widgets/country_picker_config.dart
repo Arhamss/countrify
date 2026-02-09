@@ -37,6 +37,7 @@ class CountryPickerConfig {
     this.includeUnMembers = true,
     this.maxHeight,
     this.minHeight = 200.0,
+    this.dropdownMaxHeight,
     this.allowMultipleSelection = false,
     this.showSelectedCount = false,
     this.enableCountryGrouping = false,
@@ -146,6 +147,9 @@ class CountryPickerConfig {
   /// Minimum height of the picker
   final double minHeight;
 
+  /// Maximum height for dropdown menu
+  final double? dropdownMaxHeight;
+
   /// Allow multiple country selection
   final bool allowMultipleSelection;
 
@@ -229,6 +233,7 @@ class CountryPickerConfig {
     bool? includeUnMembers,
     double? maxHeight,
     double? minHeight,
+    double? dropdownMaxHeight,
     bool? allowMultipleSelection,
     bool? showSelectedCount,
     bool? enableCountryGrouping,
@@ -278,6 +283,7 @@ class CountryPickerConfig {
       includeUnMembers: includeUnMembers ?? this.includeUnMembers,
       maxHeight: maxHeight ?? this.maxHeight,
       minHeight: minHeight ?? this.minHeight,
+      dropdownMaxHeight: dropdownMaxHeight ?? this.dropdownMaxHeight,
       allowMultipleSelection: allowMultipleSelection ?? this.allowMultipleSelection,
       showSelectedCount: showSelectedCount ?? this.showSelectedCount,
       enableCountryGrouping: enableCountryGrouping ?? this.enableCountryGrouping,

@@ -1,0 +1,28 @@
+# Development tools
+tool/
+
+# Test files in root
+test_theme.dart
+
+# CI/CD artifacts
+coverage_badge.svg
+coverage/
+
+# Raw data files (parsed data is in lib/src/data/)
+assets/country_data.csv
+
+# Example platform-specific files (only lib/ and pubspec.yaml matter)
+example/ios/
+example/android/
+example/web/
+example/macos/
+example/linux/
+example/windows/
+example/test/
+example/analysis_options.yaml
+example/.metadata
+
+# GitHub / IDE config (dot-dirs are auto-excluded, but be explicit)
+.github/
+.cursor/
+.vscode/

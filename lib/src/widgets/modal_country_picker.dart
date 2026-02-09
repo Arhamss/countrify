@@ -1,6 +1,7 @@
+import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:flutter/material.dart';
-import '../models/country.dart';
-import 'country_picker.dart';
+import 'package:countrify/src/models/country.dart';
+import 'package:countrify/src/widgets/country_picker.dart';
 
 /// {@template modal_country_picker}
 /// A modal country picker that can be easily shown as a bottom sheet or dialog
@@ -31,7 +32,7 @@ class ModalCountryPicker {
     bool useRootNavigator = false,
     RouteSettings? routeSettings,
   }) async {
-    return await showModalBottomSheet<Country>(
+    return showModalBottomSheet<Country>(
       context: context,
       isDismissible: isDismissible,
       enableDrag: enableDrag,
@@ -79,7 +80,7 @@ class ModalCountryPicker {
     RouteSettings? routeSettings,
     Offset? anchorPoint,
   }) async {
-    return await showDialog<Country>(
+    return showDialog<Country>(
       context: context,
       barrierDismissible: barrierDismissible,
       barrierColor: barrierColor,
@@ -89,13 +90,14 @@ class ModalCountryPicker {
       routeSettings: routeSettings,
       anchorPoint: anchorPoint,
       builder: (BuildContext context) => Dialog(
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Container(
           width: MediaQuery.of(context).size.width * 0.9,
           height: MediaQuery.of(context).size.height * 0.8,
-          decoration: BoxDecoration(
-            color: theme?.backgroundColor ?? Colors.white,
-            borderRadius: BorderRadius.circular(12.0),
-          ),
+          color: theme?.backgroundColor ?? Colors.white,
           child: _CountryPickerModal(
             theme: theme,
             config: config ?? const CountryPickerConfig(),
@@ -128,7 +130,7 @@ class ModalCountryPicker {
     bool fullscreenDialog = false,
     RouteSettings? routeSettings,
   }) async {
-    return await Navigator.of(context).push<Country>(
+    return Navigator.of(context).push<Country>(
       MaterialPageRoute(
         builder: (context) => _CountryPickerFullScreen(
           theme: theme,
@@ -224,7 +226,8 @@ class _CountryPickerFullScreen extends StatefulWidget {
   final VoidCallback onClose;
 
   @override
-  State<_CountryPickerFullScreen> createState() => _CountryPickerFullScreenState();
+  State<_CountryPickerFullScreen> createState() =>
+      _CountryPickerFullScreenState();
 }
 
 class _CountryPickerFullScreenState extends State<_CountryPickerFullScreen> {
@@ -242,10 +245,11 @@ class _CountryPickerFullScreenState extends State<_CountryPickerFullScreen> {
         foregroundColor: Colors.black,
         elevation: 0,
         leading: widget.showCloseButton
-            ? (widget.closeButton ?? IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: widget.onClose,
-              ))
+            ? (widget.closeButton ??
+                IconButton(
+                  icon: Icon(widget.theme?.closeIcon ?? CountrifyIcons.x),
+                  onPressed: widget.onClose,
+                ))
             : null,
       ),
       body: CountryPicker(

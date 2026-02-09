@@ -1,8 +1,50 @@
 import 'package:countrify/countrify.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+// ─── Codeable Brand Colors (gocodeable.com) ───────────────────────────
+class CodeableColors {
+  CodeableColors._();
+
+  // ── Primary Blue (main brand color) ──
+  static const Color blue = Color(0xFF3B82F6);
+  static const Color blueDark = Color(0xFF1D4ED8);
+  static const Color blueLight = Color(0xFF60A5FA);
+  static const Color blueSubtle = Color(0xFFDBEAFE);
+  static const Color blueFaint = Color(0xFFEFF6FF);
+
+  // ── Secondary Green (accent) ──
+  static const Color green = Color(0xFF22C55E);
+  static const Color greenDark = Color(0xFF16A34A);
+  static const Color greenLight = Color(0xFF4ADE80);
+  static const Color greenSubtle = Color(0xFFDCFCE7);
+  static const Color greenFaint = Color(0xFFF0FDF4);
+
+  // ── Light Theme ──
+  static const Color lightBg = Color(0xFFFFFFFF);
+  static const Color lightSurface = Color(0xFFF8FAFC);
+  static const Color lightSurfaceAlt = Color(0xFFF1F5F9);
+  static const Color lightText = Color(0xFF111827);
+  static const Color lightTextSecondary = Color(0xFF6B7280);
+  static const Color lightTextMuted = Color(0xFF9CA3AF);
+  static const Color lightBorder = Color(0xFFE2E8F0);
+  static const Color lightBorderStrong = Color(0xFFCBD5E1);
+  static const Color lightDivider = Color(0xFFE5E7EB);
+
+  // ── Dark Theme ──
+  static const Color darkBg = Color(0xFF0B0B0F);
+  static const Color darkSurface = Color(0xFF161619);
+  static const Color darkSurfaceLight = Color(0xFF1E1E22);
+  static const Color darkElevated = Color(0xFF222228);
+  static const Color darkText = Color(0xFFFFFFFF);
+  static const Color darkTextSecondary = Color(0xFF9CA3AF);
+  static const Color darkTextMuted = Color(0xFF6B7280);
+  static const Color darkBorder = Color(0xFF2D2D33);
+  static const Color darkBorderLight = Color(0xFF3F3F46);
 }
 
 class MyApp extends StatelessWidget {
@@ -12,8 +54,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Countrify Example',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: CodeableColors.lightBg,
+        colorScheme: const ColorScheme.light(
+          primary: CodeableColors.blue,
+          onPrimary: Colors.white,
+          secondary: CodeableColors.green,
+          onSecondary: Colors.white,
+          surface: CodeableColors.lightSurface,
+          onSurface: CodeableColors.lightText,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: CodeableColors.blue,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+        ),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Countrify Example'),
@@ -32,202 +90,599 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Country? _selectedCountry;
+  String _phoneNumber = '';
+  Country? _phoneCountry;
+
+  // ─── Light theme (Codeable Blue on white) ─────────────────────────
+  CountryPickerTheme get _codeableLightTheme => const CountryPickerTheme(
+        backgroundColor: CodeableColors.lightBg,
+        headerColor: CodeableColors.blueFaint,
+        headerTextStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: CodeableColors.lightText,
+        ),
+        headerIconColor: CodeableColors.lightTextSecondary,
+        searchBarColor: CodeableColors.lightSurface,
+        searchTextStyle: TextStyle(
+          fontSize: 16,
+          color: CodeableColors.lightText,
+        ),
+        searchHintStyle: TextStyle(
+          fontSize: 16,
+          color: CodeableColors.lightTextMuted,
+        ),
+        searchIconColor: CodeableColors.lightTextMuted,
+        searchBarBorderColor: CodeableColors.lightBorder,
+        searchBarBorderRadius: BorderRadius.all(Radius.circular(12)),
+        filterBackgroundColor: CodeableColors.lightSurfaceAlt,
+        filterSelectedColor: CodeableColors.blue,
+        filterTextColor: CodeableColors.lightText,
+        filterSelectedTextColor: Colors.white,
+        filterCheckmarkColor: Colors.white,
+        filterIconColor: CodeableColors.lightTextSecondary,
+        filterTextStyle: TextStyle(
+          fontSize: 14,
+          color: CodeableColors.lightText,
+        ),
+        countryItemBackgroundColor: CodeableColors.lightBg,
+        countryItemSelectedColor: CodeableColors.blueSubtle,
+        countryItemSelectedBorderColor: CodeableColors.blue,
+        countryItemSelectedIconColor: CodeableColors.blue,
+        countryItemBorderRadius: BorderRadius.all(Radius.circular(10)),
+        countryNameTextStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: CodeableColors.lightText,
+        ),
+        countrySubtitleTextStyle: TextStyle(
+          fontSize: 14,
+          color: CodeableColors.lightTextSecondary,
+        ),
+        borderColor: CodeableColors.lightBorder,
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        scrollbarThickness: 4.0,
+        scrollbarRadius: BorderRadius.all(Radius.circular(2)),
+        shadowColor: Color(0x1A3B82F6),
+        elevation: 8.0,
+        animationDuration: Duration(milliseconds: 300),
+        hapticFeedback: true,
+        dropdownMenuBackgroundColor: CodeableColors.lightBg,
+        dropdownMenuElevation: 8,
+        dropdownMenuBorderRadius: BorderRadius.all(Radius.circular(12)),
+        dropdownMenuBorderColor: CodeableColors.lightBorder,
+        dropdownMenuBorderWidth: 1,
+      );
+
+  // ─── Dark theme (Codeable Blue on dark) ───────────────────────────
+  CountryPickerTheme get _codeableDarkTheme => const CountryPickerTheme(
+        backgroundColor: CodeableColors.darkSurface,
+        headerColor: CodeableColors.darkSurfaceLight,
+        headerTextStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: CodeableColors.darkText,
+        ),
+        headerIconColor: CodeableColors.darkTextSecondary,
+        searchBarColor: CodeableColors.darkElevated,
+        searchTextStyle: TextStyle(
+          fontSize: 16,
+          color: CodeableColors.darkText,
+        ),
+        searchHintStyle: TextStyle(
+          fontSize: 16,
+          color: CodeableColors.darkTextMuted,
+        ),
+        searchIconColor: CodeableColors.darkTextMuted,
+        searchBarBorderColor: CodeableColors.darkBorder,
+        searchBarBorderRadius: BorderRadius.all(Radius.circular(12)),
+        filterBackgroundColor: CodeableColors.darkElevated,
+        filterSelectedColor: CodeableColors.blueLight,
+        filterTextColor: CodeableColors.darkTextSecondary,
+        filterSelectedTextColor: Color(0xFF0B0B0F),
+        filterCheckmarkColor: Color(0xFF0B0B0F),
+        filterIconColor: CodeableColors.darkTextMuted,
+        filterTextStyle: TextStyle(
+          fontSize: 14,
+          color: CodeableColors.darkTextSecondary,
+        ),
+        countryItemBackgroundColor: CodeableColors.darkSurface,
+        countryItemSelectedColor: Color(0xFF1A2744),
+        countryItemSelectedBorderColor: CodeableColors.blueLight,
+        countryItemSelectedIconColor: CodeableColors.blueLight,
+        countryItemBorderRadius: BorderRadius.all(Radius.circular(10)),
+        countryNameTextStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: CodeableColors.darkText,
+        ),
+        countrySubtitleTextStyle: TextStyle(
+          fontSize: 14,
+          color: CodeableColors.darkTextSecondary,
+        ),
+        borderColor: CodeableColors.darkBorder,
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        scrollbarThickness: 4.0,
+        scrollbarRadius: BorderRadius.all(Radius.circular(2)),
+        shadowColor: Color(0x333B82F6),
+        elevation: 12.0,
+        animationDuration: Duration(milliseconds: 300),
+        hapticFeedback: true,
+        dropdownMenuBackgroundColor: CodeableColors.darkSurfaceLight,
+        dropdownMenuElevation: 12,
+        dropdownMenuBorderRadius: BorderRadius.all(Radius.circular(12)),
+        dropdownMenuBorderColor: CodeableColors.darkBorder,
+        dropdownMenuBorderWidth: 1,
+      );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: CodeableColors.green,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              widget.title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.3,
+              ),
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            // Hero title
             const Text(
-              'Countrify - Beautiful Country Picker Examples',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Beautiful Country\nPicker Examples',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w700,
+                color: CodeableColors.lightText,
+                height: 1.2,
+                letterSpacing: -0.5,
+              ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 20),
-            
+            const SizedBox(height: 6),
+            const Text(
+              'Powered by Codeable',
+              style: TextStyle(
+                fontSize: 14,
+                color: CodeableColors.blue,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+
             // Selected country display
             if (_selectedCountry != null) ...[
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.blue[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.blue[200]!),
+                  color: CodeableColors.blueFaint,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: CodeableColors.blue.withOpacity(0.2),
+                  ),
                 ),
                 child: Column(
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 6,
+                          height: 6,
+                          decoration: const BoxDecoration(
+                            color: CodeableColors.green,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'SELECTED COUNTRY',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: CodeableColors.blue,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
                     Text(
-                      'Selected Country: ${_selectedCountry!.name}',
+                      _selectedCountry!.name,
                       style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        color: CodeableColors.lightText,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text('Code: ${_selectedCountry!.alpha2Code}'),
-                    Text('Capital: ${_selectedCountry!.capital}'),
-                    Text('Region: ${_selectedCountry!.region}'),
-                    Text('Population: ${CountryUtils.formatPopulation(_selectedCountry!.population)}'),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 8,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        _buildInfoChip('Code', _selectedCountry!.alpha2Code),
+                        _buildInfoChip('Capital', _selectedCountry!.capital),
+                        _buildInfoChip('Region', _selectedCountry!.region),
+                        _buildInfoChip(
+                          'Population',
+                          CountryUtils.formatPopulation(
+                              _selectedCountry!.population),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
             ],
-            
-            // Basic Picker Examples
-            _buildSectionTitle('Basic Picker Examples'),
-            ElevatedButton(
-              onPressed: () => _showBottomSheetPicker(),
-              child: const Text('📱 Bottom Sheet Picker'),
+
+            // ─── Dropdown Picker ────────────────────────────────────
+            _buildSectionTitle('Dropdown Picker'),
+            const SizedBox(height: 4),
+            const Text(
+              'Select a country using the dropdown widget:',
+              style: TextStyle(
+                  fontSize: 14, color: CodeableColors.lightTextSecondary),
             ),
+            const SizedBox(height: 12),
+            ModalComprehensivePicker.dropdown(
+              initialCountry: _selectedCountry,
+              onCountrySelected: _updateSelectedCountry,
+              onCountryChanged: _updateSelectedCountry,
+              showPhoneCode: false,
+              showFlag: true,
+              showCountryName: true,
+              theme: _codeableLightTheme,
+            ),
+            const SizedBox(height: 28),
+
+            // ─── Country Dropdown Field ───────────────────────────
+            _buildSectionTitle('Country Dropdown Field'),
+            const SizedBox(height: 4),
+            const Text(
+              'A form-friendly field that opens a picker on tap:',
+              style: TextStyle(
+                  fontSize: 14, color: CodeableColors.lightTextSecondary),
+            ),
+            const SizedBox(height: 12),
+            CountryDropdownField(
+              initialCountry: _selectedCountry,
+              onCountrySelected: _updateSelectedCountry,
+              onCountryChanged: _updateSelectedCountry,
+              hintText: 'Select a country',
+              showPhoneCode: false,
+              showFlag: true,
+              searchEnabled: true,
+              pickerType: PickerDisplayType.bottomSheet,
+              theme: _codeableLightTheme,
+            ),
+            const SizedBox(height: 28),
+
+            // ─── Basic Pickers ──────────────────────────────────────
+            _buildSectionTitle('Basic Pickers'),
             const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showDialogPicker(),
-              child: const Text('💬 Dialog Picker'),
+            _buildBlueButton(
+              label: 'Bottom Sheet Picker',
+              icon: CountrifyIcons.smartphone,
+              onPressed: _showBottomSheetPicker,
             ),
+            const SizedBox(height: 10),
+            _buildOutlinedBlueButton(
+              label: 'Dialog Picker',
+              icon: CountrifyIcons.messageSquare,
+              onPressed: _showDialogPicker,
+            ),
+            const SizedBox(height: 10),
+            _buildOutlinedBlueButton(
+              label: 'Full Screen Picker',
+              icon: CountrifyIcons.maximize,
+              onPressed: _showFullScreenPicker,
+            ),
+            const SizedBox(height: 10),
+            _buildOutlinedBlueButton(
+              label: 'Customized Picker',
+              icon: CountrifyIcons.palette,
+              onPressed: _showCustomizedPicker,
+            ),
+            const SizedBox(height: 10),
+            _buildOutlinedBlueButton(
+              label: 'Filtered Picker (Europe)',
+              icon: CountrifyIcons.globe,
+              onPressed: _showFilteredPicker,
+            ),
+            const SizedBox(height: 28),
+
+            // ─── Comprehensive Pickers ──────────────────────────────
+            _buildSectionTitle('Comprehensive Pickers'),
             const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showFullScreenPicker(),
-              child: const Text('📺 Full Screen Picker'),
+            _buildBlueButton(
+              label: 'Comprehensive Bottom Sheet',
+              icon: CountrifyIcons.rocket,
+              onPressed: _showComprehensiveBottomSheet,
             ),
+            const SizedBox(height: 10),
+            _buildBlueButton(
+              label: 'Comprehensive Dialog',
+              icon: CountrifyIcons.messageCircle,
+              onPressed: _showComprehensiveDialog,
+            ),
+            const SizedBox(height: 10),
+            _buildBlueButton(
+              label: 'Comprehensive Full Screen',
+              icon: CountrifyIcons.expand,
+              onPressed: _showComprehensiveFullScreen,
+            ),
+            const SizedBox(height: 10),
+            _buildGreenButton(
+              label: 'Phone Code Picker',
+              icon: CountrifyIcons.phone,
+              onPressed: _showPhoneCodePicker,
+            ),
+            const SizedBox(height: 28),
+
+            // ─── Phone Number Field ─────────────────────────────────
+            _buildSectionTitle('Phone Number Field'),
+            const SizedBox(height: 4),
+            const Text(
+              'Inline dropdown to pick country code:',
+              style: TextStyle(
+                  fontSize: 14, color: CodeableColors.lightTextSecondary),
+            ),
+            const SizedBox(height: 12),
+            PhoneNumberField(
+              hintText: 'Enter phone number',
+              labelText: 'Phone',
+              theme: _codeableLightTheme,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(15),
+              ],
+              onPhoneNumberChanged: (phoneNumber, country) {
+                setState(() {
+                  _phoneNumber = phoneNumber;
+                  _phoneCountry = country;
+                });
+              },
+              onCountryChanged: (country) {
+                setState(() {
+                  _phoneCountry = country;
+                });
+              },
+            ),
+            if (_phoneNumber.isNotEmpty && _phoneCountry != null) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: CodeableColors.greenFaint,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: CodeableColors.green.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      CountrifyIcons.phone,
+                      size: 18,
+                      color: CodeableColors.green,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        '+${_phoneCountry!.callingCodes.first} $_phoneNumber',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: CodeableColors.lightText,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            const SizedBox(height: 16),
+            // Custom styled variant
+            const Text(
+              'With custom styling and larger flags:',
+              style: TextStyle(
+                  fontSize: 14, color: CodeableColors.lightTextSecondary),
+            ),
+            const SizedBox(height: 12),
+            PhoneNumberField(
+              hintText: 'Phone number',
+              theme: _codeableLightTheme,
+              showDropdownIcon: true,
+              flagSize: const Size(28, 20),
+              fieldBorderRadius: BorderRadius.circular(16),
+              dropdownMaxHeight: 300,
+              dialCodeTextStyle: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: CodeableColors.blue,
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              maxLength: 12,
+              onPhoneNumberChanged: (phoneNumber, country) {},
+            ),
+            const SizedBox(height: 28),
+
+            // ─── Flag Customization ─────────────────────────────────
+            _buildSectionTitle('Flag Customization'),
             const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showCustomizedPicker(),
-              child: const Text('🎨 Customized Picker'),
+            _buildOutlinedBlueButton(
+              label: 'Circular Flags',
+              icon: CountrifyIcons.circle,
+              onPressed: _showCircularFlagsPicker,
             ),
+            const SizedBox(height: 10),
+            _buildOutlinedBlueButton(
+              label: 'Rounded Flags',
+              icon: CountrifyIcons.squareRoundCorner,
+              onPressed: _showRoundedFlagsPicker,
+            ),
+            const SizedBox(height: 10),
+            _buildOutlinedBlueButton(
+              label: 'Shadow Flags',
+              icon: CountrifyIcons.sparkles,
+              onPressed: _showShadowFlagsPicker,
+            ),
+            const SizedBox(height: 28),
+
+            // ─── Theme Examples ─────────────────────────────────────
+            _buildSectionTitle('Theme Examples'),
             const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showFilteredPicker(),
-              child: const Text('🌍 Filtered Picker (Europe Only)'),
+            _buildDarkButton(
+              label: 'Dark Theme',
+              icon: CountrifyIcons.moon,
+              onPressed: _showDarkThemePicker,
             ),
-            const SizedBox(height: 20),
-            
-            // Comprehensive Picker Examples
-            _buildSectionTitle('🚀 Comprehensive Picker Examples'),
-            ElevatedButton(
-              onPressed: () => _showComprehensiveBottomSheet(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('📱 Comprehensive Bottom Sheet'),
+            const SizedBox(height: 10),
+            _buildGreenButton(
+              label: 'Custom Color Theme',
+              icon: CountrifyIcons.paintbrush,
+              onPressed: _showCustomColorThemePicker,
             ),
+            const SizedBox(height: 28),
+
+            // ─── Data & Utilities ───────────────────────────────────
+            _buildSectionTitle('Data & Utilities'),
             const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showComprehensiveDialog(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('💬 Comprehensive Dialog'),
+            _buildOutlinedBlueButton(
+              label: 'Country Data Examples',
+              icon: CountrifyIcons.chartBar,
+              onPressed: _showCountryData,
             ),
-            const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showComprehensiveFullScreen(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('📺 Comprehensive Full Screen'),
+            const SizedBox(height: 10),
+            _buildOutlinedBlueButton(
+              label: 'Country Statistics',
+              icon: CountrifyIcons.chartLine,
+              onPressed: _showCountryStatistics,
             ),
-            const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showPhoneCodePicker(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('📞 Phone Code Picker'),
+            const SizedBox(height: 40),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ─── Info Chip (light style) ──────────────────────────────────────
+  Widget _buildInfoChip(String label, String value) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: CodeableColors.lightBg,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: CodeableColors.lightBorder),
+      ),
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: CodeableColors.lightTextMuted,
+              letterSpacing: 0.5,
             ),
-            const SizedBox(height: 20),
-            
-            // Flag Customization Examples
-            _buildSectionTitle('🏳️ Flag Customization Examples'),
-            ElevatedButton(
-              onPressed: () => _showCircularFlagsPicker(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('⭕ Circular Flags'),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: CodeableColors.lightText,
             ),
-            const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showRoundedFlagsPicker(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─── Section Title (blue accent bar) ──────────────────────────────
+  Widget _buildSectionTitle(String title) {
+    return Row(
+      children: [
+        Container(
+          width: 3,
+          height: 20,
+          decoration: BoxDecoration(
+            color: CodeableColors.blue,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: CodeableColors.lightText,
+            letterSpacing: -0.3,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ─── Blue filled button (primary CTA) ─────────────────────────────
+  Widget _buildBlueButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      height: 52,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: CodeableColors.blue,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 20),
+            const SizedBox(width: 10),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.2,
               ),
-              child: const Text('🔲 Rounded Flags'),
-            ),
-            const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showShadowFlagsPicker(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.indigo,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('✨ Shadow Flags'),
-            ),
-            const SizedBox(height: 20),
-            
-            // Theme Examples
-            _buildSectionTitle('🎨 Theme Examples'),
-            ElevatedButton(
-              onPressed: () => _showDarkThemePicker(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey[800],
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('🌙 Dark Theme'),
-            ),
-            const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showCustomColorThemePicker(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('🌈 Custom Color Theme'),
-            ),
-            const SizedBox(height: 20),
-            
-            // Data Examples
-            _buildSectionTitle('📊 Data & Utilities'),
-            ElevatedButton(
-              onPressed: () => _showCountryData(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.brown,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('📈 Country Data Examples'),
-            ),
-            const SizedBox(height: 8),
-            
-            ElevatedButton(
-              onPressed: () => _showCountryStatistics(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('📊 Country Statistics'),
             ),
           ],
         ),
@@ -235,15 +690,112 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.blue,
+  // ─── Blue outlined button (secondary) ─────────────────────────────
+  Widget _buildOutlinedBlueButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      height: 52,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          foregroundColor: CodeableColors.blue,
+          side: const BorderSide(color: CodeableColors.lightBorderStrong),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 20, color: CodeableColors.blue),
+            const SizedBox(width: 10),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: CodeableColors.lightText,
+                letterSpacing: -0.2,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ─── Green filled button (accent) ─────────────────────────────────
+  Widget _buildGreenButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      height: 52,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: CodeableColors.green,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 20),
+            const SizedBox(width: 10),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.2,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ─── Dark button (for dark theme demo) ────────────────────────────
+  Widget _buildDarkButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      height: 52,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: CodeableColors.darkSurface,
+          foregroundColor: CodeableColors.darkText,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 20, color: CodeableColors.blueLight),
+            const SizedBox(width: 10),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.2,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -257,7 +809,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // Basic Picker Methods
+  // ─── Basic Picker Methods ─────────────────────────────────────────
   void _showBottomSheetPicker() async {
     final country = await ModalCountryPicker.showBottomSheet(
       context: context,
@@ -291,20 +843,27 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _showFilteredPicker() async {
-    final country = await ModalCountryPicker.showBottomSheet(
+    final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
       initialCountry: _selectedCountry,
+      config: const CountryPickerConfig(
+        includeRegions: ['Europe'],
+      ),
+      showPhoneCode: true,
+      searchEnabled: true,
+      theme: _codeableLightTheme,
     );
     _updateSelectedCountry(country);
   }
 
-  // Comprehensive Picker Methods
+  // ─── Comprehensive Picker Methods ─────────────────────────────────
   void _showComprehensiveBottomSheet() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
       initialCountry: _selectedCountry,
       showPhoneCode: true,
       searchEnabled: true,
+      theme: _codeableLightTheme,
     );
     _updateSelectedCountry(country);
   }
@@ -315,6 +874,7 @@ class _MyHomePageState extends State<MyHomePage> {
       initialCountry: _selectedCountry,
       showPhoneCode: true,
       searchEnabled: true,
+      theme: _codeableLightTheme,
     );
     _updateSelectedCountry(country);
   }
@@ -325,6 +885,7 @@ class _MyHomePageState extends State<MyHomePage> {
       initialCountry: _selectedCountry,
       showPhoneCode: true,
       searchEnabled: true,
+      theme: _codeableLightTheme,
     );
     _updateSelectedCountry(country);
   }
@@ -335,17 +896,23 @@ class _MyHomePageState extends State<MyHomePage> {
       initialCountry: _selectedCountry,
       showPhoneCode: true,
       searchEnabled: true,
+      theme: _codeableLightTheme,
     );
     _updateSelectedCountry(country);
   }
 
-  // Flag Customization Methods
+  // ─── Flag Customization Methods ───────────────────────────────────
   void _showCircularFlagsPicker() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
       initialCountry: _selectedCountry,
       showPhoneCode: true,
       searchEnabled: true,
+      theme: _codeableLightTheme,
+      config: const CountryPickerConfig(
+        flagShape: FlagShape.circular,
+        flagSize: Size(40, 40),
+      ),
     );
     _updateSelectedCountry(country);
   }
@@ -356,6 +923,11 @@ class _MyHomePageState extends State<MyHomePage> {
       initialCountry: _selectedCountry,
       showPhoneCode: true,
       searchEnabled: true,
+      theme: _codeableLightTheme,
+      config: const CountryPickerConfig(
+        flagShape: FlagShape.rounded,
+        flagSize: Size(40, 28),
+      ),
     );
     _updateSelectedCountry(country);
   }
@@ -366,17 +938,27 @@ class _MyHomePageState extends State<MyHomePage> {
       initialCountry: _selectedCountry,
       showPhoneCode: true,
       searchEnabled: true,
+      theme: _codeableLightTheme,
+      config: const CountryPickerConfig(
+        flagShape: FlagShape.rectangular,
+        flagSize: Size(42, 30),
+        flagBorderRadius: BorderRadius.all(Radius.circular(6)),
+        flagShadowColor: Color(0x333B82F6),
+        flagShadowBlur: 8,
+        flagShadowOffset: Offset(0, 3),
+      ),
     );
     _updateSelectedCountry(country);
   }
 
-  // Theme Methods
+  // ─── Theme Methods ────────────────────────────────────────────────
   void _showDarkThemePicker() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
       initialCountry: _selectedCountry,
       showPhoneCode: true,
       searchEnabled: true,
+      theme: _codeableDarkTheme,
     );
     _updateSelectedCountry(country);
   }
@@ -387,38 +969,59 @@ class _MyHomePageState extends State<MyHomePage> {
       initialCountry: _selectedCountry,
       showPhoneCode: true,
       searchEnabled: true,
+      theme: CountryPickerTheme.custom(
+        primaryColor: CodeableColors.green,
+        backgroundColor: CodeableColors.greenFaint,
+        surfaceColor: CodeableColors.greenSubtle,
+        onSurfaceColor: CodeableColors.lightText,
+        isDark: false,
+      ),
     );
     _updateSelectedCountry(country);
   }
 
-  // Data Methods
+  // ─── Data Methods ─────────────────────────────────────────────────
   void _showCountryData() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Country Data Examples'),
+        backgroundColor: CodeableColors.lightBg,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: const Text(
+          'Country Data Examples',
+          style: TextStyle(
+            color: CodeableColors.lightText,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Total Countries: ${CountryUtils.getAllCountries().length}'),
-              const SizedBox(height: 8),
-              Text('Regions: ${CountryUtils.getAllRegions().join(', ')}'),
-              const SizedBox(height: 8),
-              Text('Most Populous: ${CountryUtils.getMostPopulousCountry()?.name ?? 'N/A'}'),
-              const SizedBox(height: 8),
-              Text('Largest by Area: ${CountryUtils.getLargestCountry()?.name ?? 'N/A'}'),
-              const SizedBox(height: 8),
-              Text('European Countries: ${CountryUtils.getCountriesByRegion('Europe').length}'),
-              const SizedBox(height: 8),
-              Text('Asian Countries: ${CountryUtils.getCountriesByRegion('Asia').length}'),
+              _dialogInfoRow('Total Countries',
+                  '${CountryUtils.getAllCountries().length}'),
+              _dialogInfoRow(
+                  'Regions', CountryUtils.getAllRegions().join(', ')),
+              _dialogInfoRow('Most Populous',
+                  CountryUtils.getMostPopulousCountry()?.name ?? 'N/A'),
+              _dialogInfoRow('Largest by Area',
+                  CountryUtils.getLargestCountry()?.name ?? 'N/A'),
+              _dialogInfoRow('European Countries',
+                  '${CountryUtils.getCountriesByRegion('Europe').length}'),
+              _dialogInfoRow('Asian Countries',
+                  '${CountryUtils.getCountriesByRegion('Asia').length}'),
             ],
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
+            style: TextButton.styleFrom(
+              foregroundColor: CodeableColors.blue,
+            ),
             child: const Text('Close'),
           ),
         ],
@@ -428,38 +1031,98 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _showCountryStatistics() {
     final countries = CountryUtils.getAllCountries();
-    final totalPopulation = countries.fold<int>(0, (sum, country) => sum + country.population);
-    final totalArea = countries.fold<double>(0, (sum, country) => sum + country.area);
-    
+    final totalPopulation =
+        countries.fold<int>(0, (sum, country) => sum + country.population);
+    final totalArea =
+        countries.fold<double>(0, (sum, country) => sum + country.area);
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Country Statistics'),
+        backgroundColor: CodeableColors.lightBg,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: const Text(
+          'Country Statistics',
+          style: TextStyle(
+            color: CodeableColors.lightText,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Total Countries: ${countries.length}'),
-              const SizedBox(height: 8),
-              Text('Total Population: ${CountryUtils.formatPopulation(totalPopulation)}'),
-              const SizedBox(height: 8),
-              Text('Total Area: ${CountryUtils.formatArea(totalArea)}'),
-              const SizedBox(height: 8),
-              Text('Average Population: ${CountryUtils.formatPopulation(totalPopulation ~/ countries.length)}'),
-              const SizedBox(height: 8),
-              Text('Average Area: ${CountryUtils.formatArea(totalArea / countries.length)}'),
-              const SizedBox(height: 8),
-              Text('Regions: ${CountryUtils.getAllRegions().length}'),
-              const SizedBox(height: 8),
-              Text('Countries with Phone Codes: ${countries.where((c) => c.callingCodes.isNotEmpty).length}'),
+              _dialogInfoRow('Total Countries', '${countries.length}'),
+              _dialogInfoRow('Total Population',
+                  CountryUtils.formatPopulation(totalPopulation)),
+              _dialogInfoRow('Total Area', CountryUtils.formatArea(totalArea)),
+              _dialogInfoRow(
+                  'Avg Population',
+                  CountryUtils.formatPopulation(
+                      totalPopulation ~/ countries.length)),
+              _dialogInfoRow('Avg Area',
+                  CountryUtils.formatArea(totalArea / countries.length)),
+              _dialogInfoRow(
+                  'Regions', '${CountryUtils.getAllRegions().length}'),
+              _dialogInfoRow('With Phone Codes',
+                  '${countries.where((c) => c.callingCodes.isNotEmpty).length}'),
             ],
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
+            style: TextButton.styleFrom(
+              foregroundColor: CodeableColors.blue,
+            ),
             child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dialogInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 4,
+            height: 4,
+            margin: const EdgeInsets.only(top: 7),
+            decoration: const BoxDecoration(
+              color: CodeableColors.blue,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: '$label: ',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: CodeableColors.lightTextSecondary,
+                    ),
+                  ),
+                  TextSpan(
+                    text: value,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: CodeableColors.lightText,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

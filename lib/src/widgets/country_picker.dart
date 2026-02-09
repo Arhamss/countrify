@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../models/country.dart';
-import '../data/all_countries.dart';
+import 'package:countrify/src/models/country.dart';
+import 'package:countrify/src/data/all_countries.dart';
 
 /// {@template country_picker_theme}
 /// Theme configuration for the country picker
@@ -18,6 +19,10 @@ class CountryPickerTheme {
     this.searchBarTextStyle,
     this.searchBarHintStyle,
     this.searchBarIconColor,
+    this.searchHintText,
+    this.searchCursorColor,
+    this.searchFocusedBorderColor,
+    this.searchInputDecoration,
     this.countryItemBackgroundColor,
     this.countryItemSelectedColor,
     this.countryItemBorderRadius,
@@ -34,6 +39,11 @@ class CountryPickerTheme {
     this.scrollbarColor,
     this.scrollbarThickness,
     this.scrollbarRadius,
+    this.closeIcon,
+    this.searchIcon,
+    this.clearIcon,
+    this.selectedIcon,
+    this.emptyStateIcon,
   });
 
   /// Background color of the picker
@@ -107,6 +117,34 @@ class CountryPickerTheme {
 
   /// Scrollbar radius
   final BorderRadius? scrollbarRadius;
+
+  /// Icon for close buttons. Defaults to [CountrifyIcons.x].
+  final IconData? closeIcon;
+
+  /// Icon for the search field prefix. Defaults to [CountrifyIcons.search].
+  final IconData? searchIcon;
+
+  /// Icon for the search field clear button. Defaults to [CountrifyIcons.circleX].
+  final IconData? clearIcon;
+
+  /// Icon shown on the selected country item. Defaults to [CountrifyIcons.circleCheckBig].
+  final IconData? selectedIcon;
+
+  /// Icon shown in the empty search state. Defaults to [CountrifyIcons.searchX].
+  final IconData? emptyStateIcon;
+
+  /// Search bar hint text (defaults to 'Search countries...')
+  final String? searchHintText;
+
+  /// Search bar cursor color
+  final Color? searchCursorColor;
+
+  /// Search bar focused border color
+  final Color? searchFocusedBorderColor;
+
+  /// Full custom InputDecoration for the search field.
+  /// When provided, this overrides all other search styling properties.
+  final InputDecoration? searchInputDecoration;
 }
 
 /// {@template country_picker_config}
@@ -268,8 +306,8 @@ class CountryPickerConfig {
 class CountryPicker extends StatefulWidget {
   /// {@macro country_picker}
   const CountryPicker({
-    super.key,
     required this.onCountrySelected,
+    super.key,
     this.theme,
     this.config = const CountryPickerConfig(),
     this.initialCountry,
@@ -366,27 +404,35 @@ class _CountryPickerState extends State<CountryPicker> {
 
     // Filter by regions
     if (widget.config.includeRegions.isNotEmpty) {
-      filtered = filtered.where((country) => 
-          widget.config.includeRegions.contains(country.region)).toList();
+      filtered = filtered
+          .where((country) =>
+              widget.config.includeRegions.contains(country.region))
+          .toList();
     } else if (widget.config.excludeRegions.isNotEmpty) {
-      filtered = filtered.where((country) => 
-          !widget.config.excludeRegions.contains(country.region)).toList();
+      filtered = filtered
+          .where((country) =>
+              !widget.config.excludeRegions.contains(country.region))
+          .toList();
     }
 
     // Filter by subregions
     if (widget.config.includeSubregions.isNotEmpty) {
-      filtered = filtered.where((country) => 
-          widget.config.includeSubregions.contains(country.subregion)).toList();
+      filtered = filtered
+          .where((country) =>
+              widget.config.includeSubregions.contains(country.subregion))
+          .toList();
     } else if (widget.config.excludeSubregions.isNotEmpty) {
-      filtered = filtered.where((country) => 
-          !widget.config.excludeSubregions.contains(country.subregion)).toList();
+      filtered = filtered
+          .where((country) =>
+              !widget.config.excludeSubregions.contains(country.subregion))
+          .toList();
     }
 
     return filtered;
   }
 
   List<Country> _applySorting(List<Country> countries) {
-    var sorted = List<Country>.from(countries);
+    final sorted = List<Country>.from(countries);
 
     if (widget.config.sortByPopulation) {
       sorted.sort((a, b) => b.population.compareTo(a.population));
@@ -401,7 +447,8 @@ class _CountryPickerState extends State<CountryPicker> {
 
   void _onSearchChanged(String query) {
     _debounceTimer?.cancel();
-    _debounceTimer = Timer(Duration(milliseconds: widget.config.searchDebounceMs), () {
+    _debounceTimer =
+        Timer(Duration(milliseconds: widget.config.searchDebounceMs), () {
       setState(() {
         _searchQuery = query;
         _filteredCountries = _searchCountries(query);
@@ -424,7 +471,7 @@ class _CountryPickerState extends State<CountryPicker> {
           country.region.toLowerCase().contains(lowercaseQuery) ||
           country.subregion.toLowerCase().contains(lowercaseQuery) ||
           country.callingCodes.any((code) => code.contains(query)) ||
-          country.nameTranslations.values.any((translation) => 
+          country.nameTranslations.values.any((translation) =>
               translation.toLowerCase().contains(lowercaseQuery));
     }).toList();
   }
@@ -449,37 +496,40 @@ class _CountryPickerState extends State<CountryPicker> {
         borderRadius: theme?.searchBarBorderRadius ?? BorderRadius.circular(12),
         border: Border.all(
           color: theme?.searchBarBorderColor ?? Colors.grey[300]!,
-          width: 1,
         ),
       ),
       child: TextField(
         controller: _searchController,
         onChanged: _onSearchChanged,
-        decoration: InputDecoration(
-          hintText: config.searchHint,
-          hintStyle: theme?.searchBarHintStyle ?? TextStyle(color: Colors.grey[600]),
-          prefixIcon: Icon(
-            Icons.search,
-            color: theme?.searchBarIconColor ?? Colors.grey[600],
-          ),
-          suffixIcon: _searchQuery.isNotEmpty
-              ? IconButton(
-                  icon: Icon(
-                    Icons.clear,
-                    color: theme?.searchBarIconColor ?? Colors.grey[600],
+        cursorColor: theme?.searchCursorColor,
+        decoration: theme?.searchInputDecoration ??
+            InputDecoration(
+              hintText: theme?.searchHintText ?? config.searchHint,
+              hintStyle: theme?.searchBarHintStyle ??
+                  TextStyle(color: Colors.grey[600]),
+              prefixIcon: Icon(
+                theme?.searchIcon ?? CountrifyIcons.search,
+                color: theme?.searchBarIconColor ?? Colors.grey[600],
+              ),
+              suffixIcon: _searchQuery.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(
+                        theme?.clearIcon ?? CountrifyIcons.circleX,
+                        color: theme?.searchBarIconColor ?? Colors.grey[600],
+                      ),
+                      onPressed: () {
+                        _searchController.clear();
+                        _onSearchChanged('');
+                      },
+                    )
+                  : null,
+              border: InputBorder.none,
+              contentPadding: theme?.searchBarPadding ??
+                  const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
                   ),
-                  onPressed: () {
-                    _searchController.clear();
-                    _onSearchChanged('');
-                  },
-                )
-              : null,
-          border: InputBorder.none,
-          contentPadding: theme?.searchBarPadding ?? const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
-        ),
+            ),
         style: theme?.searchBarTextStyle ?? const TextStyle(fontSize: 16),
       ),
     );
@@ -494,23 +544,28 @@ class _CountryPickerState extends State<CountryPicker> {
       height: config.itemHeight,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
       decoration: BoxDecoration(
-        color: isSelected 
+        color: isSelected
             ? (theme?.countryItemSelectedColor ?? Colors.blue[50])
             : (theme?.countryItemBackgroundColor ?? Colors.transparent),
-        borderRadius: theme?.countryItemBorderRadius ?? BorderRadius.circular(8),
+        borderRadius:
+            theme?.countryItemBorderRadius ?? BorderRadius.circular(8),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: () => _onCountrySelected(country),
-          borderRadius: theme?.countryItemBorderRadius ?? BorderRadius.circular(8),
-          splashColor: config.enableRipple ? Colors.blue[100] : Colors.transparent,
-          highlightColor: config.enableRipple ? Colors.blue[50] : Colors.transparent,
+          borderRadius:
+              theme?.countryItemBorderRadius ?? BorderRadius.circular(8),
+          splashColor:
+              config.enableRipple ? Colors.blue[100] : Colors.transparent,
+          highlightColor:
+              config.enableRipple ? Colors.blue[50] : Colors.transparent,
           child: Padding(
-            padding: theme?.countryItemPadding ?? const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
+            padding: theme?.countryItemPadding ??
+                const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
             child: Row(
               children: [
                 if (config.showFlag) ...[
@@ -524,15 +579,18 @@ class _CountryPickerState extends State<CountryPicker> {
                     children: [
                       Text(
                         country.name,
-                        style: theme?.countryNameStyle ?? const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: theme?.countryNameStyle ??
+                            const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      if (config.showCountryCode || config.showDialCode || 
-                          config.showCapital || config.showRegion) ...[
+                      if (config.showCountryCode ||
+                          config.showDialCode ||
+                          config.showCapital ||
+                          config.showRegion) ...[
                         const SizedBox(height: 2),
                         _buildCountryDetails(country),
                       ],
@@ -541,7 +599,7 @@ class _CountryPickerState extends State<CountryPicker> {
                 ),
                 if (isSelected)
                   Icon(
-                    Icons.check_circle,
+                    theme?.selectedIcon ?? CountrifyIcons.circleCheckBig,
                     color: Colors.blue[600],
                     size: 20,
                   ),
@@ -604,10 +662,11 @@ class _CountryPickerState extends State<CountryPicker> {
 
     return Text(
       details.join(' • '),
-      style: widget.theme?.countryCodeStyle ?? TextStyle(
-        fontSize: 12,
-        color: Colors.grey[600],
-      ),
+      style: widget.theme?.countryCodeStyle ??
+          TextStyle(
+            fontSize: 12,
+            color: Colors.grey[600],
+          ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
@@ -622,17 +681,18 @@ class _CountryPickerState extends State<CountryPicker> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.search_off,
+            theme?.emptyStateIcon ?? CountrifyIcons.searchX,
             size: 64,
             color: theme?.emptyStateIconColor ?? Colors.grey[400],
           ),
           const SizedBox(height: 16),
           Text(
             config.emptyStateMessage,
-            style: theme?.emptyStateTextStyle ?? TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
+            style: theme?.emptyStateTextStyle ??
+                TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -685,10 +745,11 @@ class _CountryPickerState extends State<CountryPicker> {
                     Expanded(
                       child: Text(
                         widget.title ?? 'Select Country',
-                        style: widget.titleStyle ?? const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: widget.titleStyle ??
+                            const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
                   ],
@@ -697,8 +758,9 @@ class _CountryPickerState extends State<CountryPicker> {
                       widget.closeButton!
                     else
                       IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: widget.onClose ?? () => Navigator.of(context).pop(),
+                        icon: Icon(widget.theme?.closeIcon ?? CountrifyIcons.x),
+                        onPressed:
+                            widget.onClose ?? () => Navigator.of(context).pop(),
                       ),
                   ],
                 ],
@@ -717,7 +779,8 @@ class _CountryPickerState extends State<CountryPicker> {
                     thumbVisibility: true,
                     trackVisibility: true,
                     thickness: theme?.scrollbarThickness ?? 6.0,
-                    radius: theme?.scrollbarRadius?.topLeft ?? const Radius.circular(3),
+                    radius: theme?.scrollbarRadius?.topLeft ??
+                        const Radius.circular(3),
                     child: _buildCountriesList(),
                   )
                 : _buildCountriesList(),
@@ -727,4 +790,3 @@ class _CountryPickerState extends State<CountryPicker> {
     );
   }
 }
-

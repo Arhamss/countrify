@@ -1,3 +1,4 @@
+import 'package:countrify/src/widgets/country_picker_config.dart';
 import 'package:flutter/material.dart';
 import '../models/country.dart';
 import 'comprehensive_country_picker.dart';
@@ -187,64 +188,45 @@ class ModalComprehensivePicker {
     return result;
   }
 
-  /// Show country picker as dropdown
-  static Future<Country?> showDropdown({
-    required BuildContext context,
-    required GlobalKey dropdownKey,
+  /// Create country picker as dropdown widget (for embedding in forms/UI)
+  ///
+  /// This returns a Widget that can be embedded directly in your UI.
+  /// The dropdown shows the selected country and opens a menu below when tapped.
+  ///
+  /// Example:
+  /// ```dart
+  /// ModalComprehensivePicker.dropdown(
+  ///   initialCountry: selectedCountry,
+  ///   onCountrySelected: (country) {
+  ///     setState(() => selectedCountry = country);
+  ///   },
+  /// )
+  /// ```
+  static Widget dropdown({
     Country? initialCountry,
     ValueChanged<Country>? onCountrySelected,
     ValueChanged<Country>? onCountryChanged,
-    ValueChanged<String>? onSearchChanged,
-    ValueChanged<CountryFilter>? onFilterChanged,
     CountryPickerTheme? theme,
     config.CountryPickerConfig? config,
     bool showPhoneCode = true,
     bool showFlag = true,
     bool showCountryName = true,
-    bool showCapital = false,
-    bool showRegion = false,
-    bool showPopulation = false,
-    bool searchEnabled = true,
-    bool filterEnabled = false,
     bool hapticFeedback = true,
-    Duration animationDuration = const Duration(milliseconds: 300),
-    Duration debounceDuration = const Duration(milliseconds: 300),
-    bool barrierDismissible = true,
-    Color? barrierColor,
-    String? barrierLabel,
-    bool useRootNavigator = false,
-    RouteSettings? routeSettings,
-  }) async {
-    final result = await showGeneralDialog<Country>(
-      context: context,
-      barrierDismissible: barrierDismissible,
-      barrierColor: barrierColor ?? Colors.black54,
-      barrierLabel: barrierLabel ?? 'Close dialog',
-      useRootNavigator: useRootNavigator,
-      routeSettings: routeSettings,
-      pageBuilder: (context, animation, secondaryAnimation) => ComprehensiveCountryPicker(
-        initialCountry: initialCountry,
-        onCountrySelected: onCountrySelected,
-        onCountryChanged: onCountryChanged,
-        onSearchChanged: onSearchChanged,
-        onFilterChanged: onFilterChanged,
-        theme: theme,
-        config: config,
-        pickerType: CountryPickerType.dropdown,
-        showPhoneCode: showPhoneCode,
-        showFlag: showFlag,
-        showCountryName: showCountryName,
-        showCapital: showCapital,
-        showRegion: showRegion,
-        showPopulation: showPopulation,
-        searchEnabled: searchEnabled,
-        filterEnabled: filterEnabled,
-        hapticFeedback: hapticFeedback,
-        animationDuration: animationDuration,
-        debounceDuration: debounceDuration,
-      ),
+  }) {
+    return ComprehensiveCountryPicker(
+      initialCountry: initialCountry,
+      onCountrySelected: onCountrySelected,
+      onCountryChanged: onCountryChanged,
+      theme: theme,
+      config: config,
+      pickerType: CountryPickerType.dropdown,
+      showPhoneCode: showPhoneCode,
+      showFlag: showFlag,
+      showCountryName: showCountryName,
+      searchEnabled: false,
+      filterEnabled: false,
+      hapticFeedback: hapticFeedback,
     );
-    return result;
   }
 
   /// Show country picker inline

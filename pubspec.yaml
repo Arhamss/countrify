@@ -1,27 +1,52 @@
 name: countrify
-description: A beautiful and highly customizable country picker package for Flutter with comprehensive country data, ISO 3166-1 codes, and flag images.
+description: >
+  A beautiful, customizable country picker for Flutter. 245+ countries, 5 display modes,
+  rich theming, flag images, phone codes, 40+ utilities. Zero dependencies.
 version: 1.0.0
-homepage: https://github.com/yourusername/countrify
-repository: https://github.com/yourusername/countrify
-issue_tracker: https://github.com/yourusername/countrify/issues
-documentation: https://github.com/yourusername/countrify#readme
+homepage: https://github.com/codeable-dev/countrify
+repository: https://github.com/codeable-dev/countrify
+issue_tracker: https://github.com/codeable-dev/countrify/issues
+documentation: https://pub.dev/documentation/countrify/latest/
+
+topics:
+  - country-picker
+  - country
+  - phone-code
+  - flag
+  - widgets
+
+screenshots:
+  - description: 'Country picker bottom sheet with search (light theme)'
+    path: screenshots/bottom_sheet_light.png
+  - description: 'Country picker dark theme bottom sheet'
+    path: screenshots/bottom_sheet_dark.png
+  - description: 'Phone number input field with country code picker'
+    path: screenshots/phone_number_field.png
+  - description: 'Country dropdown field for forms'
+    path: screenshots/country_dropdown_field.png
+  - description: 'Dropdown picker embedded in page'
+    path: screenshots/dropdown_picker.png
 
 environment:
   sdk: ^3.0.0
-  flutter: ^3.0.0
+  flutter: ">=3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
 dev_dependencies:
+  csv: ^6.0.0
+  flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
   very_good_analysis: ^9.0.0
-  flutter_lints: ^3.0.0
-  csv: ^6.0.0
 
 flutter:
   assets:
     - assets/images/flags/
+  fonts:
+    - family: CountrifyIcons
+      fonts:
+        - asset: assets/fonts/countrify_icons.ttf

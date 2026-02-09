@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../models/country.dart';
-import '../utils/country_utils.dart';
-import 'country_picker_theme.dart';
-import 'country_picker_config.dart';
+import 'package:countrify/src/models/country.dart';
+import 'package:countrify/src/utils/country_utils.dart';
+import 'package:countrify/src/widgets/country_picker_theme.dart';
+import 'package:countrify/src/widgets/country_picker_config.dart';
 
 /// {@template comprehensive_country_picker}
 /// A highly customizable and modern country picker with extensive styling options
@@ -32,7 +33,13 @@ class ComprehensiveCountryPicker extends StatefulWidget {
     this.hapticFeedback = true,
     this.animationDuration = const Duration(milliseconds: 300),
     this.debounceDuration = const Duration(milliseconds: 300),
-  });
+  }) : assert(
+          pickerType != CountryPickerType.dropdown ||
+              showPhoneCode ||
+              showFlag ||
+              showCountryName,
+          'For dropdown picker, at least one of showPhoneCode, showFlag, or showCountryName must be true',
+        );
 
   /// Initial selected country
   final Country? initialCountry;
@@ -92,30 +99,42 @@ class ComprehensiveCountryPicker extends StatefulWidget {
   final Duration debounceDuration;
 
   @override
-  State<ComprehensiveCountryPicker> createState() => _ComprehensiveCountryPickerState();
+  State<ComprehensiveCountryPicker> createState() =>
+      _ComprehensiveCountryPickerState();
 }
 
 class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     with TickerProviderStateMixin {
   Country? _selectedCountry;
   String _searchQuery = '';
-  CountryFilter _currentFilter = const CountryFilter();
+  late CountryFilter _currentFilter;
   List<Country> _filteredCountries = [];
   late TextEditingController _searchController;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   Timer? _debounceTimer;
+  final ScrollController _scrollController = ScrollController();
+  final LayerLink _dropdownLayerLink = LayerLink();
+  OverlayEntry? _dropdownOverlay;
+  bool _isDropdownOpen = false;
 
   @override
   void initState() {
     super.initState();
     _selectedCountry = widget.initialCountry;
+    final config = widget.config ?? const CountryPickerConfig();
+    _currentFilter = CountryFilter(
+      regions: config.includeRegions,
+      sortBy: config.sortBy,
+      includeIndependent: config.includeIndependent,
+      includeUnMembers: config.includeUnMembers,
+    );
     _searchController = TextEditingController();
     _animationController = AnimationController(
       duration: widget.animationDuration,
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
     _loadCountries();
@@ -123,26 +142,94 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
   }
 
   @override
+  void didUpdateWidget(ComprehensiveCountryPicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update internal state when parent's initialCountry changes
+    if (widget.initialCountry != oldWidget.initialCountry) {
+      setState(() {
+        _selectedCountry = widget.initialCountry;
+        // Rebuild the list to put selected country at top
+        _filteredCountries = _getFilteredCountries();
+      });
+    }
+  }
+
+  @override
   void dispose() {
+    _removeDropdownOverlay();
     _searchController.dispose();
     _animationController.dispose();
     _debounceTimer?.cancel();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _removeDropdownOverlay() {
+    _dropdownOverlay?.remove();
+    _dropdownOverlay = null;
+    if (_isDropdownOpen && mounted) {
+      setState(() {
+        _isDropdownOpen = false;
+      });
+    }
   }
 
   void _loadCountries() {
     setState(() {
       _filteredCountries = _getFilteredCountries();
+      // Scroll to top to show selected country at the top
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(0);
+      }
     });
   }
 
   List<Country> _getFilteredCountries() {
-    List<Country> countries = CountryUtils.getAllCountries();
+    final config = widget.config ?? const CountryPickerConfig();
+    var countries = CountryUtils.getAllCountries();
 
-    // Apply region filter
-    if (_currentFilter.regions.isNotEmpty) {
-      countries = countries.where((country) => 
-          _currentFilter.regions.contains(country.region)).toList();
+    // Apply include/exclude country filters
+    if (config.includeCountries.isNotEmpty) {
+      final includeSet =
+          config.includeCountries.map((c) => c.toUpperCase()).toSet();
+      countries = countries
+          .where((country) =>
+              includeSet.contains(country.alpha2Code.toUpperCase()))
+          .toList();
+    }
+
+    if (config.excludeCountries.isNotEmpty) {
+      final excludeSet =
+          config.excludeCountries.map((c) => c.toUpperCase()).toSet();
+      countries = countries
+          .where((country) =>
+              !excludeSet.contains(country.alpha2Code.toUpperCase()))
+          .toList();
+    }
+
+    // Apply region filters (config + runtime filter)
+    final effectiveRegions = {
+      ...config.includeRegions,
+      ..._currentFilter.regions,
+    }.where((r) => r.isNotEmpty).toList();
+
+    if (effectiveRegions.isNotEmpty) {
+      countries = countries
+          .where((country) => effectiveRegions.contains(country.region))
+          .toList();
+    } else if (config.excludeRegions.isNotEmpty) {
+      countries = countries
+          .where((country) => !config.excludeRegions.contains(country.region))
+          .toList();
+    }
+
+    // Apply independence / UN membership filters
+    if (!config.includeIndependent || !_currentFilter.includeIndependent) {
+      countries = countries.where((country) => !country.isIndependent).toList();
+    }
+
+    if (!config.includeUnMembers || !_currentFilter.includeUnMembers) {
+      countries = countries.where((country) => !country.isUnMember).toList();
     }
 
     // Apply search filter
@@ -159,28 +246,39 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     }
 
     // Apply sorting - create a new list to avoid modifying unmodifiable list
-    List<Country> sortedCountries = List.from(countries);
+    final sortedCountries = List<Country>.from(countries);
     switch (_currentFilter.sortBy) {
       case CountrySortBy.name:
         sortedCountries.sort((a, b) => a.name.compareTo(b.name));
-        break;
       case CountrySortBy.population:
         sortedCountries.sort((a, b) => b.population.compareTo(a.population));
-        break;
       case CountrySortBy.area:
         sortedCountries.sort((a, b) => b.area.compareTo(a.area));
-        break;
       case CountrySortBy.region:
         sortedCountries.sort((a, b) => a.region.compareTo(b.region));
-        break;
+      case CountrySortBy.capital:
+        sortedCountries.sort((a, b) => a.capital.compareTo(b.capital));
+    }
+
+    // Put selected country at the top if it exists and is in the filtered list
+    if (_selectedCountry != null) {
+      final selectedIndex = sortedCountries.indexWhere(
+        (country) => country.alpha2Code == _selectedCountry!.alpha2Code,
+      );
+      if (selectedIndex != -1) {
+        // Remove from current position and add to the beginning
+        final selected = sortedCountries.removeAt(selectedIndex);
+        sortedCountries.insert(0, selected);
+      }
     }
 
     return sortedCountries;
   }
 
   void _onSearchChanged(String query) {
+    final config = widget.config ?? const CountryPickerConfig();
     _debounceTimer?.cancel();
-    _debounceTimer = Timer(widget.debounceDuration, () {
+    _debounceTimer = Timer(Duration(milliseconds: config.searchDebounceMs), () {
       setState(() {
         _searchQuery = query;
         _loadCountries();
@@ -193,13 +291,22 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     if (widget.hapticFeedback) {
       HapticFeedback.lightImpact();
     }
-    
+
     setState(() {
       _selectedCountry = country;
+      // Rebuild the list to put selected country at top
+      _filteredCountries = _getFilteredCountries();
     });
 
     widget.onCountrySelected?.call(country);
     widget.onCountryChanged?.call(country);
+
+    // Close modal pickers and return the selected country
+    if (widget.pickerType == CountryPickerType.bottomSheet ||
+        widget.pickerType == CountryPickerType.dialog ||
+        widget.pickerType == CountryPickerType.fullScreen) {
+      Navigator.of(context).pop(country);
+    }
   }
 
   void _onFilterChanged(CountryFilter filter) {
@@ -221,7 +328,8 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     );
   }
 
-  Widget _buildPickerContent(CountryPickerTheme theme, CountryPickerConfig config) {
+  Widget _buildPickerContent(
+      CountryPickerTheme theme, CountryPickerConfig config) {
     switch (widget.pickerType) {
       case CountryPickerType.bottomSheet:
         return _buildBottomSheetPicker(theme, config);
@@ -236,12 +344,19 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     }
   }
 
-  Widget _buildBottomSheetPicker(CountryPickerTheme theme, CountryPickerConfig config) {
+  Widget _buildBottomSheetPicker(
+      CountryPickerTheme theme, CountryPickerConfig config) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final targetHeight = (config.maxHeight ?? screenHeight * 0.8)
+        .clamp(config.minHeight, screenHeight);
+
     return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
+      height: targetHeight,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: theme.backgroundColor,
-        borderRadius: theme.borderRadius ?? const BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: theme.borderRadius ??
+            const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
         children: [
@@ -254,15 +369,23 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     );
   }
 
-  Widget _buildDialogPicker(CountryPickerTheme theme, CountryPickerConfig config) {
+  Widget _buildDialogPicker(
+      CountryPickerTheme theme, CountryPickerConfig config) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final targetHeight = (config.maxHeight ?? screenHeight * 0.8)
+        .clamp(config.minHeight, screenHeight);
+
     return Dialog(
       backgroundColor: theme.backgroundColor,
+      insetPadding: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
-        borderRadius: theme.borderRadius ?? const BorderRadius.all(Radius.circular(20)),
+        borderRadius:
+            theme.borderRadius ?? const BorderRadius.all(Radius.circular(20)),
       ),
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
-        height: MediaQuery.of(context).size.height * 0.8,
+        height: targetHeight,
         child: Column(
           children: [
             _buildHeader(theme, config),
@@ -275,7 +398,8 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     );
   }
 
-  Widget _buildFullScreenPicker(CountryPickerTheme theme, CountryPickerConfig config) {
+  Widget _buildFullScreenPicker(
+      CountryPickerTheme theme, CountryPickerConfig config) {
     return Scaffold(
       backgroundColor: theme.backgroundColor,
       appBar: AppBar(
@@ -285,58 +409,243 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
           style: theme.headerTextStyle,
         ),
         leading: IconButton(
-          icon: Icon(Icons.close, color: theme.headerIconColor),
+          icon: Icon(theme.closeIcon ?? CountrifyIcons.x,
+              color: theme.headerIconColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
           if (widget.filterEnabled)
             IconButton(
-              icon: Icon(Icons.filter_list, color: theme.headerIconColor),
+              icon: Icon(theme.filterIcon ?? CountrifyIcons.listFilter,
+                  color: theme.headerIconColor),
               onPressed: () => _showFilterDialog(theme, config),
             ),
         ],
       ),
       body: Column(
         children: [
-          if (widget.searchEnabled) _buildSearchBar(theme, config),
+          if (widget.searchEnabled && config.enableSearch)
+            _buildSearchBar(theme, config),
           Expanded(child: _buildCountryList(theme, config)),
         ],
       ),
     );
   }
 
-  Widget _buildDropdownPicker(CountryPickerTheme theme, CountryPickerConfig config) {
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.backgroundColor,
-        borderRadius: theme.borderRadius ?? const BorderRadius.all(Radius.circular(12)),
-        border: Border.all(color: theme.borderColor ?? Colors.grey.shade300),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<Country>(
-          value: _selectedCountry,
-          isExpanded: true,
-          items: _filteredCountries.map((country) {
-            return DropdownMenuItem<Country>(
-              value: country,
-              child: _buildCountryItem(country, theme, config),
-            );
-          }).toList(),
-          onChanged: (country) {
-            if (country != null) {
-              _onCountrySelected(country);
-            }
-          },
+  Widget _buildDropdownPicker(
+      CountryPickerTheme theme, CountryPickerConfig config) {
+    return CompositedTransformTarget(
+      link: _dropdownLayerLink,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: _selectedCountry != null ? 0 : 12,
+        ),
+        decoration: BoxDecoration(
+          color: theme.backgroundColor,
+          borderRadius:
+              theme.borderRadius ?? const BorderRadius.all(Radius.circular(12)),
+          border: Border.all(color: theme.borderColor ?? Colors.grey.shade300),
+        ),
+        child: InkWell(
+          onTap: () => _toggleDropdownOverlay(theme, config),
+          child: Row(
+            children: [
+              Expanded(
+                child: _selectedCountry != null
+                    ? _buildSimpleCountryItem(_selectedCountry!, theme, config,
+                        showBackground: false)
+                    : Text(
+                        'Select a country',
+                        style: theme.countryNameTextStyle ??
+                            const TextStyle(fontSize: 14),
+                      ),
+              ),
+              AnimatedRotation(
+                turns: _isDropdownOpen ? 0.5 : 0,
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  theme.dropdownIcon ?? CountrifyIcons.chevronDown,
+                  color: theme.borderColor ?? Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildInlinePicker(CountryPickerTheme theme, CountryPickerConfig config) {
+  void _toggleDropdownOverlay(
+      CountryPickerTheme theme, CountryPickerConfig config) {
+    if (_dropdownOverlay != null) {
+      _removeDropdownOverlay();
+      return;
+    }
+
+    final renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+    final buttonWidth = renderBox.size.width;
+
+    // Reorder list to show selected country first
+    final orderedCountries = _selectedCountry != null
+        ? [
+            _selectedCountry!,
+            ..._filteredCountries
+                .where((c) => c.alpha2Code != _selectedCountry!.alpha2Code),
+          ]
+        : _filteredCountries;
+
+    _dropdownOverlay = OverlayEntry(
+      builder: (overlayContext) {
+        return Stack(
+          children: [
+            // Dismiss backdrop
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: _removeDropdownOverlay,
+                child: const ColoredBox(color: Colors.transparent),
+              ),
+            ),
+            // The dropdown menu, positioned below the field
+            CompositedTransformFollower(
+              link: _dropdownLayerLink,
+              showWhenUnlinked: false,
+              targetAnchor: Alignment.bottomLeft,
+              child: Container(
+                width: buttonWidth,
+                constraints: BoxConstraints(
+                  maxHeight: config.dropdownMaxHeight ?? 400,
+                ),
+                margin: const EdgeInsets.only(top: 4),
+                decoration: BoxDecoration(
+                  color: theme.dropdownMenuBackgroundColor ?? Colors.white,
+                  borderRadius: theme.dropdownMenuBorderRadius ??
+                      BorderRadius.circular(12),
+                  border: theme.dropdownMenuBorderColor != null
+                      ? Border.all(
+                          color: theme.dropdownMenuBorderColor!,
+                          width: theme.dropdownMenuBorderWidth ?? 1,
+                        )
+                      : null,
+                  boxShadow: [
+                    BoxShadow(
+                      color: theme.shadowColor ?? Colors.black26,
+                      blurRadius: theme.dropdownMenuElevation ?? 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: theme.dropdownMenuBorderRadius ??
+                      BorderRadius.circular(12),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemCount: orderedCountries.length,
+                      itemBuilder: (context, index) {
+                        final country = orderedCountries[index];
+                        return InkWell(
+                          onTap: () {
+                            _removeDropdownOverlay();
+                            _onCountrySelected(country);
+                          },
+                          child:
+                              _buildSimpleCountryItem(country, theme, config),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    Overlay.of(context).insert(_dropdownOverlay!);
+    setState(() {
+      _isDropdownOpen = true;
+    });
+  }
+
+  Widget _buildSimpleCountryItem(
+      Country country, CountryPickerTheme theme, CountryPickerConfig config,
+      {bool showBackground = true}) {
+    final isSelected = _selectedCountry?.alpha2Code == country.alpha2Code;
+
     return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+      decoration: BoxDecoration(
+        color: (isSelected && showBackground)
+            ? const Color(0xFFE3F2FD)
+            : null, // Light blue background only in menu
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        children: [
+          if (widget.showFlag) ...[
+            SizedBox(
+              width: 32,
+              height: 24,
+              child: _buildFlag(country, theme, config),
+            ),
+            const SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.showCountryName)
+                  Text(
+                    country.name,
+                    style: (theme.countryNameTextStyle ?? const TextStyle())
+                        .copyWith(
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                if (widget.showPhoneCode && country.callingCodes.isNotEmpty)
+                  Text(
+                    '+${country.callingCodes.first}',
+                    style: (theme.countrySubtitleTextStyle ?? const TextStyle())
+                        .copyWith(
+                      fontSize: 12,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          if (isSelected && showBackground) ...[
+            const SizedBox(width: 8),
+            Icon(
+              theme.selectedIcon ?? CountrifyIcons.circleCheckBig,
+              color: theme.countryItemSelectedIconColor ?? Colors.blue,
+              size: 20,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInlinePicker(
+      CountryPickerTheme theme, CountryPickerConfig config) {
+    return Container(
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: theme.backgroundColor,
-        borderRadius: theme.borderRadius ?? const BorderRadius.all(Radius.circular(12)),
+        borderRadius:
+            theme.borderRadius ?? const BorderRadius.all(Radius.circular(12)),
         border: Border.all(color: theme.borderColor ?? Colors.grey.shade300),
       ),
       child: Column(
@@ -353,11 +662,16 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
   }
 
   Widget _buildHeader(CountryPickerTheme theme, CountryPickerConfig config) {
+    if (config.customHeaderBuilder != null) {
+      return config.customHeaderBuilder!(context);
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.headerColor,
-        borderRadius: theme.borderRadius ?? const BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: theme.borderRadius ??
+            const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Row(
         children: [
@@ -367,7 +681,8 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
           ),
           const Spacer(),
           IconButton(
-            icon: Icon(Icons.close, color: theme.headerIconColor),
+            icon: Icon(theme.closeIcon ?? CountrifyIcons.x,
+                color: theme.headerIconColor),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ],
@@ -376,19 +691,27 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
   }
 
   Widget _buildSearchBar(CountryPickerTheme theme, CountryPickerConfig config) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: TextField(
-        controller: _searchController,
-        onChanged: _onSearchChanged,
-        style: theme.searchTextStyle,
-        decoration: InputDecoration(
-          hintText: 'Search countries...',
+    if (!config.enableSearch) {
+      return const SizedBox.shrink();
+    }
+
+    if (config.customSearchBuilder != null) {
+      return config.customSearchBuilder!(
+          context, _searchController, _onSearchChanged);
+    }
+
+    final effectiveBorderRadius = theme.searchBarBorderRadius ??
+        const BorderRadius.all(Radius.circular(12));
+    final effectiveDecoration = theme.searchInputDecoration ??
+        InputDecoration(
+          hintText: theme.searchHintText ?? 'Search countries...',
           hintStyle: theme.searchHintStyle,
-          prefixIcon: Icon(Icons.search, color: theme.searchIconColor),
+          prefixIcon: Icon(theme.searchIcon ?? CountrifyIcons.search,
+              color: theme.searchIconColor),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
-                  icon: Icon(Icons.clear, color: theme.searchIconColor),
+                  icon: Icon(theme.clearIcon ?? CountrifyIcons.circleX,
+                      color: theme.searchIconColor),
                   onPressed: () {
                     _searchController.clear();
                     _onSearchChanged('');
@@ -397,24 +720,48 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
               : null,
           filled: true,
           fillColor: theme.searchBarColor,
+          contentPadding: theme.searchContentPadding,
           border: OutlineInputBorder(
-            borderRadius: theme.searchBarBorderRadius ?? const BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(color: theme.searchBarBorderColor ?? Colors.grey.shade300),
+            borderRadius: effectiveBorderRadius,
+            borderSide: BorderSide(
+                color: theme.searchBarBorderColor ?? Colors.grey.shade300),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: theme.searchBarBorderRadius ?? const BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(color: theme.searchBarBorderColor ?? Colors.grey.shade300),
+            borderRadius: effectiveBorderRadius,
+            borderSide: BorderSide(
+                color: theme.searchBarBorderColor ?? Colors.grey.shade300),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: theme.searchBarBorderRadius ?? const BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(color: theme.searchBarBorderColor ?? Colors.blue),
+            borderRadius: effectiveBorderRadius,
+            borderSide: BorderSide(
+                color: theme.searchFocusedBorderColor ??
+                    theme.searchBarBorderColor ??
+                    Colors.blue),
           ),
-        ),
+        );
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: TextField(
+        controller: _searchController,
+        onChanged: _onSearchChanged,
+        style: theme.searchTextStyle,
+        cursorColor: theme.searchCursorColor,
+        decoration: effectiveDecoration,
       ),
     );
   }
 
   Widget _buildFilterBar(CountryPickerTheme theme, CountryPickerConfig config) {
+    if (!config.enableFilter) {
+      return const SizedBox.shrink();
+    }
+
+    if (config.customFilterBuilder != null) {
+      return config.customFilterBuilder!(
+          context, _currentFilter, _onFilterChanged);
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -435,7 +782,8 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
             ),
           ),
           IconButton(
-            icon: Icon(Icons.filter_list, color: theme.filterIconColor),
+            icon: Icon(theme.filterIcon ?? CountrifyIcons.listFilter,
+                color: theme.filterIconColor),
             onPressed: () => _showFilterDialog(theme, config),
           ),
         ],
@@ -443,11 +791,12 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     );
   }
 
-  Widget _buildFilterChip(String label, String? region, CountryPickerTheme theme) {
-    final isSelected = region == null 
+  Widget _buildFilterChip(
+      String label, String? region, CountryPickerTheme theme) {
+    final isSelected = region == null
         ? _currentFilter.regions.isEmpty
         : _currentFilter.regions.contains(region);
-    
+
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: FilterChip(
@@ -467,78 +816,116 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
         checkmarkColor: theme.filterCheckmarkColor,
         backgroundColor: theme.filterBackgroundColor,
         labelStyle: TextStyle(
-          color: isSelected ? theme.filterSelectedTextColor : theme.filterTextColor,
+          color: isSelected
+              ? theme.filterSelectedTextColor
+              : theme.filterTextColor,
         ),
       ),
     );
   }
 
-  Widget _buildCountryList(CountryPickerTheme theme, CountryPickerConfig config) {
-    return ListView.builder(
+  Widget _buildCountryList(
+      CountryPickerTheme theme, CountryPickerConfig config) {
+    final listView = ListView.builder(
+      controller: _scrollController,
+      padding: EdgeInsets.zero,
       itemCount: _filteredCountries.length,
       itemBuilder: (context, index) {
         final country = _filteredCountries[index];
         return _buildCountryItem(country, theme, config);
       },
     );
+
+    if (!config.enableScrollbar) {
+      return listView;
+    }
+
+    return Scrollbar(
+      thumbVisibility: true,
+      controller: _scrollController,
+      child: listView,
+    );
   }
 
-  Widget _buildCountryItem(Country country, CountryPickerTheme theme, CountryPickerConfig config) {
+  Widget _buildCountryItem(
+      Country country, CountryPickerTheme theme, CountryPickerConfig config) {
     final isSelected = _selectedCountry?.alpha2Code == country.alpha2Code;
-    
+
+    if (config.customCountryBuilder != null) {
+      return config.customCountryBuilder!(context, country, isSelected);
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: isSelected ? theme.countryItemSelectedColor : theme.countryItemBackgroundColor,
-        borderRadius: theme.countryItemBorderRadius ?? const BorderRadius.all(Radius.circular(8)),
-        border: isSelected ? Border.all(color: theme.countryItemSelectedBorderColor ?? Colors.blue) : null,
+        color: isSelected
+            ? theme.countryItemSelectedColor
+            : theme.countryItemBackgroundColor,
+        borderRadius: theme.countryItemBorderRadius ??
+            const BorderRadius.all(Radius.circular(8)),
+        border: isSelected
+            ? Border.all(
+                color: theme.countryItemSelectedBorderColor ?? Colors.blue)
+            : null,
       ),
       child: ListTile(
         onTap: () => _onCountrySelected(country),
         leading: widget.showFlag ? _buildFlag(country, theme, config) : null,
-        title: widget.showCountryName ? _buildCountryName(country, theme) : null,
+        title:
+            widget.showCountryName ? _buildCountryName(country, theme) : null,
         subtitle: _buildCountrySubtitle(country, theme, config),
-        trailing: isSelected ? Icon(Icons.check_circle, color: theme.countryItemSelectedIconColor) : null,
+        trailing: isSelected
+            ? Icon(theme.selectedIcon ?? CountrifyIcons.circleCheckBig,
+                color: theme.countryItemSelectedIconColor)
+            : null,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       ),
     );
   }
 
-  Widget _buildFlag(Country country, CountryPickerTheme theme, CountryPickerConfig config) {
+  Widget _buildFlag(
+      Country country, CountryPickerTheme theme, CountryPickerConfig config) {
+    final flagWidth = config.flagSize.width;
+    final flagHeight = config.flagSize.height;
+    final baseRadius = config.flagBorderRadius;
+
+    final borderRadius = config.flagShape == FlagShape.circular
+        ? BorderRadius.circular(flagWidth / 2)
+        : baseRadius;
+
     return Container(
-      width: config.flagSize?.width ?? 32,
-      height: config.flagSize?.height ?? 24,
+      width: flagWidth,
+      height: flagHeight,
       decoration: BoxDecoration(
-        borderRadius: config.flagShape == FlagShape.circular
-            ? BorderRadius.circular((config.flagSize?.width ?? 32) / 2)
-            : config.flagBorderRadius ?? const BorderRadius.all(Radius.circular(4)),
+        borderRadius: borderRadius,
         border: config.flagBorderColor != null
-            ? Border.all(color: config.flagBorderColor!, width: config.flagBorderWidth ?? 1)
+            ? Border.all(
+                color: config.flagBorderColor!,
+                width: config.flagBorderWidth,
+              )
             : null,
         boxShadow: config.flagShadowColor != null
             ? [
                 BoxShadow(
                   color: config.flagShadowColor!,
-                  blurRadius: config.flagShadowBlur ?? 2,
-                  offset: config.flagShadowOffset ?? const Offset(0, 1),
+                  blurRadius: config.flagShadowBlur,
+                  offset: config.flagShadowOffset,
                 ),
               ]
             : null,
       ),
       child: ClipRRect(
-        borderRadius: config.flagShape == FlagShape.circular
-            ? BorderRadius.circular((config.flagSize?.width ?? 32) / 2)
-            : config.flagBorderRadius ?? const BorderRadius.all(Radius.circular(4)),
+        borderRadius: borderRadius,
         child: Image.asset(
           country.flagImagePath,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
-            return Container(
+            return ColoredBox(
               color: Colors.grey.shade300,
               child: Center(
                 child: Text(
                   country.flagEmoji,
-                  style: TextStyle(fontSize: (config.flagSize?.width ?? 32) * 0.6),
+                  style: TextStyle(fontSize: flagWidth * 0.6),
                 ),
               ),
             );
@@ -555,27 +942,28 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     );
   }
 
-  Widget _buildCountrySubtitle(Country country, CountryPickerTheme theme, CountryPickerConfig config) {
-    final List<String> subtitleParts = [];
-    
+  Widget _buildCountrySubtitle(
+      Country country, CountryPickerTheme theme, CountryPickerConfig config) {
+    final subtitleParts = <String>[];
+
     if (widget.showPhoneCode && country.callingCodes.isNotEmpty) {
       subtitleParts.add('+${country.callingCodes.first}');
     }
-    
+
     if (widget.showCapital && country.capital.isNotEmpty) {
       subtitleParts.add(country.capital);
     }
-    
+
     if (widget.showRegion && country.region.isNotEmpty) {
       subtitleParts.add(country.region);
     }
-    
+
     if (widget.showPopulation && country.population > 0) {
       subtitleParts.add(CountryUtils.formatPopulation(country.population));
     }
-    
+
     if (subtitleParts.isEmpty) return const SizedBox.shrink();
-    
+
     return Text(
       subtitleParts.join(' • '),
       style: theme.countrySubtitleTextStyle,
@@ -601,44 +989,6 @@ enum CountryPickerType {
   fullScreen,
   dropdown,
   inline,
-}
-
-
-/// Country filter configuration
-class CountryFilter {
-  const CountryFilter({
-    this.regions = const [],
-    this.sortBy = CountrySortBy.name,
-    this.includeIndependent = true,
-    this.includeUnMembers = true,
-  });
-
-  final List<String> regions;
-  final CountrySortBy sortBy;
-  final bool includeIndependent;
-  final bool includeUnMembers;
-
-  CountryFilter copyWith({
-    List<String>? regions,
-    CountrySortBy? sortBy,
-    bool? includeIndependent,
-    bool? includeUnMembers,
-  }) {
-    return CountryFilter(
-      regions: regions ?? this.regions,
-      sortBy: sortBy ?? this.sortBy,
-      includeIndependent: includeIndependent ?? this.includeIndependent,
-      includeUnMembers: includeUnMembers ?? this.includeUnMembers,
-    );
-  }
-}
-
-/// Country sorting options
-enum CountrySortBy {
-  name,
-  population,
-  area,
-  region,
 }
 
 /// Filter dialog widget
@@ -688,9 +1038,9 @@ class _FilterDialogState extends State<_FilterDialog> {
               },
             );
           }),
-          
+
           const Divider(),
-          
+
           // Region filters
           Text('Regions:', style: widget.theme.filterTextStyle),
           ...['Europe', 'Asia', 'Africa', 'Americas', 'Oceania'].map((region) {
@@ -699,7 +1049,7 @@ class _FilterDialogState extends State<_FilterDialog> {
               value: _filter.regions.contains(region),
               onChanged: (value) {
                 setState(() {
-                  final newRegions = value == true
+                  final newRegions = value ?? false
                       ? [..._filter.regions, region]
                       : _filter.regions.where((r) => r != region).toList();
                   _filter = _filter.copyWith(regions: newRegions);

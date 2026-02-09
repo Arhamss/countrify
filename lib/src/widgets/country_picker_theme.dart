@@ -1,3 +1,4 @@
+import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:flutter/material.dart';
 
 /// {@template country_picker_theme}
@@ -16,6 +17,11 @@ class CountryPickerTheme {
     this.searchIconColor,
     this.searchBarBorderColor,
     this.searchBarBorderRadius,
+    this.searchHintText,
+    this.searchCursorColor,
+    this.searchFocusedBorderColor,
+    this.searchContentPadding,
+    this.searchInputDecoration,
     this.filterBackgroundColor,
     this.filterSelectedColor,
     this.filterTextColor,
@@ -38,6 +44,19 @@ class CountryPickerTheme {
     this.elevation,
     this.animationDuration,
     this.hapticFeedback,
+    this.dropdownMenuBackgroundColor,
+    this.dropdownMenuElevation,
+    this.dropdownMenuBorderRadius,
+    this.dropdownMenuBorderColor,
+    this.dropdownMenuBorderWidth,
+    this.closeIcon,
+    this.searchIcon,
+    this.clearIcon,
+    this.selectedIcon,
+    this.filterIcon,
+    this.dropdownIcon,
+    this.emptyStateIcon,
+    this.defaultCountryIcon,
   });
 
   /// Background color of the picker
@@ -69,6 +88,22 @@ class CountryPickerTheme {
 
   /// Search bar border radius
   final BorderRadius? searchBarBorderRadius;
+
+  /// Search bar hint text (defaults to 'Search countries...')
+  final String? searchHintText;
+
+  /// Search bar cursor color
+  final Color? searchCursorColor;
+
+  /// Search bar focused border color (defaults to searchBarBorderColor or blue)
+  final Color? searchFocusedBorderColor;
+
+  /// Search bar content padding
+  final EdgeInsets? searchContentPadding;
+
+  /// Full custom InputDecoration for the search field.
+  /// When provided, this overrides all other search styling properties.
+  final InputDecoration? searchInputDecoration;
 
   /// Filter background color
   final Color? filterBackgroundColor;
@@ -136,6 +171,55 @@ class CountryPickerTheme {
   /// Haptic feedback enabled
   final bool? hapticFeedback;
 
+  /// Dropdown menu background color
+  final Color? dropdownMenuBackgroundColor;
+
+  /// Dropdown menu elevation
+  final double? dropdownMenuElevation;
+
+  /// Dropdown menu border radius
+  final BorderRadius? dropdownMenuBorderRadius;
+
+  /// Dropdown menu border color
+  final Color? dropdownMenuBorderColor;
+
+  /// Dropdown menu border width
+  final double? dropdownMenuBorderWidth;
+
+  // ─── Customizable Icons ─────────────────────────────────────────────
+
+  /// Icon for close buttons (header close, fullscreen close).
+  /// Defaults to [CountrifyIcons.x].
+  final IconData? closeIcon;
+
+  /// Icon for the search field prefix.
+  /// Defaults to [CountrifyIcons.search].
+  final IconData? searchIcon;
+
+  /// Icon for the search field clear button.
+  /// Defaults to [CountrifyIcons.circleX].
+  final IconData? clearIcon;
+
+  /// Icon shown on the selected country item.
+  /// Defaults to [CountrifyIcons.circleCheckBig].
+  final IconData? selectedIcon;
+
+  /// Icon for filter buttons.
+  /// Defaults to [CountrifyIcons.listFilter].
+  final IconData? filterIcon;
+
+  /// Icon for dropdown arrows.
+  /// Defaults to [CountrifyIcons.chevronDown].
+  final IconData? dropdownIcon;
+
+  /// Icon shown in the empty search state.
+  /// Defaults to [CountrifyIcons.searchX].
+  final IconData? emptyStateIcon;
+
+  /// Default icon when no country flag is available.
+  /// Defaults to [CountrifyIcons.globe].
+  final IconData? defaultCountryIcon;
+
   /// Default theme
   static CountryPickerTheme defaultTheme() {
     return const CountryPickerTheme(
@@ -165,7 +249,7 @@ class CountryPickerTheme {
       filterSelectedTextColor: Colors.white,
       filterCheckmarkColor: Colors.white,
       filterIconColor: Colors.black54,
-      filterTextStyle: const TextStyle(
+      filterTextStyle: TextStyle(
         fontSize: 14,
         color: Colors.black87,
       ),
@@ -185,10 +269,10 @@ class CountryPickerTheme {
       ),
       borderColor: Color(0xFFE0E0E0),
       borderRadius: BorderRadius.all(Radius.circular(20)),
-      scrollbarThickness: 6.0,
+      scrollbarThickness: 6,
       scrollbarRadius: BorderRadius.all(Radius.circular(3)),
       shadowColor: Color(0x1A000000),
-      elevation: 8.0,
+      elevation: 8,
       animationDuration: Duration(milliseconds: 300),
       hapticFeedback: true,
     );
@@ -223,7 +307,7 @@ class CountryPickerTheme {
       filterSelectedTextColor: Colors.black,
       filterCheckmarkColor: Colors.black,
       filterIconColor: Colors.white60,
-      filterTextStyle: const TextStyle(
+      filterTextStyle: TextStyle(
         fontSize: 14,
         color: Colors.white,
       ),
@@ -243,10 +327,10 @@ class CountryPickerTheme {
       ),
       borderColor: Color(0xFF404040),
       borderRadius: BorderRadius.all(Radius.circular(20)),
-      scrollbarThickness: 6.0,
+      scrollbarThickness: 6,
       scrollbarRadius: BorderRadius.all(Radius.circular(3)),
       shadowColor: Color(0x1A000000),
-      elevation: 8.0,
+      elevation: 8,
       animationDuration: Duration(milliseconds: 300),
       hapticFeedback: true,
     );
@@ -297,10 +381,10 @@ class CountryPickerTheme {
       ),
       borderColor: Color(0xFF79747E),
       borderRadius: BorderRadius.all(Radius.circular(28)),
-      scrollbarThickness: 6.0,
+      scrollbarThickness: 6,
       scrollbarRadius: BorderRadius.all(Radius.circular(3)),
       shadowColor: Color(0x1A6750A4),
-      elevation: 8.0,
+      elevation: 8,
       animationDuration: Duration(milliseconds: 300),
       hapticFeedback: true,
     );
@@ -315,11 +399,14 @@ class CountryPickerTheme {
     Color? onBackgroundColor,
     bool isDark = false,
   }) {
-    final baseColor = primaryColor ?? (isDark ? const Color(0xFF64B5F6) : const Color(0xFF2196F3));
-    final bgColor = backgroundColor ?? (isDark ? const Color(0xFF1E1E1E) : Colors.white);
-    final surface = surfaceColor ?? (isDark ? const Color(0xFF2D2D2D) : const Color(0xFFF5F5F5));
-    final onSurface = onSurfaceColor ?? (isDark ? Colors.white : Colors.black87);
-    final onBackground = onBackgroundColor ?? (isDark ? Colors.white : Colors.black87);
+    final baseColor = primaryColor ??
+        (isDark ? const Color(0xFF64B5F6) : const Color(0xFF2196F3));
+    final bgColor =
+        backgroundColor ?? (isDark ? const Color(0xFF1E1E1E) : Colors.white);
+    final surface = surfaceColor ??
+        (isDark ? const Color(0xFF2D2D2D) : const Color(0xFFF5F5F5));
+    final onSurface =
+        onSurfaceColor ?? (isDark ? Colors.white : Colors.black87);
 
     return CountryPickerTheme(
       backgroundColor: bgColor,
@@ -364,10 +451,10 @@ class CountryPickerTheme {
       ),
       borderColor: onSurface.withOpacity(0.2),
       borderRadius: const BorderRadius.all(Radius.circular(20)),
-      scrollbarThickness: 6.0,
+      scrollbarThickness: 6,
       scrollbarRadius: const BorderRadius.all(Radius.circular(3)),
       shadowColor: baseColor.withOpacity(0.1),
-      elevation: 8.0,
+      elevation: 8,
       animationDuration: const Duration(milliseconds: 300),
       hapticFeedback: true,
     );
@@ -385,6 +472,11 @@ class CountryPickerTheme {
     Color? searchIconColor,
     Color? searchBarBorderColor,
     BorderRadius? searchBarBorderRadius,
+    String? searchHintText,
+    Color? searchCursorColor,
+    Color? searchFocusedBorderColor,
+    EdgeInsets? searchContentPadding,
+    InputDecoration? searchInputDecoration,
     Color? filterBackgroundColor,
     Color? filterSelectedColor,
     Color? filterTextColor,
@@ -407,6 +499,19 @@ class CountryPickerTheme {
     double? elevation,
     Duration? animationDuration,
     bool? hapticFeedback,
+    Color? dropdownMenuBackgroundColor,
+    double? dropdownMenuElevation,
+    BorderRadius? dropdownMenuBorderRadius,
+    Color? dropdownMenuBorderColor,
+    double? dropdownMenuBorderWidth,
+    IconData? closeIcon,
+    IconData? searchIcon,
+    IconData? clearIcon,
+    IconData? selectedIcon,
+    IconData? filterIcon,
+    IconData? dropdownIcon,
+    IconData? emptyStateIcon,
+    IconData? defaultCountryIcon,
   }) {
     return CountryPickerTheme(
       backgroundColor: backgroundColor ?? this.backgroundColor,
@@ -418,21 +523,37 @@ class CountryPickerTheme {
       searchHintStyle: searchHintStyle ?? this.searchHintStyle,
       searchIconColor: searchIconColor ?? this.searchIconColor,
       searchBarBorderColor: searchBarBorderColor ?? this.searchBarBorderColor,
-      searchBarBorderRadius: searchBarBorderRadius ?? this.searchBarBorderRadius,
-      filterBackgroundColor: filterBackgroundColor ?? this.filterBackgroundColor,
+      searchBarBorderRadius:
+          searchBarBorderRadius ?? this.searchBarBorderRadius,
+      searchHintText: searchHintText ?? this.searchHintText,
+      searchCursorColor: searchCursorColor ?? this.searchCursorColor,
+      searchFocusedBorderColor:
+          searchFocusedBorderColor ?? this.searchFocusedBorderColor,
+      searchContentPadding: searchContentPadding ?? this.searchContentPadding,
+      searchInputDecoration:
+          searchInputDecoration ?? this.searchInputDecoration,
+      filterBackgroundColor:
+          filterBackgroundColor ?? this.filterBackgroundColor,
       filterSelectedColor: filterSelectedColor ?? this.filterSelectedColor,
       filterTextColor: filterTextColor ?? this.filterTextColor,
-      filterSelectedTextColor: filterSelectedTextColor ?? this.filterSelectedTextColor,
+      filterSelectedTextColor:
+          filterSelectedTextColor ?? this.filterSelectedTextColor,
       filterCheckmarkColor: filterCheckmarkColor ?? this.filterCheckmarkColor,
       filterIconColor: filterIconColor ?? this.filterIconColor,
       filterTextStyle: filterTextStyle ?? this.filterTextStyle,
-      countryItemBackgroundColor: countryItemBackgroundColor ?? this.countryItemBackgroundColor,
-      countryItemSelectedColor: countryItemSelectedColor ?? this.countryItemSelectedColor,
-      countryItemSelectedBorderColor: countryItemSelectedBorderColor ?? this.countryItemSelectedBorderColor,
-      countryItemSelectedIconColor: countryItemSelectedIconColor ?? this.countryItemSelectedIconColor,
-      countryItemBorderRadius: countryItemBorderRadius ?? this.countryItemBorderRadius,
+      countryItemBackgroundColor:
+          countryItemBackgroundColor ?? this.countryItemBackgroundColor,
+      countryItemSelectedColor:
+          countryItemSelectedColor ?? this.countryItemSelectedColor,
+      countryItemSelectedBorderColor:
+          countryItemSelectedBorderColor ?? this.countryItemSelectedBorderColor,
+      countryItemSelectedIconColor:
+          countryItemSelectedIconColor ?? this.countryItemSelectedIconColor,
+      countryItemBorderRadius:
+          countryItemBorderRadius ?? this.countryItemBorderRadius,
       countryNameTextStyle: countryNameTextStyle ?? this.countryNameTextStyle,
-      countrySubtitleTextStyle: countrySubtitleTextStyle ?? this.countrySubtitleTextStyle,
+      countrySubtitleTextStyle:
+          countrySubtitleTextStyle ?? this.countrySubtitleTextStyle,
       borderColor: borderColor ?? this.borderColor,
       borderRadius: borderRadius ?? this.borderRadius,
       scrollbarThickness: scrollbarThickness ?? this.scrollbarThickness,
@@ -441,6 +562,24 @@ class CountryPickerTheme {
       elevation: elevation ?? this.elevation,
       animationDuration: animationDuration ?? this.animationDuration,
       hapticFeedback: hapticFeedback ?? this.hapticFeedback,
+      dropdownMenuBackgroundColor:
+          dropdownMenuBackgroundColor ?? this.dropdownMenuBackgroundColor,
+      dropdownMenuElevation:
+          dropdownMenuElevation ?? this.dropdownMenuElevation,
+      dropdownMenuBorderRadius:
+          dropdownMenuBorderRadius ?? this.dropdownMenuBorderRadius,
+      dropdownMenuBorderColor:
+          dropdownMenuBorderColor ?? this.dropdownMenuBorderColor,
+      dropdownMenuBorderWidth:
+          dropdownMenuBorderWidth ?? this.dropdownMenuBorderWidth,
+      closeIcon: closeIcon ?? this.closeIcon,
+      searchIcon: searchIcon ?? this.searchIcon,
+      clearIcon: clearIcon ?? this.clearIcon,
+      selectedIcon: selectedIcon ?? this.selectedIcon,
+      filterIcon: filterIcon ?? this.filterIcon,
+      dropdownIcon: dropdownIcon ?? this.dropdownIcon,
+      emptyStateIcon: emptyStateIcon ?? this.emptyStateIcon,
+      defaultCountryIcon: defaultCountryIcon ?? this.defaultCountryIcon,
     );
   }
 }
