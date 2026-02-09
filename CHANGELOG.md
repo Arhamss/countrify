@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Fixed README screenshots not rendering on pub.dev (use absolute GitHub URLs)
+
 ## 1.0.1
 
 - Added contributors section to documentation

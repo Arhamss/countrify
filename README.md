@@ -104,17 +104,17 @@ Countrify is the most feature-rich country picker for Flutter. It ships with **2
 <th>Phone Number Field</th>
 </tr>
 <tr>
-<td><img src="screenshots/bottom_sheet_light.png" width="250"/></td>
-<td><img src="screenshots/bottom_sheet_dark.png" width="250"/></td>
-<td><img src="screenshots/phone_number_field.png" width="250"/></td>
+<td><img src="https://raw.githubusercontent.com/Arhamss/countrify/main/screenshots/bottom_sheet_light.png" width="250"/></td>
+<td><img src="https://raw.githubusercontent.com/Arhamss/countrify/main/screenshots/bottom_sheet_dark.png" width="250"/></td>
+<td><img src="https://raw.githubusercontent.com/Arhamss/countrify/main/screenshots/phone_number_field.png" width="250"/></td>
 </tr>
 <tr>
 <th>Country Dropdown Field</th>
 <th>Dropdown Picker</th>
 </tr>
 <tr>
-<td><img src="screenshots/country_dropdown_field.png" width="250"/></td>
-<td><img src="screenshots/dropdown_picker.png" width="250"/></td>
+<td><img src="https://raw.githubusercontent.com/Arhamss/countrify/main/screenshots/country_dropdown_field.png" width="250"/></td>
+<td><img src="https://raw.githubusercontent.com/Arhamss/countrify/main/screenshots/dropdown_picker.png" width="250"/></td>
 </tr>
 </table>
 
@@ -128,7 +128,7 @@ Add `countrify` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  countrify: ^1.0.0
+  countrify: ^1.0.2
 ```
 
 Then run:
