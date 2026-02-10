@@ -1,3 +1,7 @@
+## 1.1.1
+
+- Added Buy Me a Coffee support link to README
+
 ## 1.1.0
 
 ### New: Country Name Localization (132 languages)

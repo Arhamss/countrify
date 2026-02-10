@@ -13,6 +13,8 @@
 
 **[GitHub](https://github.com/Arhamss/countrify)** | **[Example](https://github.com/Arhamss/countrify/tree/main/example)** | **[Codeable](https://gocodeable.com)**
 
+<a href="https://buymeacoffee.com/abdullahzer" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="217" height="60"></a>
+
 ---
 
 A comprehensive Flutter package for country selection with **250 countries**, **132 language translations**, beautiful UI, extensive theming, and **zero runtime dependencies**.
@@ -133,7 +135,7 @@ Add `countrify` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  countrify: ^1.1.0
+  countrify: ^1.1.1
 ```
 
 Then run:
@@ -1466,6 +1468,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 <div align="center">
 
 **[GitHub](https://github.com/Arhamss/countrify)** | **[Issues](https://github.com/Arhamss/countrify/issues)** | **[Codeable](https://gocodeable.com)**
+
+<a href="https://buymeacoffee.com/abdullahzer" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="217" height="60"></a>
 
 Built with ❤️ by **[Codeable](https://gocodeable.com)**
 

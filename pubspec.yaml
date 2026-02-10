@@ -3,7 +3,7 @@ description: >
   A beautiful, customizable country picker for Flutter. 250 countries, 5 display modes,
   rich theming, flag images, phone codes, 132 language translations, 40+ utilities.
   Zero runtime dependencies.
-version: 1.1.0
+version: 1.1.1
 homepage: https://gocodeable.com
 repository: https://github.com/Arhamss/countrify
 issue_tracker: https://github.com/Arhamss/countrify/issues
