@@ -118,10 +118,14 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
   OverlayEntry? _dropdownOverlay;
   bool _isDropdownOpen = false;
 
+  late String _effectiveLocale;
+
   @override
   void initState() {
     super.initState();
     _selectedCountry = widget.initialCountry;
+    _effectiveLocale =
+        (widget.config ?? const CountryPickerConfig()).locale ?? 'en';
     final config = widget.config ?? const CountryPickerConfig();
     _currentFilter = CountryFilter(
       regions: config.includeRegions,
@@ -139,6 +143,17 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     );
     _loadCountries();
     _animationController.forward();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = (widget.config ?? const CountryPickerConfig()).locale ??
+        Localizations.localeOf(context).languageCode;
+    if (locale != _effectiveLocale) {
+      _effectiveLocale = locale;
+      _loadCountries();
+    }
   }
 
   @override
@@ -172,6 +187,15 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
         _isDropdownOpen = false;
       });
     }
+  }
+
+  /// Returns the display name for a country, respecting the locale.
+  ///
+  /// Uses the locale from config (if set), otherwise auto-detects from
+  /// [Localizations.localeOf] via [_effectiveLocale].
+  String _displayName(Country country) {
+    if (_effectiveLocale == 'en') return country.name;
+    return CountryUtils.getCountryNameInLanguage(country, _effectiveLocale);
   }
 
   void _loadCountries() {
@@ -236,7 +260,8 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     if (_searchQuery.isNotEmpty) {
       countries = countries.where((country) {
         final query = _searchQuery.toLowerCase();
-        return country.name.toLowerCase().contains(query) ||
+        return _displayName(country).toLowerCase().contains(query) ||
+            country.name.toLowerCase().contains(query) ||
             country.alpha2Code.toLowerCase().contains(query) ||
             country.alpha3Code.toLowerCase().contains(query) ||
             country.capital.toLowerCase().contains(query) ||
@@ -249,7 +274,8 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
     final sortedCountries = List<Country>.from(countries);
     switch (_currentFilter.sortBy) {
       case CountrySortBy.name:
-        sortedCountries.sort((a, b) => a.name.compareTo(b.name));
+        sortedCountries
+            .sort((a, b) => _displayName(a).compareTo(_displayName(b)));
       case CountrySortBy.population:
         sortedCountries.sort((a, b) => b.population.compareTo(a.population));
       case CountrySortBy.area:
@@ -405,7 +431,7 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
       appBar: AppBar(
         backgroundColor: theme.headerColor,
         title: Text(
-          'Select Country',
+          config.titleText,
           style: theme.headerTextStyle,
         ),
         leading: IconButton(
@@ -457,7 +483,7 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
                     ? _buildSimpleCountryItem(_selectedCountry!, theme, config,
                         showBackground: false)
                     : Text(
-                        'Select a country',
+                        config.selectCountryHintText,
                         style: theme.countryNameTextStyle ??
                             const TextStyle(fontSize: 14),
                       ),
@@ -604,7 +630,7 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
               children: [
                 if (widget.showCountryName)
                   Text(
-                    country.name,
+                    _displayName(country),
                     style: (theme.countryNameTextStyle ?? const TextStyle())
                         .copyWith(
                       fontWeight:
@@ -676,7 +702,7 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
       child: Row(
         children: [
           Text(
-            'Select Country',
+            config.titleText,
             style: theme.headerTextStyle,
           ),
           const Spacer(),
@@ -704,7 +730,7 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
         const BorderRadius.all(Radius.circular(12));
     final effectiveDecoration = theme.searchInputDecoration ??
         InputDecoration(
-          hintText: theme.searchHintText ?? 'Search countries...',
+          hintText: theme.searchHintText ?? config.searchHintText,
           hintStyle: theme.searchHintStyle,
           prefixIcon: Icon(theme.searchIcon ?? CountrifyIcons.search,
               color: theme.searchIconColor),
@@ -771,7 +797,7 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _buildFilterChip('All', null, theme),
+                  _buildFilterChip(config.filterAllText, null, theme),
                   _buildFilterChip('Europe', 'Europe', theme),
                   _buildFilterChip('Asia', 'Asia', theme),
                   _buildFilterChip('Africa', 'Africa', theme),
@@ -937,7 +963,7 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
 
   Widget _buildCountryName(Country country, CountryPickerTheme theme) {
     return Text(
-      country.name,
+      _displayName(country),
       style: theme.countryNameTextStyle,
     );
   }
@@ -977,6 +1003,7 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
         currentFilter: _currentFilter,
         onFilterChanged: _onFilterChanged,
         theme: theme,
+        config: config,
       ),
     );
   }
@@ -997,11 +1024,13 @@ class _FilterDialog extends StatefulWidget {
     required this.currentFilter,
     required this.onFilterChanged,
     required this.theme,
+    required this.config,
   });
 
   final CountryFilter currentFilter;
   final ValueChanged<CountryFilter> onFilterChanged;
   final CountryPickerTheme theme;
+  final CountryPickerConfig config;
 
   @override
   State<_FilterDialog> createState() => _FilterDialogState();
@@ -1020,12 +1049,14 @@ class _FilterDialogState extends State<_FilterDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: widget.theme.backgroundColor,
-      title: Text('Filter Countries', style: widget.theme.headerTextStyle),
+      title: Text(widget.config.filterTitleText,
+          style: widget.theme.headerTextStyle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           // Sort options
-          Text('Sort by:', style: widget.theme.filterTextStyle),
+          Text(widget.config.filterSortByText,
+              style: widget.theme.filterTextStyle),
           RadioGroup<CountrySortBy>(
             groupValue: _filter.sortBy,
             onChanged: (CountrySortBy? value) {
@@ -1047,7 +1078,8 @@ class _FilterDialogState extends State<_FilterDialog> {
           const Divider(),
 
           // Region filters
-          Text('Regions:', style: widget.theme.filterTextStyle),
+          Text(widget.config.filterRegionsText,
+              style: widget.theme.filterTextStyle),
           ...['Europe', 'Asia', 'Africa', 'Americas', 'Oceania'].map((region) {
             return CheckboxListTile(
               title: Text(region),
@@ -1067,14 +1099,14 @@ class _FilterDialogState extends State<_FilterDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(widget.config.filterCancelText),
         ),
         TextButton(
           onPressed: () {
             widget.onFilterChanged(_filter);
             Navigator.of(context).pop();
           },
-          child: const Text('Apply'),
+          child: Text(widget.config.filterApplyText),
         ),
       ],
     );

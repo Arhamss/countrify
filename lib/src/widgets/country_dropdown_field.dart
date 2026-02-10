@@ -1,5 +1,6 @@
 import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:countrify/src/models/country.dart';
+import 'package:countrify/src/utils/country_utils.dart';
 import 'package:countrify/src/widgets/comprehensive_country_picker.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
@@ -179,12 +180,20 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
     );
   }
 
+  String _displayName(Country country) {
+    final locale = (widget.config ?? const CountryPickerConfig()).locale ??
+        Localizations.localeOf(context).languageCode;
+    if (locale == 'en') return country.name;
+    return CountryUtils.getCountryNameInLanguage(country, locale);
+  }
+
   String _getDisplayText() {
+    final config = widget.config ?? const CountryPickerConfig();
     if (_selectedCountry == null) {
-      return widget.hintText ?? 'Select a country';
+      return widget.hintText ?? config.selectCountryHintText;
     }
 
-    final parts = <String>[_selectedCountry!.name];
+    final parts = <String>[_displayName(_selectedCountry!)];
 
     if (widget.showPhoneCode && _selectedCountry!.callingCodes.isNotEmpty) {
       parts.add('(+${_selectedCountry!.callingCodes.first})');
@@ -199,7 +208,8 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
 
     final defaultDecoration = InputDecoration(
       labelText: widget.labelText,
-      hintText: widget.hintText ?? 'Select a country',
+      hintText: widget.hintText ??
+          (widget.config ?? const CountryPickerConfig()).selectCountryHintText,
       prefixIcon: _selectedCountry != null && widget.showFlag
           ? Padding(
               padding: const EdgeInsets.all(12),

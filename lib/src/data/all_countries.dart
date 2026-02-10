@@ -1,4 +1,4 @@
-import '../models/country.dart';
+import 'package:countrify/src/models/country.dart';
 
 /// Complete list of all countries with ISO 3166-1 codes
 /// Generated from CSV data
@@ -21,11 +21,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 38041754,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['93'],
       topLevelDomains: ['.af'],
       currencies: [Currency(code: 'AFN', name: 'AFN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Pashto', nativeName: 'Pashto')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Pashto', nativeName: 'Pashto')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -46,11 +49,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 2854191,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['355'],
       topLevelDomains: ['.al'],
       currencies: [Currency(code: 'ALL', name: 'ALL', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Albanian', nativeName: 'Albanian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Albanian',
+            nativeName: 'Albanian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -71,11 +80,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Northern Africa',
       population: 43053054,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['213'],
       topLevelDomains: ['.dz'],
       currencies: [Currency(code: 'DZD', name: 'DZD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -96,11 +108,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 77142,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['376'],
       topLevelDomains: ['.ad'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Catalan', nativeName: 'Catalan')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Catalan',
+            nativeName: 'Catalan')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -121,11 +139,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 31825295,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['244'],
       topLevelDomains: ['.ao'],
       currencies: [Currency(code: 'AOA', name: 'AOA', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Portuguese', nativeName: 'Portuguese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Portuguese',
+            nativeName: 'Portuguese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -141,16 +165,22 @@ class AllCountries {
       numericCode: '028',
       flagEmoji: '🇦🇬',
       flagImagePath: 'packages/countrify/assets/images/flags/AG.png',
-      capital: 'St. John\'s, Saint John',
-      largestCity: 'St. John\'s, Saint John',
+      capital: "St. John's, Saint John",
+      largestCity: "St. John's, Saint John",
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 97118,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.ag'],
       currencies: [Currency(code: 'XCD', name: 'XCD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -171,11 +201,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'South America',
       population: 44938712,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['54'],
       topLevelDomains: ['.ar'],
       currencies: [Currency(code: 'ARS', name: 'ARS', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -196,11 +232,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Eastern Asia',
       population: 2957731,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['374'],
       topLevelDomains: ['.am'],
       currencies: [Currency(code: 'AMD', name: 'AMD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Armenian', nativeName: 'Armenian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Armenian',
+            nativeName: 'Armenian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -221,11 +263,17 @@ class AllCountries {
       region: 'Oceania',
       subregion: 'Polynesia',
       population: 25766605,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['61'],
       topLevelDomains: ['.au'],
       currencies: [Currency(code: 'AUD', name: 'AUD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -246,11 +294,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 8877067,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['43'],
       topLevelDomains: ['.at'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'German', nativeName: 'German')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'German', nativeName: 'German')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -271,11 +322,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Eastern Asia',
       population: 10023318,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['994'],
       topLevelDomains: ['.az'],
       currencies: [Currency(code: 'AZN', name: 'AZN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Azerbaijani', nativeName: 'Azerbaijani')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Azerbaijani',
+            nativeName: 'Azerbaijani')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -296,11 +353,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 389482,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.bs'],
       currencies: [Currency(code: 'BSD', name: 'BSD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -321,11 +384,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 1501635,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['973'],
       topLevelDomains: ['.bh'],
       currencies: [Currency(code: 'BHD', name: 'BHD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -346,11 +412,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 167310838,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['880'],
       topLevelDomains: ['.bd'],
       currencies: [Currency(code: 'BDT', name: 'BDT', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Bengali', nativeName: 'Bengali')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Bengali',
+            nativeName: 'Bengali')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -371,11 +443,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 287025,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.bb'],
       currencies: [Currency(code: 'BBD', name: 'BBD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -396,11 +474,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 9466856,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['375'],
       topLevelDomains: ['.by'],
       currencies: [Currency(code: 'BYN', name: 'BYN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Russian', nativeName: 'Russian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Russian',
+            nativeName: 'Russian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -421,11 +505,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 11484055,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['32'],
       topLevelDomains: ['.be'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -446,11 +533,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 390353,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['501'],
       topLevelDomains: ['.bz'],
       currencies: [Currency(code: 'BZD', name: 'BZD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -471,11 +564,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 11801151,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['229'],
       topLevelDomains: ['.bj'],
       currencies: [Currency(code: 'XOF', name: 'XOF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -496,11 +592,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 727145,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['975'],
       topLevelDomains: ['.bt'],
       currencies: [Currency(code: 'BTN', name: 'BTN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Dzongkha', nativeName: 'Dzongkha')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Dzongkha',
+            nativeName: 'Dzongkha')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -521,11 +623,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'Central America',
       population: 11513100,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['591'],
       topLevelDomains: ['.bo'],
       currencies: [Currency(code: 'BOB', name: 'BOB', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -546,11 +654,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 3301000,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['387'],
       topLevelDomains: ['.ba'],
       currencies: [Currency(code: 'BAM', name: 'BAM', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Bosnian', nativeName: 'Bosnian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Bosnian',
+            nativeName: 'Bosnian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -571,11 +685,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 2346179,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['267'],
       topLevelDomains: ['.bw'],
       currencies: [Currency(code: 'BWP', name: 'BWP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -596,11 +716,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'Central America',
       population: 212559417,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['55'],
       topLevelDomains: ['.br'],
       currencies: [Currency(code: 'BRL', name: 'BRL', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Portuguese', nativeName: 'Portuguese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Portuguese',
+            nativeName: 'Portuguese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -621,11 +747,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 433285,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['673'],
       topLevelDomains: ['.bn'],
       currencies: [Currency(code: 'BND', name: 'BND', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Malay', nativeName: 'Malay')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Malay', nativeName: 'Malay')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -646,11 +775,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 6975761,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['359'],
       topLevelDomains: ['.bg'],
       currencies: [Currency(code: 'BGN', name: 'BGN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Bulgarian', nativeName: 'Bulgarian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Bulgarian',
+            nativeName: 'Bulgarian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -671,11 +806,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 20321378,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['226'],
       topLevelDomains: ['.bf'],
       currencies: [Currency(code: 'XOF', name: 'XOF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -696,11 +834,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 11530580,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['257'],
       topLevelDomains: ['.bi'],
       currencies: [Currency(code: 'BIF', name: 'BIF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Kirundi', nativeName: 'Kirundi')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Kirundi',
+            nativeName: 'Kirundi')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -721,11 +865,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 25716544,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['225'],
       topLevelDomains: ['.ci'],
       currencies: [Currency(code: 'XOF', name: 'XOF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -746,11 +893,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'Northern America',
       population: 483628,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['238'],
       topLevelDomains: ['.cv'],
       currencies: [Currency(code: 'CVE', name: 'CVE', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Portuguese', nativeName: 'Portuguese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Portuguese',
+            nativeName: 'Portuguese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -771,11 +924,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 16486542,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['855'],
       topLevelDomains: ['.kh'],
       currencies: [Currency(code: 'KHR', name: 'KHR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Khmer language', nativeName: 'Khmer language')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Khmer language',
+            nativeName: 'Khmer language')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -796,11 +955,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 25876380,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['237'],
       topLevelDomains: ['.cm'],
       currencies: [Currency(code: 'XAF', name: 'XAF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -821,11 +983,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Eastern Asia',
       population: 36991981,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.ca'],
       currencies: [Currency(code: 'CAD', name: 'CAD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -846,11 +1011,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 4745185,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['236'],
       topLevelDomains: ['.cf'],
       currencies: [Currency(code: 'XAF', name: 'XAF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -866,16 +1034,19 @@ class AllCountries {
       numericCode: '148',
       flagEmoji: '🇹🇩',
       flagImagePath: 'packages/countrify/assets/images/flags/TD.png',
-      capital: 'N\'Djamena',
-      largestCity: 'N\'Djamena',
+      capital: "N'Djamena",
+      largestCity: "N'Djamena",
       region: 'Africa',
       subregion: 'Western Africa',
       population: 15946876,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['235'],
       topLevelDomains: ['.td'],
       currencies: [Currency(code: 'XAF', name: 'XAF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -896,11 +1067,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'South America',
       population: 18952038,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['56'],
       topLevelDomains: ['.cl'],
       currencies: [Currency(code: 'CLP', name: 'CLP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -921,11 +1098,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 1397715000,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['86'],
       topLevelDomains: ['.cn'],
       currencies: [Currency(code: 'CNY', name: 'CNY', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Chinese', nativeName: 'Chinese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Chinese',
+            nativeName: 'Chinese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -946,11 +1129,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'Central America',
       population: 50339443,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['57'],
       topLevelDomains: ['.co'],
       currencies: [Currency(code: 'COP', name: 'COP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -971,11 +1160,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 850886,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['269'],
       topLevelDomains: ['.km'],
       currencies: [Currency(code: 'KMF', name: 'KMF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -996,11 +1188,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 5380508,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['242'],
       topLevelDomains: ['.cg'],
       currencies: [Currency(code: 'XAF', name: 'XAF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1021,11 +1216,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 5047561,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['506'],
       topLevelDomains: ['.cr'],
       currencies: [Currency(code: 'CRC', name: 'CRC', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1046,11 +1247,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 4067500,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['385'],
       topLevelDomains: ['.hr'],
       currencies: [Currency(code: 'HRK', name: 'HRK', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Croatian', nativeName: 'Croatian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Croatian',
+            nativeName: 'Croatian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1071,11 +1278,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 11333483,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['53'],
       topLevelDomains: ['.cu'],
       currencies: [Currency(code: 'CUP', name: 'CUP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1096,11 +1309,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Southern Europe',
       population: 1198575,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['357'],
       topLevelDomains: ['.cy'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Greek', nativeName: 'Greek')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Greek', nativeName: 'Greek')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1121,11 +1337,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 10669709,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['420'],
       topLevelDomains: ['.cz'],
       currencies: [Currency(code: 'CZK', name: 'CZK', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Czech', nativeName: 'Czech')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Czech', nativeName: 'Czech')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1146,11 +1365,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 86790567,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['243'],
       topLevelDomains: ['.cd'],
       currencies: [Currency(code: 'CDF', name: 'CDF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1171,11 +1393,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 5818553,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['45'],
       topLevelDomains: ['.dk'],
       currencies: [Currency(code: 'DKK', name: 'DKK', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Danish', nativeName: 'Danish')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Danish', nativeName: 'Danish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1196,11 +1421,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 973560,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['253'],
       topLevelDomains: ['.dj'],
       currencies: [Currency(code: 'DJF', name: 'DJF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1221,11 +1449,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 71808,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.dm'],
       currencies: [Currency(code: 'XCD', name: 'XCD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1246,11 +1480,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 10738958,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.do'],
       currencies: [Currency(code: 'DOP', name: 'DOP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1271,11 +1511,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'Central America',
       population: 17373662,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['593'],
       topLevelDomains: ['.ec'],
       currencies: [Currency(code: 'USD', name: 'USD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1296,11 +1542,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Northern Africa',
       population: 100388073,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['20'],
       topLevelDomains: ['.eg'],
       currencies: [Currency(code: 'EGP', name: 'EGP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1321,11 +1570,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 6453553,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['503'],
       topLevelDomains: ['.sv'],
       currencies: [Currency(code: 'SVC', name: 'SVC', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1346,11 +1601,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 1355986,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['240'],
       topLevelDomains: ['.gq'],
       currencies: [Currency(code: 'XAF', name: 'XAF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1371,11 +1632,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 6333135,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['291'],
       topLevelDomains: ['.er'],
       currencies: [Currency(code: 'ERN', name: 'ERN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Tigrinya', nativeName: 'Tigrinya')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Tigrinya',
+            nativeName: 'Tigrinya')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1396,11 +1663,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 1331824,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['372'],
       topLevelDomains: ['.ee'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Estonian', nativeName: 'Estonian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Estonian',
+            nativeName: 'Estonian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1421,11 +1694,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 1093238,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['268'],
       topLevelDomains: ['.sz'],
       currencies: [Currency(code: 'SZL', name: 'SZL', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1446,11 +1725,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 112078730,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['251'],
       topLevelDomains: ['.et'],
       currencies: [Currency(code: 'ETB', name: 'ETB', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Amharic', nativeName: 'Amharic')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Amharic',
+            nativeName: 'Amharic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1471,11 +1756,17 @@ class AllCountries {
       region: 'Oceania',
       subregion: 'Polynesia',
       population: 889953,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['679'],
       topLevelDomains: ['.fj'],
       currencies: [Currency(code: 'FJD', name: 'FJD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Fiji Hindi', nativeName: 'Fiji Hindi')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Fiji Hindi',
+            nativeName: 'Fiji Hindi')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1496,11 +1787,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 5520314,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['358'],
       topLevelDomains: ['.fi'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Swedish', nativeName: 'Swedish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Swedish',
+            nativeName: 'Swedish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1521,11 +1818,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 67059887,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['33'],
       topLevelDomains: ['.fr'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1546,11 +1846,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 2172579,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['241'],
       topLevelDomains: ['.ga'],
       currencies: [Currency(code: 'XAF', name: 'XAF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1571,11 +1874,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 2347706,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['220'],
       topLevelDomains: ['.gm'],
       currencies: [Currency(code: 'GMD', name: 'GMD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1596,11 +1905,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Eastern Asia',
       population: 3720382,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['995'],
       topLevelDomains: ['.ge'],
       currencies: [Currency(code: 'GEL', name: 'GEL', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Georgian', nativeName: 'Georgian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Georgian',
+            nativeName: 'Georgian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1621,11 +1936,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 83132799,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['49'],
       topLevelDomains: ['.de'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'German', nativeName: 'German')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'German', nativeName: 'German')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1646,11 +1964,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 30792608,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['233'],
       topLevelDomains: ['.gh'],
       currencies: [Currency(code: 'GHS', name: 'GHS', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1671,11 +1995,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Southern Europe',
       population: 10716322,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['30'],
       topLevelDomains: ['.gr'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Greek', nativeName: 'Greek')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Greek', nativeName: 'Greek')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1691,16 +2018,22 @@ class AllCountries {
       numericCode: '308',
       flagEmoji: '🇬🇩',
       flagImagePath: 'packages/countrify/assets/images/flags/GD.png',
-      capital: 'St. George\'s, Grenada',
-      largestCity: 'St. George\'s, Grenada',
+      capital: "St. George's, Grenada",
+      largestCity: "St. George's, Grenada",
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 112003,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.gd'],
       currencies: [Currency(code: 'XCD', name: 'XCD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1721,11 +2054,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 16604026,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['502'],
       topLevelDomains: ['.gt'],
       currencies: [Currency(code: 'GTQ', name: 'GTQ', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1746,11 +2085,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 12771246,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['224'],
       topLevelDomains: ['.gn'],
       currencies: [Currency(code: 'GNF', name: 'GNF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1771,11 +2113,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 1920922,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['245'],
       topLevelDomains: ['.gw'],
       currencies: [Currency(code: 'XOF', name: 'XOF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Portuguese', nativeName: 'Portuguese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Portuguese',
+            nativeName: 'Portuguese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1796,11 +2144,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'Central America',
       population: 782766,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['592'],
       topLevelDomains: ['.gy'],
       currencies: [Currency(code: 'GYD', name: 'GYD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1821,11 +2175,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 11263077,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['509'],
       topLevelDomains: ['.ht'],
       currencies: [Currency(code: 'HTG', name: 'HTG', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1846,11 +2203,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 836,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['379'],
       topLevelDomains: ['.va'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Italian', nativeName: 'Italian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Italian',
+            nativeName: 'Italian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1871,11 +2234,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 9746117,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['504'],
       topLevelDomains: ['.hn'],
       currencies: [Currency(code: 'HNL', name: 'HNL', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1896,11 +2265,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 9769949,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['36'],
       topLevelDomains: ['.hu'],
       currencies: [Currency(code: 'HUF', name: 'HUF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Hungarian', nativeName: 'Hungarian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Hungarian',
+            nativeName: 'Hungarian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1921,11 +2296,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 361313,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['354'],
       topLevelDomains: ['.is'],
       currencies: [Currency(code: 'ISK', name: 'ISK', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Icelandic', nativeName: 'Icelandic')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Icelandic',
+            nativeName: 'Icelandic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1946,11 +2327,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 1366417754,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['91'],
       topLevelDomains: ['.in'],
       currencies: [Currency(code: 'INR', name: 'INR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Hindi', nativeName: 'Hindi')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Hindi', nativeName: 'Hindi')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1971,11 +2355,17 @@ class AllCountries {
       region: 'Oceania',
       subregion: 'Polynesia',
       population: 270203917,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['62'],
       topLevelDomains: ['.id'],
       currencies: [Currency(code: 'IDR', name: 'IDR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Indonesian', nativeName: 'Indonesian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Indonesian',
+            nativeName: 'Indonesian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -1996,11 +2386,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 82913906,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['98'],
       topLevelDomains: ['.ir'],
       currencies: [Currency(code: 'IRR', name: 'IRR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Persian', nativeName: 'Persian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Persian',
+            nativeName: 'Persian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2021,11 +2417,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 39309783,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['964'],
       topLevelDomains: ['.iq'],
       currencies: [Currency(code: 'IQD', name: 'IQD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2034,23 +2433,26 @@ class AllCountries {
 
     // Republic of Ireland
     Country(
-      name: 'Republic of Ireland',
-      nameTranslations: {'en': 'Republic of Ireland'},
-      alpha2Code: 'ROI',
-      alpha3Code: 'UNK',
-      numericCode: '000',
-      flagEmoji: '🏳️',
-      flagImagePath: 'packages/countrify/assets/images/flags/ROI.png',
+      name: 'Ireland',
+      nameTranslations: {'en': 'Ireland'},
+      alpha2Code: 'IE',
+      alpha3Code: 'IRL',
+      numericCode: '372',
+      flagEmoji: '🇮🇪',
+      flagImagePath: 'packages/countrify/assets/images/flags/IE.png',
       capital: 'Dublin',
       largestCity: 'Connacht',
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 5007069,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['353'],
       topLevelDomains: ['.roi'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Irish', nativeName: 'Irish')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Irish', nativeName: 'Irish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2071,11 +2473,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Northern Africa',
       population: 9053300,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['972'],
       topLevelDomains: ['.il'],
       currencies: [Currency(code: 'ILS', name: 'ILS', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Hebrew', nativeName: 'Hebrew')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Hebrew', nativeName: 'Hebrew')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2096,11 +2501,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 60297396,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['39'],
       topLevelDomains: ['.it'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Italian', nativeName: 'Italian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Italian',
+            nativeName: 'Italian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2121,11 +2532,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 2948279,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1876'],
       topLevelDomains: ['.jm'],
       currencies: [Currency(code: 'JMD', name: 'JMD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2146,11 +2563,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 126226568,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['81'],
       topLevelDomains: ['.jp'],
       currencies: [Currency(code: 'JPY', name: 'JPY', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Japanese', nativeName: 'Japanese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Japanese',
+            nativeName: 'Japanese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2171,11 +2594,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Northern Africa',
       population: 10101694,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['962'],
       topLevelDomains: ['.jo'],
       currencies: [Currency(code: 'JOD', name: 'JOD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2196,11 +2622,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Eastern Asia',
       population: 18513930,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['7'],
       topLevelDomains: ['.kz'],
       currencies: [Currency(code: 'KZT', name: 'KZT', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Russian', nativeName: 'Russian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Russian',
+            nativeName: 'Russian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2221,11 +2653,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 52573973,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['254'],
       topLevelDomains: ['.ke'],
       currencies: [Currency(code: 'KES', name: 'KES', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Swahili', nativeName: 'Swahili')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Swahili',
+            nativeName: 'Swahili')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2246,11 +2684,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'Central America',
       population: 117606,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['686'],
       topLevelDomains: ['.ki'],
       currencies: [Currency(code: 'AUD', name: 'AUD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2271,11 +2715,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 4207083,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['965'],
       topLevelDomains: ['.kw'],
       currencies: [Currency(code: 'KWD', name: 'KWD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2296,11 +2743,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Eastern Asia',
       population: 6456900,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['996'],
       topLevelDomains: ['.kg'],
       currencies: [Currency(code: 'KGS', name: 'KGS', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Russian', nativeName: 'Russian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Russian',
+            nativeName: 'Russian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2321,11 +2774,13 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 7169455,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['856'],
       topLevelDomains: ['.la'],
       currencies: [Currency(code: 'LAK', name: 'LAK', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Lao', nativeName: 'Lao')],
+      languages: [
+        Language(iso6391: 'en', iso6392: 'eng', name: 'Lao', nativeName: 'Lao')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2346,11 +2801,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 1912789,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['371'],
       topLevelDomains: ['.lv'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Latvian', nativeName: 'Latvian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Latvian',
+            nativeName: 'Latvian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2371,11 +2832,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Northern Africa',
       population: 6855713,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['961'],
       topLevelDomains: ['.lb'],
       currencies: [Currency(code: 'LBP', name: 'LBP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2396,11 +2860,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 2125268,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['266'],
       topLevelDomains: ['.ls'],
       currencies: [Currency(code: 'LSL', name: 'LSL', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2421,11 +2891,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 4937374,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['231'],
       topLevelDomains: ['.lr'],
       currencies: [Currency(code: 'LRD', name: 'LRD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2446,11 +2922,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Northern Africa',
       population: 6777452,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['218'],
       topLevelDomains: ['.ly'],
       currencies: [Currency(code: 'LYD', name: 'LYD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2471,11 +2950,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 38019,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['423'],
       topLevelDomains: ['.li'],
       currencies: [Currency(code: 'CHF', name: 'CHF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'German', nativeName: 'German')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'German', nativeName: 'German')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2496,11 +2978,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 2786844,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['370'],
       topLevelDomains: ['.lt'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Lithuanian', nativeName: 'Lithuanian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Lithuanian',
+            nativeName: 'Lithuanian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2521,11 +3009,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 645397,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['352'],
       topLevelDomains: ['.lu'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Luxembourgish', nativeName: 'Luxembourgish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Luxembourgish',
+            nativeName: 'Luxembourgish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2546,11 +3040,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 26969307,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['261'],
       topLevelDomains: ['.mg'],
       currencies: [Currency(code: 'MGA', name: 'MGA', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2571,11 +3068,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 18628747,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['265'],
       topLevelDomains: ['.mw'],
       currencies: [Currency(code: 'MWK', name: 'MWK', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2596,11 +3099,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 32447385,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['60'],
       topLevelDomains: ['.my'],
       currencies: [Currency(code: 'MYR', name: 'MYR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Malay', nativeName: 'Malay')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Malay', nativeName: 'Malay')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2621,11 +3127,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 530953,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['960'],
       topLevelDomains: ['.mv'],
       currencies: [Currency(code: 'MVR', name: 'MVR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Divehi', nativeName: 'Divehi')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Divehi', nativeName: 'Divehi')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2646,11 +3155,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 19658031,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['223'],
       topLevelDomains: ['.ml'],
       currencies: [Currency(code: 'XOF', name: 'XOF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2671,11 +3183,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Southern Europe',
       population: 502653,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['356'],
       topLevelDomains: ['.mt'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Maltese', nativeName: 'Maltese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Maltese',
+            nativeName: 'Maltese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2696,11 +3214,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 58791,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['692'],
       topLevelDomains: ['.mh'],
       currencies: [Currency(code: 'USD', name: 'USD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Marshallese', nativeName: 'Marshallese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Marshallese',
+            nativeName: 'Marshallese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2721,11 +3245,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Northern Africa',
       population: 4525696,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['222'],
       topLevelDomains: ['.mr'],
       currencies: [Currency(code: 'MRU', name: 'MRU', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2746,11 +3273,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 1265711,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['230'],
       topLevelDomains: ['.mu'],
       currencies: [Currency(code: 'MUR', name: 'MUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2771,11 +3301,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 126014024,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['52'],
       topLevelDomains: ['.mx'],
       currencies: [Currency(code: 'MXN', name: 'MXN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2796,11 +3332,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 113815,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['691'],
       topLevelDomains: ['.fm'],
       currencies: [Currency(code: 'USD', name: 'USD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2821,11 +3363,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 2657637,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['373'],
       topLevelDomains: ['.md'],
       currencies: [Currency(code: 'MDL', name: 'MDL', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Romanian', nativeName: 'Romanian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Romanian',
+            nativeName: 'Romanian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2846,11 +3394,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 38964,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['377'],
       topLevelDomains: ['.mc'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2871,11 +3422,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Eastern Asia',
       population: 3225167,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['976'],
       topLevelDomains: ['.mn'],
       currencies: [Currency(code: 'MNT', name: 'MNT', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Mongolian', nativeName: 'Mongolian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Mongolian',
+            nativeName: 'Mongolian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2896,11 +3453,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 622137,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['382'],
       topLevelDomains: ['.me'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Montenegrin language', nativeName: 'Montenegrin language')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Montenegrin language',
+            nativeName: 'Montenegrin language')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2921,11 +3484,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Northern Africa',
       population: 36910560,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['212'],
       topLevelDomains: ['.ma'],
       currencies: [Currency(code: 'MAD', name: 'MAD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2946,11 +3512,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 30366036,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['258'],
       topLevelDomains: ['.mz'],
       currencies: [Currency(code: 'MZN', name: 'MZN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Portuguese', nativeName: 'Portuguese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Portuguese',
+            nativeName: 'Portuguese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2971,11 +3543,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 54045420,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['95'],
       topLevelDomains: ['.mm'],
       currencies: [Currency(code: 'MMK', name: 'MMK', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Burmese', nativeName: 'Burmese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Burmese',
+            nativeName: 'Burmese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -2996,11 +3574,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 2494530,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['264'],
       topLevelDomains: ['.na'],
       currencies: [Currency(code: 'NAD', name: 'NAD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3021,11 +3605,17 @@ class AllCountries {
       region: 'Oceania',
       subregion: 'Polynesia',
       population: 10084,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['674'],
       topLevelDomains: ['.nr'],
       currencies: [Currency(code: 'AUD', name: 'AUD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3046,11 +3636,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 28608710,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['977'],
       topLevelDomains: ['.np'],
       currencies: [Currency(code: 'NPR', name: 'NPR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Nepali', nativeName: 'Nepali')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Nepali', nativeName: 'Nepali')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3071,11 +3664,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 17332850,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['31'],
       topLevelDomains: ['.nl'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Dutch', nativeName: 'Dutch')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Dutch', nativeName: 'Dutch')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3096,11 +3692,17 @@ class AllCountries {
       region: 'Oceania',
       subregion: 'Polynesia',
       population: 4841000,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['64'],
       topLevelDomains: ['.nz'],
       currencies: [Currency(code: 'NZD', name: 'NZD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3121,11 +3723,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 6545502,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['505'],
       topLevelDomains: ['.ni'],
       currencies: [Currency(code: 'NIO', name: 'NIO', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3146,11 +3754,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 23310715,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['227'],
       topLevelDomains: ['.ne'],
       currencies: [Currency(code: 'XOF', name: 'XOF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3171,11 +3782,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 200963599,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['234'],
       topLevelDomains: ['.ng'],
       currencies: [Currency(code: 'NGN', name: 'NGN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3196,11 +3813,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Eastern Asia',
       population: 25666161,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['850'],
       topLevelDomains: ['.kp'],
       currencies: [Currency(code: 'KPW', name: 'KPW', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Korean', nativeName: 'Korean')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Korean', nativeName: 'Korean')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3211,21 +3831,27 @@ class AllCountries {
     Country(
       name: 'North Macedonia',
       nameTranslations: {'en': 'North Macedonia'},
-      alpha2Code: 'MKD',
-      alpha3Code: 'UNK',
-      numericCode: '000',
-      flagEmoji: '🏳️',
-      flagImagePath: 'packages/countrify/assets/images/flags/MKD.png',
+      alpha2Code: 'MK',
+      alpha3Code: 'MKD',
+      numericCode: '807',
+      flagEmoji: '🇲🇰',
+      flagImagePath: 'packages/countrify/assets/images/flags/MK.png',
       capital: 'Skopje',
       largestCity: 'Skopje',
       region: 'Europe',
       subregion: 'Western Europe',
       population: 1836713,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['389'],
       topLevelDomains: ['.mkd'],
       currencies: [Currency(code: 'MKD', name: 'MKD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Macedonian', nativeName: 'Macedonian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Macedonian',
+            nativeName: 'Macedonian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3246,11 +3872,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 5347896,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['47'],
       topLevelDomains: ['.no'],
       currencies: [Currency(code: 'NOK', name: 'NOK', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Norwegian', nativeName: 'Norwegian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Norwegian',
+            nativeName: 'Norwegian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3271,11 +3903,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 5266535,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['968'],
       topLevelDomains: ['.om'],
       currencies: [Currency(code: 'OMR', name: 'OMR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3296,11 +3931,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 216565318,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['92'],
       topLevelDomains: ['.pk'],
       currencies: [Currency(code: 'PKR', name: 'PKR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Urdu', nativeName: 'Urdu')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Urdu', nativeName: 'Urdu')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3321,11 +3959,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 18233,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['680'],
       topLevelDomains: ['.pw'],
       currencies: [Currency(code: 'USD', name: 'USD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3334,23 +3978,26 @@ class AllCountries {
 
     // Palestinian National Authority
     Country(
-      name: 'Palestinian National Authority',
-      nameTranslations: {'en': 'Palestinian National Authority'},
-      alpha2Code: 'PNA',
-      alpha3Code: 'UNK',
-      numericCode: '000',
-      flagEmoji: '🏳️',
-      flagImagePath: 'packages/countrify/assets/images/flags/PNA.png',
+      name: 'Palestine',
+      nameTranslations: {'en': 'Palestine'},
+      alpha2Code: 'PS',
+      alpha3Code: 'PSE',
+      numericCode: '275',
+      flagEmoji: '🇵🇸',
+      flagImagePath: 'packages/countrify/assets/images/flags/PS.png',
       capital: 'Ramallah',
       largestCity: 'Gaza City',
-      region: 'Africa',
-      subregion: 'Northern Africa',
+      region: 'Asia',
+      subregion: 'Western Asia',
       population: 5300000,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['970'],
       topLevelDomains: ['.pna'],
       currencies: [Currency(code: 'JOD', name: 'JOD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3371,11 +4018,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 4246439,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['507'],
       topLevelDomains: ['.pa'],
       currencies: [Currency(code: 'PAB', name: 'PAB', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3396,11 +4049,17 @@ class AllCountries {
       region: 'Oceania',
       subregion: 'Polynesia',
       population: 8776109,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['675'],
       topLevelDomains: ['.pg'],
       currencies: [Currency(code: 'PGK', name: 'PGK', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Tok Pisin', nativeName: 'Tok Pisin')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Tok Pisin',
+            nativeName: 'Tok Pisin')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3421,11 +4080,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'South America',
       population: 7044636,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['595'],
       topLevelDomains: ['.py'],
       currencies: [Currency(code: 'PYG', name: 'PYG', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3446,11 +4111,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'Central America',
       population: 32510453,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['51'],
       topLevelDomains: ['.pe'],
       currencies: [Currency(code: 'PEN', name: 'PEN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3471,11 +4142,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 108116615,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['63'],
       topLevelDomains: ['.ph'],
       currencies: [Currency(code: 'PHP', name: 'PHP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3496,11 +4173,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 37970874,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['48'],
       topLevelDomains: ['.pl'],
       currencies: [Currency(code: 'PLN', name: 'PLN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Polish', nativeName: 'Polish')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Polish', nativeName: 'Polish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3521,11 +4201,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Southern Europe',
       population: 10269417,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['351'],
       topLevelDomains: ['.pt'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Portuguese', nativeName: 'Portuguese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Portuguese',
+            nativeName: 'Portuguese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3546,11 +4232,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 2832067,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['974'],
       topLevelDomains: ['.qa'],
       currencies: [Currency(code: 'QAR', name: 'QAR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3571,11 +4260,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 19356544,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['40'],
       topLevelDomains: ['.ro'],
       currencies: [Currency(code: 'RON', name: 'RON', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Romanian', nativeName: 'Romanian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Romanian',
+            nativeName: 'Romanian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3596,11 +4291,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Eastern Asia',
       population: 144373535,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['7'],
       topLevelDomains: ['.ru'],
       currencies: [Currency(code: 'RUB', name: 'RUB', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Russian', nativeName: 'Russian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Russian',
+            nativeName: 'Russian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3621,11 +4322,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 12626950,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['250'],
       topLevelDomains: ['.rw'],
       currencies: [Currency(code: 'RWF', name: 'RWF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Swahili', nativeName: 'Swahili')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Swahili',
+            nativeName: 'Swahili')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3646,11 +4353,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 52823,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.kn'],
       currencies: [Currency(code: 'XCD', name: 'XCD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3671,11 +4384,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 182790,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.lc'],
       currencies: [Currency(code: 'XCD', name: 'XCD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3696,11 +4415,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 100455,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.vc'],
       currencies: [Currency(code: 'XCD', name: 'XCD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3721,11 +4446,14 @@ class AllCountries {
       region: 'Americas',
       subregion: 'Central America',
       population: 202506,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['685'],
       topLevelDomains: ['.ws'],
       currencies: [Currency(code: 'WST', name: 'WST', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Samoan', nativeName: 'Samoan')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Samoan', nativeName: 'Samoan')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3746,11 +4474,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 33860,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['378'],
       topLevelDomains: ['.sm'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Italian', nativeName: 'Italian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Italian',
+            nativeName: 'Italian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3771,11 +4505,13 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 215056,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['239'],
       topLevelDomains: ['.st'],
       currencies: [Currency(code: 'STN', name: 'STN', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: '', nativeName: '')],
+      languages: [
+        Language(iso6391: 'en', iso6392: 'eng', name: '', nativeName: '')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3796,11 +4532,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 34268528,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['966'],
       topLevelDomains: ['.sa'],
       currencies: [Currency(code: 'SAR', name: 'SAR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3821,11 +4560,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 16296364,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['221'],
       topLevelDomains: ['.sn'],
       currencies: [Currency(code: 'XOF', name: 'XOF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3846,11 +4588,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 6944975,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['381'],
       topLevelDomains: ['.rs'],
       currencies: [Currency(code: 'RSD', name: 'RSD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Serbian', nativeName: 'Serbian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Serbian',
+            nativeName: 'Serbian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3871,11 +4619,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 97625,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['248'],
       topLevelDomains: ['.sc'],
       currencies: [Currency(code: 'SCR', name: 'SCR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3896,11 +4647,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 7813215,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['232'],
       topLevelDomains: ['.sl'],
       currencies: [Currency(code: 'SLL', name: 'SLL', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3921,11 +4678,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 5703569,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['65'],
       topLevelDomains: ['.sg'],
       currencies: [Currency(code: 'SGD', name: 'SGD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Malay', nativeName: 'Malay')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Malay', nativeName: 'Malay')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3946,11 +4706,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 5454073,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['421'],
       topLevelDomains: ['.sk'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Slovak', nativeName: 'Slovak')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Slovak', nativeName: 'Slovak')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3971,11 +4734,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 2087946,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['386'],
       topLevelDomains: ['.si'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Slovene language', nativeName: 'Slovene language')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Slovene language',
+            nativeName: 'Slovene language')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -3996,11 +4765,17 @@ class AllCountries {
       region: 'Oceania',
       subregion: 'Polynesia',
       population: 669823,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['677'],
       topLevelDomains: ['.sb'],
       currencies: [Currency(code: 'SBD', name: 'SBD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4021,11 +4796,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 15442905,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['252'],
       topLevelDomains: ['.so'],
       currencies: [Currency(code: 'SOS', name: 'SOS', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4046,11 +4824,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 58558270,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['27'],
       topLevelDomains: ['.za'],
       currencies: [Currency(code: 'ZAR', name: 'ZAR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Afrikaans', nativeName: 'Afrikaans')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Afrikaans',
+            nativeName: 'Afrikaans')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4071,11 +4855,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 51709098,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['82'],
       topLevelDomains: ['.kr'],
       currencies: [Currency(code: 'KRW', name: 'KRW', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Korean', nativeName: 'Korean')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Korean', nativeName: 'Korean')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4096,11 +4883,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 11062113,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['211'],
       topLevelDomains: ['.ss'],
       currencies: [Currency(code: 'SSP', name: 'SSP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4121,11 +4914,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 47076781,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['34'],
       topLevelDomains: ['.es'],
       currencies: [Currency(code: 'EUR', name: 'EUR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4146,11 +4945,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 21803000,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['94'],
       topLevelDomains: ['.lk'],
       currencies: [Currency(code: 'LKR', name: 'LKR', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Tamil', nativeName: 'Tamil')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Tamil', nativeName: 'Tamil')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4171,11 +4973,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 42813238,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['249'],
       topLevelDomains: ['.sd'],
       currencies: [Currency(code: 'SDG', name: 'SDG', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4196,11 +5001,14 @@ class AllCountries {
       region: 'Americas',
       subregion: 'Central America',
       population: 581372,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['597'],
       topLevelDomains: ['.sr'],
       currencies: [Currency(code: 'SRD', name: 'SRD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Dutch', nativeName: 'Dutch')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Dutch', nativeName: 'Dutch')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4221,11 +5029,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 10285453,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['46'],
       topLevelDomains: ['.se'],
       currencies: [Currency(code: 'SEK', name: 'SEK', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Swedish', nativeName: 'Swedish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Swedish',
+            nativeName: 'Swedish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4246,11 +5060,14 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 8574832,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['41'],
       topLevelDomains: ['.ch'],
       currencies: [Currency(code: 'CHF', name: 'CHF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'German', nativeName: 'German')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'German', nativeName: 'German')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4271,11 +5088,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Northern Africa',
       population: 17070135,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['963'],
       topLevelDomains: ['.sy'],
       currencies: [Currency(code: 'SYP', name: 'SYP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4296,11 +5116,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 9321018,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['992'],
       topLevelDomains: ['.tj'],
       currencies: [Currency(code: 'TJS', name: 'TJS', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Persian', nativeName: 'Persian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Persian',
+            nativeName: 'Persian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4321,11 +5147,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 58005463,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['255'],
       topLevelDomains: ['.tz'],
       currencies: [Currency(code: 'TZS', name: 'TZS', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Swahili', nativeName: 'Swahili')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Swahili',
+            nativeName: 'Swahili')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4346,11 +5178,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 69625582,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['66'],
       topLevelDomains: ['.th'],
       currencies: [Currency(code: 'THB', name: 'THB', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Thai', nativeName: 'Thai')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Thai', nativeName: 'Thai')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4371,11 +5206,17 @@ class AllCountries {
       region: 'Oceania',
       subregion: 'Polynesia',
       population: 3500000,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['670'],
       topLevelDomains: ['.tl'],
       currencies: [Currency(code: 'USD', name: 'USD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Portuguese', nativeName: 'Portuguese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Portuguese',
+            nativeName: 'Portuguese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4396,11 +5237,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 8082366,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['228'],
       topLevelDomains: ['.tg'],
       currencies: [Currency(code: 'XOF', name: 'XOF', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4421,11 +5265,14 @@ class AllCountries {
       region: 'Americas',
       subregion: 'South America',
       population: 100209,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['676'],
       topLevelDomains: ['.to'],
       currencies: [Currency(code: 'TOP', name: 'TOP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Tongan', nativeName: 'Tongan')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Tongan', nativeName: 'Tongan')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4446,11 +5293,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 1394973,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.tt'],
       currencies: [Currency(code: 'TTD', name: 'TTD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4471,11 +5324,14 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Northern Africa',
       population: 11694719,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['216'],
       topLevelDomains: ['.tn'],
       currencies: [Currency(code: 'TND', name: 'TND', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4496,11 +5352,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Southern Europe',
       population: 83429615,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['90'],
       topLevelDomains: ['.tr'],
       currencies: [Currency(code: 'TRY', name: 'TRY', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Turkish', nativeName: 'Turkish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Turkish',
+            nativeName: 'Turkish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4521,11 +5383,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 5942089,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['993'],
       topLevelDomains: ['.tm'],
       currencies: [Currency(code: 'TMT', name: 'TMT', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Turkmen', nativeName: 'Turkmen')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Turkmen',
+            nativeName: 'Turkmen')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4546,11 +5414,17 @@ class AllCountries {
       region: 'Oceania',
       subregion: 'Polynesia',
       population: 11646,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['688'],
       topLevelDomains: ['.tv'],
       currencies: [Currency(code: 'AUD', name: 'AUD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Tuvaluan', nativeName: 'Tuvaluan')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Tuvaluan',
+            nativeName: 'Tuvaluan')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4571,11 +5445,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Western Africa',
       population: 44269594,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['256'],
       topLevelDomains: ['.ug'],
       currencies: [Currency(code: 'UGX', name: 'UGX', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Swahili', nativeName: 'Swahili')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Swahili',
+            nativeName: 'Swahili')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4596,11 +5476,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Western Europe',
       population: 44385155,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['380'],
       topLevelDomains: ['.ua'],
       currencies: [Currency(code: 'UAH', name: 'UAH', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Ukrainian', nativeName: 'Ukrainian')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Ukrainian',
+            nativeName: 'Ukrainian')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4621,11 +5507,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 9770529,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['971'],
       topLevelDomains: ['.ae'],
       currencies: [Currency(code: 'AED', name: 'AED', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4646,11 +5535,17 @@ class AllCountries {
       region: 'Europe',
       subregion: 'Northern Europe',
       population: 66834405,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['44'],
       topLevelDomains: ['.gb'],
       currencies: [Currency(code: 'GBP', name: 'GBP', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4671,11 +5566,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Southern Asia',
       population: 328239523,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['1'],
       topLevelDomains: ['.us'],
       currencies: [Currency(code: 'USD', name: 'USD', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4696,11 +5597,17 @@ class AllCountries {
       region: 'Americas',
       subregion: 'South America',
       population: 3461734,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['598'],
       topLevelDomains: ['.uy'],
       currencies: [Currency(code: 'UYU', name: 'UYU', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4721,11 +5628,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'Eastern Asia',
       population: 33580650,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['998'],
       topLevelDomains: ['.uz'],
       currencies: [Currency(code: 'UZS', name: 'UZS', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Uzbek', nativeName: 'Uzbek')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Uzbek', nativeName: 'Uzbek')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4746,11 +5656,14 @@ class AllCountries {
       region: 'Oceania',
       subregion: 'Polynesia',
       population: 299882,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['678'],
       topLevelDomains: ['.vu'],
       currencies: [Currency(code: 'VUV', name: 'VUV', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'French', nativeName: 'French')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4771,11 +5684,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 28515829,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['58'],
       topLevelDomains: ['.ve'],
       currencies: [Currency(code: 'VED', name: 'VED', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Spanish', nativeName: 'Spanish')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Spanish',
+            nativeName: 'Spanish')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4796,11 +5715,17 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 96462106,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['84'],
       topLevelDomains: ['.vn'],
       currencies: [Currency(code: 'VND', name: 'VND', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Vietnamese', nativeName: 'Vietnamese')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'Vietnamese',
+            nativeName: 'Vietnamese')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4821,11 +5746,14 @@ class AllCountries {
       region: 'Asia',
       subregion: 'South-Eastern Asia',
       population: 29161922,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['967'],
       topLevelDomains: ['.ye'],
       currencies: [Currency(code: 'YER', name: 'YER', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Arabic', nativeName: 'Arabic')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4846,11 +5774,17 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 17861030,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['260'],
       topLevelDomains: ['.zm'],
       currencies: [Currency(code: 'ZMW', name: 'ZMW', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+      languages: [
+        Language(
+            iso6391: 'en',
+            iso6392: 'eng',
+            name: 'English',
+            nativeName: 'English')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
@@ -4871,17 +5805,19 @@ class AllCountries {
       region: 'Africa',
       subregion: 'Southern Africa',
       population: 14645468,
-      area: 0.0, // Not available in CSV
+      area: 0, // Not available in CSV
       callingCodes: ['263'],
       topLevelDomains: ['.zw'],
       currencies: [Currency(code: 'ZWL', name: 'ZWL', symbol: '')],
-      languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'Shona', nativeName: 'Shona')],
+      languages: [
+        Language(
+            iso6391: 'en', iso6392: 'eng', name: 'Shona', nativeName: 'Shona')
+      ],
       timezones: ['UTC+00:00'], // Default timezone
       borders: [], // Not available in CSV
       isIndependent: true, // Default to true
       isUnMember: true, // Default to true
     ),
-
   ];
 
   /// Get all countries
@@ -4894,13 +5830,16 @@ class AllCountries {
 
   /// Get countries by subregion
   static List<Country> getBySubregion(String subregion) {
-    return _allCountries.where((country) => country.subregion == subregion).toList();
+    return _allCountries
+        .where((country) => country.subregion == subregion)
+        .toList();
   }
 
   /// Get country by alpha-2 code
   static Country? getByAlpha2Code(String alpha2Code) {
     try {
-      return _allCountries.firstWhere((country) => country.alpha2Code == alpha2Code.toUpperCase());
+      return _allCountries.firstWhere(
+          (country) => country.alpha2Code == alpha2Code.toUpperCase());
     } catch (e) {
       return null;
     }
@@ -4909,7 +5848,8 @@ class AllCountries {
   /// Get country by alpha-3 code
   static Country? getByAlpha3Code(String alpha3Code) {
     try {
-      return _allCountries.firstWhere((country) => country.alpha3Code == alpha3Code.toUpperCase());
+      return _allCountries.firstWhere(
+          (country) => country.alpha3Code == alpha3Code.toUpperCase());
     } catch (e) {
       return null;
     }
@@ -4918,7 +5858,8 @@ class AllCountries {
   /// Get country by numeric code
   static Country? getByNumericCode(String numericCode) {
     try {
-      return _allCountries.firstWhere((country) => country.numericCode == numericCode);
+      return _allCountries
+          .firstWhere((country) => country.numericCode == numericCode);
     } catch (e) {
       return null;
     }
@@ -4929,16 +5870,16 @@ class AllCountries {
     final lowercaseQuery = query.toLowerCase();
     return _allCountries.where((country) {
       return country.name.toLowerCase().contains(lowercaseQuery) ||
-          country.nameTranslations.values.any((translation) => 
+          country.nameTranslations.values.any((translation) =>
               translation.toLowerCase().contains(lowercaseQuery));
     }).toList();
   }
 
   /// Get independent countries only
-  static List<Country> get independent => 
+  static List<Country> get independent =>
       _allCountries.where((country) => country.isIndependent).toList();
 
   /// Get UN member countries only
-  static List<Country> get unMembers => 
+  static List<Country> get unMembers =>
       _allCountries.where((country) => country.isUnMember).toList();
 }

@@ -15,7 +15,7 @@
 
 ---
 
-A comprehensive Flutter package for country selection with **245+ countries**, beautiful UI, extensive theming, and **zero runtime dependencies**.
+A comprehensive Flutter package for country selection with **250 countries**, **132 language translations**, beautiful UI, extensive theming, and **zero runtime dependencies**.
 
 </div>
 
@@ -49,7 +49,9 @@ A comprehensive Flutter package for country selection with **245+ countries**, b
   - [Sorting](#sorting)
   - [Sizing](#sizing)
   - [Custom Builders](#custom-builders)
+  - [Customizable Strings](#customizable-strings)
 - [Country Data & Utilities](#country-data--utilities)
+- [Localization (132 Languages)](#localization-132-languages)
 - [Country Model](#country-model)
 - [Enums Reference](#enums-reference)
 - [Real-World Examples](#real-world-examples)
@@ -62,12 +64,13 @@ A comprehensive Flutter package for country selection with **245+ countries**, b
 
 ## Overview
 
-Countrify is the most feature-rich country picker for Flutter. It ships with **245+ countries**, **5 display modes**, **4 built-in themes**, **40+ utility methods**, a dedicated **phone number input field**, and a rich country data model — all with **zero runtime dependencies**.
+Countrify is the most feature-rich country picker for Flutter. It ships with **250 countries**, **132 language translations**, **5 display modes**, **4 built-in themes**, **40+ utility methods**, a dedicated **phone number input field**, and a rich country data model — all with **zero runtime dependencies**.
 
 | Metric | Value |
 |---|---|
-| Countries | 245+ |
-| Flag Assets | 245 PNG images |
+| Countries | 250 |
+| Language Translations | 132 (CLDR-based) |
+| Flag Assets | 250 PNG images |
 | Utility Methods | 40+ |
 | Display Modes | 5 |
 | Built-in Themes | 4 |
@@ -86,6 +89,8 @@ Countrify is the most feature-rich country picker for Flutter. It ships with **2
 - **Custom Sorting** — Sort by name, population, area, region, or capital
 - **Flag Customization** — Rectangular, circular, or rounded shapes with borders and shadows
 - **Custom Builders** — Provide your own widgets for country items, headers, search bars, and filters
+- **Customizable Strings** — Every user-facing text (titles, hints, empty states, filter labels) is overridable via config
+- **132 Language Translations** — Auto-detects your app locale; all pickers display localized country names, search, and sorting out of the box. Zero runtime dependencies
 - **Rich Country Data** — 15+ fields per country including capitals, currencies, languages, timezones, borders
 - **40+ Utility Methods** — Programmatic access to country data, search, statistics, and validation
 - **Haptic Feedback** — Tactile response on country selection
@@ -128,7 +133,7 @@ Add `countrify` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  countrify: ^1.0.5
+  countrify: ^1.1.0
 ```
 
 Then run:
@@ -724,6 +729,53 @@ CountryPickerConfig(
 )
 ```
 
+### Customizable Strings
+
+Every user-facing text string in the picker widgets is configurable. This makes it easy to localize the picker UI itself (not just country names) or customize labels to match your app's tone.
+
+**`CountryPickerConfig` (used by `ModalComprehensivePicker`, `PhoneNumberField`, `PhoneCodePicker`, `CountryDropdownField`):**
+
+```dart
+const config = CountryPickerConfig(
+  titleText: 'Choose Your Country',       // Picker header title
+  searchHintText: 'Type to search...',     // Search bar placeholder
+  emptyStateText: 'Nothing found',         // Shown when search has no results
+  selectCountryHintText: 'Tap to choose',  // Placeholder when nothing is selected
+  filterTitleText: 'Filter Options',       // Filter dialog title
+  filterSortByText: 'Sort:',              // Filter sort label
+  filterRegionsText: 'Regions:',           // Filter regions label
+  filterAllText: 'All',                    // "All" filter chip label
+  filterCancelText: 'Cancel',             // Filter cancel button
+  filterApplyText: 'Done',                // Filter apply button
+);
+```
+
+**`CountryPickerConfig` from `CountryPicker` (used by `ModalCountryPicker`):**
+
+```dart
+const config = CountryPickerConfig(
+  titleText: 'Choose Your Country',        // Picker header title
+  searchHint: 'Type to search...',         // Search bar placeholder
+  emptyStateMessage: 'Nothing found',      // Shown when search has no results
+  selectCountryHintText: 'Tap to choose',  // Placeholder when nothing is selected
+);
+```
+
+All strings have sensible English defaults, so existing apps require **zero changes**.
+
+| Parameter | Default | Where it appears |
+|-----------|---------|-----------------|
+| `titleText` | `'Select Country'` | Header of every picker |
+| `searchHintText` / `searchHint` | `'Search countries...'` | Search bar placeholder |
+| `emptyStateText` / `emptyStateMessage` | `'No countries found'` | Empty search results |
+| `selectCountryHintText` | `'Select a country'` | Dropdown/field placeholder |
+| `filterTitleText` | `'Filter Countries'` | Filter dialog title |
+| `filterSortByText` | `'Sort by:'` | Filter dialog |
+| `filterRegionsText` | `'Regions:'` | Filter dialog |
+| `filterAllText` | `'All'` | Filter chip |
+| `filterCancelText` | `'Cancel'` | Filter dialog button |
+| `filterApplyText` | `'Apply'` | Filter dialog button |
+
 ---
 
 ## Country Data & Utilities
@@ -733,7 +785,7 @@ Use `CountryUtils` to access country data programmatically without showing any p
 ### Fetching Countries
 
 ```dart
-// Get all 245+ countries
+// Get all 250 countries
 final countries = CountryUtils.getAllCountries();
 
 // Get by ISO code
@@ -809,6 +861,132 @@ CountryUtils.isValidAlpha3Code('USA');  // true
 CountryUtils.isValidNumericCode('840'); // true
 CountryUtils.isValidAlpha2Code('XX');   // false
 ```
+
+---
+
+## Localization (132 Languages)
+
+Countrify ships with built-in country name translations for **132 languages**, sourced from [CLDR data](https://github.com/umpirsky/country-list). All translations are compile-time constants — zero runtime dependencies, no network requests, no JSON parsing.
+
+### Automatic Locale Detection (Recommended)
+
+**All picker widgets auto-detect the locale from your `MaterialApp`.** If your app already sets a locale, every Countrify widget will display localized country names, search results, and sort order automatically — no extra configuration needed.
+
+```dart
+// 1. Add flutter_localizations to your pubspec.yaml:
+//    dependencies:
+//      flutter_localizations:
+//        sdk: flutter
+
+// 2. Configure your MaterialApp:
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+MaterialApp(
+  locale: const Locale('ja'), // or any of 132 supported languages
+  supportedLocales: const [
+    Locale('ja'),
+    Locale('en'),
+    // ... your supported locales
+  ],
+  localizationsDelegates: const [
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  // ...
+);
+
+// 3. That's it! All Countrify pickers now show Japanese country names.
+//    No per-widget configuration needed.
+ModalComprehensivePicker.showBottomSheet(context: context);
+// → shows アメリカ合衆国, ドイツ, フランス, ...
+```
+
+> **How it works:** Every picker widget calls `Localizations.localeOf(context)` to read the current locale from the widget tree. If your `MaterialApp` sets a locale and includes it in `supportedLocales` with the appropriate delegates, all pickers will pick it up automatically.
+
+### Explicit Locale Override
+
+Use `CountryPickerConfig.locale` to override the auto-detected locale for a specific widget:
+
+```dart
+// Force German names on this picker, regardless of app locale
+ModalComprehensivePicker.showBottomSheet(
+  context: context,
+  config: CountryPickerConfig(locale: 'de'),
+);
+
+// Force English even if app locale is non-English
+PhoneNumberField(
+  config: CountryPickerConfig(locale: 'en'),
+);
+```
+
+| Scenario | What to do |
+|----------|-----------|
+| App already has a locale set | Nothing — auto-detected |
+| Override locale for one widget | `CountryPickerConfig(locale: 'de')` |
+| Force English in a non-English app | `CountryPickerConfig(locale: 'en')` |
+| No locale set anywhere | Defaults to English |
+
+### Programmatic Access
+
+Use `CountryUtils` to get localized names in code (outside of widgets):
+
+```dart
+final usa = CountryUtils.getCountryByAlpha2Code('US')!;
+
+CountryUtils.getCountryNameInLanguage(usa, 'de'); // "Vereinigte Staaten"
+CountryUtils.getCountryNameInLanguage(usa, 'fr'); // "États-Unis"
+CountryUtils.getCountryNameInLanguage(usa, 'ja'); // "アメリカ合衆国"
+CountryUtils.getCountryNameInLanguage(usa, 'ar'); // "الولايات المتحدة"
+CountryUtils.getCountryNameInLanguage(usa, 'zh'); // "美国"
+CountryUtils.getCountryNameInLanguage(usa, 'hi'); // "संयुक्त राज्य"
+```
+
+The method checks the country's `nameTranslations` map first (for user-provided overrides), then falls back to the built-in CLDR data, and finally returns the English name.
+
+### Get All Translations for a Country
+
+```dart
+final allNames = CountryUtils.getCountryNamesInAllLanguages(usa);
+// Returns a Map<String, String> with 130+ entries:
+// {"af": "Verenigde State van Amerika", "ar": "الولايات المتحدة", "de": "Vereinigte Staaten", ...}
+```
+
+### List Supported Locales
+
+```dart
+final locales = CountryUtils.getSupportedLocales();
+// ["af", "ak", "am", "ar", "as", "az", "be", "bg", ..., "zh", "zu"]
+// 132 locale codes
+```
+
+### Direct Access via CountryNameL10n
+
+For lower-level access without going through `CountryUtils`:
+
+```dart
+import 'package:countrify/countrify.dart';
+
+// Get a single translation
+final name = CountryNameL10n.getLocalizedName('DE', 'fr'); // "Allemagne"
+
+// Get all country names for a locale
+final frenchNames = CountryNameL10n.getTranslationsForLocale('fr');
+// {"AD": "Andorre", "AE": "Émirats arabes unis", "AF": "Afghanistan", ...}
+
+// Check supported locales
+final locales = CountryNameL10n.supportedLocales; // 132 entries
+```
+
+### Supported Languages
+
+<details>
+<summary>Full list of 132 supported language codes</summary>
+
+`af` `ak` `am` `ar` `as` `az` `be` `bg` `bm` `bn` `bo` `br` `bs` `ca` `ce` `cs` `cy` `da` `de` `dz` `ee` `el` `en` `eo` `es` `et` `eu` `fa` `ff` `fi` `fo` `fr` `fy` `ga` `gd` `gl` `gu` `gv` `ha` `he` `hi` `hr` `hu` `hy` `ia` `id` `ig` `ii` `is` `it` `ja` `jv` `ka` `ki` `kk` `kl` `km` `kn` `ko` `ks` `ku` `kw` `ky` `lb` `lg` `ln` `lo` `lt` `lu` `lv` `mg` `mi` `mk` `ml` `mn` `mr` `ms` `mt` `my` `nb` `nd` `ne` `nl` `nn` `no` `om` `or` `os` `pa` `pl` `ps` `pt` `qu` `rm` `rn` `ro` `ru` `rw` `se` `sg` `si` `sk` `sl` `sn` `so` `sq` `sr` `sv` `sw` `ta` `te` `tg` `th` `ti` `tk` `tl` `to` `tr` `tt` `ug` `uk` `ur` `uz` `vi` `vo` `wo` `xh` `yo` `zh` `zu`
+
+</details>
 
 ---
 
@@ -1140,13 +1318,25 @@ Yes. Countrify works on iOS, Android, Web, macOS, Windows, and Linux.
 <details>
 <summary><strong>How large is the package?</strong></summary>
 
-Approximately 2.5 MB, most of which is PNG flag images. The Dart code is around 50 KB.
+Approximately 3–4 MB. Most of that is PNG flag images (~2.5 MB) and the built-in translation data for 132 languages (~1 MB). The translation data is compile-time constant and tree-shakable.
 </details>
 
 <details>
 <summary><strong>Does it support RTL languages?</strong></summary>
 
-Yes. The package respects Flutter's text direction settings.
+Yes. The package respects Flutter's text direction settings. Country name translations are available for RTL languages including Arabic (`ar`), Hebrew (`he`), Persian/Farsi (`fa`), Urdu (`ur`), and Pashto (`ps`).
+</details>
+
+<details>
+<summary><strong>How does localization work?</strong></summary>
+
+All picker widgets **auto-detect** the locale from your `MaterialApp`. If your app sets `locale: Locale('de')` (with matching `supportedLocales` and `localizationsDelegates`), every Countrify picker will show German country names automatically — no per-widget configuration needed. You can also override per-widget with `CountryPickerConfig(locale: 'ja')`. Under the hood, all 132 language translations are sourced from [CLDR data](https://github.com/umpirsky/country-list) and stored as compile-time `static const` maps — no runtime dependencies, no network requests, no JSON parsing. See the [Localization](#localization-132-languages) section for full details.
+</details>
+
+<details>
+<summary><strong>Can I customize the picker's UI text strings?</strong></summary>
+
+Yes. Every user-facing string — titles, search hints, empty state messages, filter labels, and buttons — is overridable via `CountryPickerConfig`. See the [Customizable Strings](#customizable-strings) section.
 </details>
 
 <details>

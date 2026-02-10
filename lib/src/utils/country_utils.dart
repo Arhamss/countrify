@@ -1,5 +1,6 @@
-import '../models/country.dart';
 import '../data/all_countries.dart';
+import '../l10n/country_name_l10n.dart';
+import '../models/country.dart';
 
 /// {@template country_utils}
 /// Utility functions for working with country data
@@ -277,15 +278,39 @@ class CountryUtils {
   static bool isValidNumericCode(String code) => 
       getCountryByNumericCode(code) != null;
 
-  /// Get country name in a specific language
-  static String getCountryNameInLanguage(Country country, String languageCode) {
-    return country.nameTranslations[languageCode] ?? country.name;
+  /// Get country name in a specific language.
+  ///
+  /// Checks the country's [nameTranslations] first, then falls back to the
+  /// built-in l10n data (132 languages via CLDR).
+  static String getCountryNameInLanguage(
+    Country country,
+    String languageCode,
+  ) {
+    return country.nameTranslations[languageCode] ??
+        CountryNameL10n.getLocalizedName(country.alpha2Code, languageCode) ??
+        country.name;
   }
 
-  /// Get country names in all available languages
+  /// Get country names in all available languages.
+  ///
+  /// Merges the country's [nameTranslations] with the built-in l10n data.
   static Map<String, String> getCountryNamesInAllLanguages(Country country) {
-    return country.nameTranslations;
+    final merged = <String, String>{...country.nameTranslations};
+    for (final locale in CountryNameL10n.supportedLocales) {
+      if (!merged.containsKey(locale)) {
+        final name = CountryNameL10n.getLocalizedName(
+          country.alpha2Code,
+          locale,
+        );
+        if (name != null) merged[locale] = name;
+      }
+    }
+    return merged;
   }
+
+  /// Get the list of supported locale codes for country name translations.
+  static List<String> getSupportedLocales() =>
+      CountryNameL10n.supportedLocales;
 
   /// Format population number with commas
   static String formatPopulation(int population) {

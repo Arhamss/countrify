@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:countrify/src/icons/countrify_icons.dart';
+import 'package:countrify/src/utils/country_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:countrify/src/models/country.dart';
@@ -153,6 +154,7 @@ class CountryPickerTheme {
 class CountryPickerConfig {
   /// {@macro country_picker_config}
   const CountryPickerConfig({
+    this.locale,
     this.showSearchBar = true,
     this.showCountryCode = true,
     this.showFlag = true,
@@ -168,8 +170,10 @@ class CountryPickerConfig {
     this.showBorders = false,
     this.showIndependenceStatus = false,
     this.showUnMemberStatus = false,
+    this.titleText = 'Select Country',
     this.searchHint = 'Search countries...',
     this.emptyStateMessage = 'No countries found',
+    this.selectCountryHintText = 'Select a country',
     this.groupByRegion = false,
     this.groupBySubregion = false,
     this.sortByName = true,
@@ -190,6 +194,12 @@ class CountryPickerConfig {
     this.enableRipple = true,
     this.enableHapticFeedback = true,
   });
+
+  /// Locale code for displaying country names in a specific language.
+  ///
+  /// When set, all country names are displayed in the specified language.
+  /// When `null` (default), English names are used.
+  final String? locale;
 
   /// Whether to show the search bar
   final bool showSearchBar;
@@ -236,11 +246,17 @@ class CountryPickerConfig {
   /// Whether to show UN member status
   final bool showUnMemberStatus;
 
+  /// Title text shown in the picker header (e.g. "Select Country").
+  final String titleText;
+
   /// Search bar hint text
   final String searchHint;
 
   /// Empty state message
   final String emptyStateMessage;
+
+  /// Hint text shown when no country is selected (e.g. "Select a country").
+  final String selectCountryHintText;
 
   /// Whether to group countries by region
   final bool groupByRegion;
@@ -359,13 +375,35 @@ class _CountryPickerState extends State<CountryPicker> {
   late List<Country> _allCountries;
   String _searchQuery = '';
   Timer? _debounceTimer;
+  late String _effectiveLocale;
+
+  /// Returns the display name for a country, respecting the locale.
+  String _displayName(Country country) {
+    if (_effectiveLocale == 'en') return country.name;
+    return CountryUtils.getCountryNameInLanguage(country, _effectiveLocale);
+  }
 
   @override
   void initState() {
     super.initState();
+    _effectiveLocale = widget.config.locale ?? 'en';
     _searchController = TextEditingController();
     _initializeCountries();
     _filteredCountries = _allCountries;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale =
+        widget.config.locale ?? Localizations.localeOf(context).languageCode;
+    if (locale != _effectiveLocale) {
+      _effectiveLocale = locale;
+      _initializeCountries();
+      setState(() {
+        _filteredCountries = _searchCountries(_searchQuery);
+      });
+    }
   }
 
   @override
@@ -439,7 +477,7 @@ class _CountryPickerState extends State<CountryPicker> {
     } else if (widget.config.sortByArea) {
       sorted.sort((a, b) => b.area.compareTo(a.area));
     } else if (widget.config.sortByName) {
-      sorted.sort((a, b) => a.name.compareTo(b.name));
+      sorted.sort((a, b) => _displayName(a).compareTo(_displayName(b)));
     }
 
     return sorted;
@@ -463,7 +501,8 @@ class _CountryPickerState extends State<CountryPicker> {
 
     final lowercaseQuery = query.toLowerCase();
     return _allCountries.where((country) {
-      return country.name.toLowerCase().contains(lowercaseQuery) ||
+      return _displayName(country).toLowerCase().contains(lowercaseQuery) ||
+          country.name.toLowerCase().contains(lowercaseQuery) ||
           country.alpha2Code.toLowerCase().contains(lowercaseQuery) ||
           country.alpha3Code.toLowerCase().contains(lowercaseQuery) ||
           country.numericCode.contains(query) ||
@@ -578,7 +617,7 @@ class _CountryPickerState extends State<CountryPicker> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        country.name,
+                        _displayName(country),
                         style: theme?.countryNameStyle ??
                             const TextStyle(
                               fontSize: 16,
@@ -744,7 +783,7 @@ class _CountryPickerState extends State<CountryPicker> {
                   if (widget.showTitle) ...[
                     Expanded(
                       child: Text(
-                        widget.title ?? 'Select Country',
+                        widget.title ?? widget.config.titleText,
                         style: widget.titleStyle ??
                             const TextStyle(
                               fontSize: 20,

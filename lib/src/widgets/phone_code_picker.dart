@@ -156,10 +156,15 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
   late Animation<double> _fadeAnimation;
   Timer? _debounceTimer;
 
+  late String _effectiveLocale;
+
   @override
   void initState() {
     super.initState();
     _selectedCountry = widget.initialCountry;
+    _effectiveLocale =
+        (widget.config ?? const picker_config.CountryPickerConfig()).locale ??
+            'en';
     _searchController = TextEditingController();
     _animationController = AnimationController(
       duration: widget.animationDuration,
@@ -173,11 +178,28 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale =
+        (widget.config ?? const picker_config.CountryPickerConfig()).locale ??
+            Localizations.localeOf(context).languageCode;
+    if (locale != _effectiveLocale) {
+      _effectiveLocale = locale;
+      _loadCountries();
+    }
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     _animationController.dispose();
     _debounceTimer?.cancel();
     super.dispose();
+  }
+
+  String _displayName(Country country) {
+    if (_effectiveLocale == 'en') return country.name;
+    return CountryUtils.getCountryNameInLanguage(country, _effectiveLocale);
   }
 
   void _loadCountries() {
@@ -197,15 +219,16 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
     if (_searchQuery.isNotEmpty) {
       countries = countries.where((country) {
         final query = _searchQuery.toLowerCase();
-        return country.name.toLowerCase().contains(query) ||
+        return _displayName(country).toLowerCase().contains(query) ||
+            country.name.toLowerCase().contains(query) ||
             country.alpha2Code.toLowerCase().contains(query) ||
             country.alpha3Code.toLowerCase().contains(query) ||
             country.callingCodes.any((code) => code.contains(query));
       }).toList();
     }
 
-    // Sort by name
-    countries.sort((a, b) => a.name.compareTo(b.name));
+    // Sort by display name
+    countries.sort((a, b) => _displayName(a).compareTo(_displayName(b)));
 
     return countries;
   }
@@ -308,7 +331,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
       appBar: AppBar(
         backgroundColor: theme.headerColor,
         title: Text(
-          'Select Country',
+          config.titleText,
           style: theme.headerTextStyle,
         ),
         leading: IconButton(
@@ -388,7 +411,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
       child: Row(
         children: [
           Text(
-            'Select Country',
+            config.titleText,
             style: theme.headerTextStyle,
           ),
           const Spacer(),
@@ -408,7 +431,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
         const BorderRadius.all(Radius.circular(12));
     final effectiveDecoration = theme.searchInputDecoration ??
         InputDecoration(
-          hintText: theme.searchHintText ?? 'Search countries...',
+          hintText: theme.searchHintText ?? config.searchHintText,
           hintStyle: theme.searchHintStyle,
           prefixIcon: Icon(theme.searchIcon ?? CountrifyIcons.search,
               color: theme.searchIconColor),
@@ -547,7 +570,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
 
   Widget _buildCountryName(Country country, CountryPickerTheme theme) {
     return Text(
-      country.name,
+      _displayName(country),
       style: theme.countryNameTextStyle,
     );
   }

@@ -14,6 +14,8 @@ export 'src/data/all_countries.dart';
 
 export 'src/icons/countrify_icons.dart';
 
+export 'src/l10n/country_name_l10n.dart';
+
 export 'src/models/country.dart';
 
 export 'src/utils/country_utils.dart';

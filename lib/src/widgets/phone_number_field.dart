@@ -405,7 +405,9 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
           backgroundColor: pickerTheme.backgroundColor,
           appBar: AppBar(
             backgroundColor: pickerTheme.headerColor,
-            title: Text('Select Country', style: pickerTheme.headerTextStyle),
+            title: Text(
+                (widget.config ?? const CountryPickerConfig()).titleText,
+                style: pickerTheme.headerTextStyle),
             leading: IconButton(
               icon: Icon(pickerTheme.closeIcon ?? CountrifyIcons.x,
                   color: pickerTheme.headerIconColor),
@@ -626,11 +628,24 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
   List<Country> _countries = [];
   List<Country> _filtered = [];
   Timer? _debounce;
+  late String _effectiveLocale;
 
   @override
   void initState() {
     super.initState();
+    _effectiveLocale = widget.config?.locale ?? 'en';
     _loadCountries();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale =
+        widget.config?.locale ?? Localizations.localeOf(context).languageCode;
+    if (locale != _effectiveLocale) {
+      _effectiveLocale = locale;
+      _loadCountries();
+    }
   }
 
   @override
@@ -640,11 +655,16 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
     super.dispose();
   }
 
+  String _displayName(Country country) {
+    if (_effectiveLocale == 'en') return country.name;
+    return CountryUtils.getCountryNameInLanguage(country, _effectiveLocale);
+  }
+
   void _loadCountries() {
     var list = CountryUtils.getAllCountries()
         .where((c) => c.callingCodes.isNotEmpty)
         .toList()
-      ..sort((a, b) => a.name.compareTo(b.name));
+      ..sort((a, b) => _displayName(a).compareTo(_displayName(b)));
 
     final config = widget.config;
     if (config != null) {
@@ -690,7 +710,8 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
       } else {
         final q = query.toLowerCase();
         _filtered = _countries.where((c) {
-          return c.name.toLowerCase().contains(q) ||
+          return _displayName(c).toLowerCase().contains(q) ||
+              c.name.toLowerCase().contains(q) ||
               c.alpha2Code.toLowerCase().contains(q) ||
               c.callingCodes.any((code) => code.contains(q));
         }).toList();
@@ -758,11 +779,12 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
   }
 
   Widget _buildSearch(CountryPickerTheme theme) {
+    final config = widget.config ?? const CountryPickerConfig();
     final effectiveBorderRadius = theme.searchBarBorderRadius ??
         const BorderRadius.all(Radius.circular(12));
     final effectiveDecoration = theme.searchInputDecoration ??
         InputDecoration(
-          hintText: theme.searchHintText ?? 'Search countries...',
+          hintText: theme.searchHintText ?? config.searchHintText,
           hintStyle: theme.searchHintStyle,
           prefixIcon: Icon(theme.searchIcon ?? CountrifyIcons.search,
               color: theme.searchIconColor),
@@ -812,6 +834,7 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
 
   Widget _buildList(CountryPickerTheme theme) {
     if (_filtered.isEmpty) {
+      final config = widget.config ?? const CountryPickerConfig();
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 24),
         child: Center(
@@ -822,7 +845,7 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
                   size: 28, color: Colors.grey),
               const SizedBox(height: 6),
               Text(
-                'No countries found',
+                config.emptyStateText,
                 style: theme.countrySubtitleTextStyle ??
                     const TextStyle(fontSize: 13, color: Colors.grey),
               ),
@@ -874,7 +897,7 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      country.name,
+                      _displayName(country),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.countrySubtitleTextStyle?.copyWith(
@@ -966,11 +989,24 @@ class _ModalCountryListState extends State<_ModalCountryList> {
   List<Country> _countries = [];
   List<Country> _filtered = [];
   Timer? _debounce;
+  late String _effectiveLocale;
 
   @override
   void initState() {
     super.initState();
+    _effectiveLocale = widget.config?.locale ?? 'en';
     _loadCountries();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale =
+        widget.config?.locale ?? Localizations.localeOf(context).languageCode;
+    if (locale != _effectiveLocale) {
+      _effectiveLocale = locale;
+      _loadCountries();
+    }
   }
 
   @override
@@ -980,11 +1016,16 @@ class _ModalCountryListState extends State<_ModalCountryList> {
     super.dispose();
   }
 
+  String _displayName(Country country) {
+    if (_effectiveLocale == 'en') return country.name;
+    return CountryUtils.getCountryNameInLanguage(country, _effectiveLocale);
+  }
+
   void _loadCountries() {
     var list = CountryUtils.getAllCountries()
         .where((c) => c.callingCodes.isNotEmpty)
         .toList()
-      ..sort((a, b) => a.name.compareTo(b.name));
+      ..sort((a, b) => _displayName(a).compareTo(_displayName(b)));
 
     final config = widget.config;
     if (config != null) {
@@ -1030,7 +1071,8 @@ class _ModalCountryListState extends State<_ModalCountryList> {
       } else {
         final q = query.toLowerCase();
         _filtered = _countries.where((c) {
-          return c.name.toLowerCase().contains(q) ||
+          return _displayName(c).toLowerCase().contains(q) ||
+              c.name.toLowerCase().contains(q) ||
               c.alpha2Code.toLowerCase().contains(q) ||
               c.callingCodes.any((code) => code.contains(q));
         }).toList();
@@ -1075,7 +1117,8 @@ class _ModalCountryListState extends State<_ModalCountryList> {
       ),
       child: Row(
         children: [
-          Text('Select Country', style: theme.headerTextStyle),
+          Text((widget.config ?? const CountryPickerConfig()).titleText,
+              style: theme.headerTextStyle),
           const Spacer(),
           GestureDetector(
             onTap: () => Navigator.pop(context),
@@ -1092,7 +1135,8 @@ class _ModalCountryListState extends State<_ModalCountryList> {
         const BorderRadius.all(Radius.circular(12));
     final effectiveDecoration = theme.searchInputDecoration ??
         InputDecoration(
-          hintText: theme.searchHintText ?? 'Search countries...',
+          hintText: theme.searchHintText ??
+              (widget.config ?? const CountryPickerConfig()).searchHintText,
           hintStyle: theme.searchHintStyle,
           prefixIcon: Icon(theme.searchIcon ?? CountrifyIcons.search,
               color: theme.searchIconColor),
@@ -1142,6 +1186,7 @@ class _ModalCountryListState extends State<_ModalCountryList> {
 
   Widget _buildList(CountryPickerTheme theme) {
     if (_filtered.isEmpty) {
+      final config = widget.config ?? const CountryPickerConfig();
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1150,7 +1195,7 @@ class _ModalCountryListState extends State<_ModalCountryList> {
                 size: 40, color: Colors.grey),
             const SizedBox(height: 8),
             Text(
-              'No countries found',
+              config.emptyStateText,
               style: theme.countrySubtitleTextStyle ??
                   const TextStyle(color: Colors.grey),
             ),
@@ -1193,7 +1238,7 @@ class _ModalCountryListState extends State<_ModalCountryList> {
                   ),
                 )
               : null,
-          title: Text(country.name,
+          title: Text(_displayName(country),
               style: theme.countryNameTextStyle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis),

@@ -240,7 +240,7 @@ class _CountryPickerFullScreenState extends State<_CountryPickerFullScreen> {
     return Scaffold(
       backgroundColor: widget.theme?.backgroundColor ?? Colors.white,
       appBar: AppBar(
-        title: Text(widget.title ?? 'Select Country'),
+        title: Text(widget.title ?? widget.config.titleText),
         backgroundColor: widget.theme?.backgroundColor ?? Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,

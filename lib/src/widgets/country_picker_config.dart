@@ -7,6 +7,7 @@ import '../models/country.dart';
 class CountryPickerConfig {
   /// {@macro country_picker_config}
   const CountryPickerConfig({
+    this.locale,
     this.showDialCode = true,
     this.showCapital = false,
     this.showRegion = false,
@@ -49,6 +50,16 @@ class CountryPickerConfig {
     this.itemsPerPage = 50,
     this.showLoadingIndicator = true,
     this.loadingIndicatorColor,
+    this.titleText = 'Select Country',
+    this.searchHintText = 'Search countries...',
+    this.emptyStateText = 'No countries found',
+    this.selectCountryHintText = 'Select a country',
+    this.filterTitleText = 'Filter Countries',
+    this.filterSortByText = 'Sort by:',
+    this.filterRegionsText = 'Regions:',
+    this.filterAllText = 'All',
+    this.filterCancelText = 'Cancel',
+    this.filterApplyText = 'Apply',
     this.emptyStateWidget,
     this.errorStateWidget,
     this.customCountryBuilder,
@@ -56,6 +67,18 @@ class CountryPickerConfig {
     this.customSearchBuilder,
     this.customFilterBuilder,
   });
+
+  /// Locale code for displaying country names in a specific language.
+  ///
+  /// When set, all country names will be displayed in the specified language
+  /// (e.g. `'de'` for German, `'ja'` for Japanese). Supports 132 languages.
+  ///
+  /// When `null` (default), the locale is **auto-detected** from
+  /// `Localizations.localeOf(context)` — so if your `MaterialApp` sets a
+  /// locale, all picker widgets will pick it up automatically.
+  ///
+  /// Pass `'en'` explicitly to force English regardless of app locale.
+  final String? locale;
 
   /// Whether to show dial code
   final bool showDialCode;
@@ -183,6 +206,36 @@ class CountryPickerConfig {
   /// Loading indicator color
   final Color? loadingIndicatorColor;
 
+  /// Title text shown in the picker header (e.g. "Select Country").
+  final String titleText;
+
+  /// Hint text for the search field (e.g. "Search countries...").
+  final String searchHintText;
+
+  /// Message shown when no countries match the search query.
+  final String emptyStateText;
+
+  /// Hint text shown when no country is selected (e.g. "Select a country").
+  final String selectCountryHintText;
+
+  /// Title text for the filter dialog.
+  final String filterTitleText;
+
+  /// Label for the "Sort by" section in the filter dialog.
+  final String filterSortByText;
+
+  /// Label for the "Regions" section in the filter dialog.
+  final String filterRegionsText;
+
+  /// Label for the "All" filter chip (shows all regions).
+  final String filterAllText;
+
+  /// Label for the cancel button in the filter dialog.
+  final String filterCancelText;
+
+  /// Label for the apply button in the filter dialog.
+  final String filterApplyText;
+
   /// Custom empty state widget
   final Widget? emptyStateWidget;
 
@@ -203,6 +256,7 @@ class CountryPickerConfig {
 
   /// Copy with method
   CountryPickerConfig copyWith({
+    String? locale,
     bool? showDialCode,
     bool? showCapital,
     bool? showRegion,
@@ -245,6 +299,16 @@ class CountryPickerConfig {
     int? itemsPerPage,
     bool? showLoadingIndicator,
     Color? loadingIndicatorColor,
+    String? titleText,
+    String? searchHintText,
+    String? emptyStateText,
+    String? selectCountryHintText,
+    String? filterTitleText,
+    String? filterSortByText,
+    String? filterRegionsText,
+    String? filterAllText,
+    String? filterCancelText,
+    String? filterApplyText,
     Widget? emptyStateWidget,
     Widget? errorStateWidget,
     Widget Function(BuildContext context, Country country, bool isSelected)? customCountryBuilder,
@@ -253,6 +317,7 @@ class CountryPickerConfig {
     Widget Function(BuildContext context, CountryFilter filter, ValueChanged<CountryFilter> onChanged)? customFilterBuilder,
   }) {
     return CountryPickerConfig(
+      locale: locale ?? this.locale,
       showDialCode: showDialCode ?? this.showDialCode,
       showCapital: showCapital ?? this.showCapital,
       showRegion: showRegion ?? this.showRegion,
@@ -295,6 +360,16 @@ class CountryPickerConfig {
       itemsPerPage: itemsPerPage ?? this.itemsPerPage,
       showLoadingIndicator: showLoadingIndicator ?? this.showLoadingIndicator,
       loadingIndicatorColor: loadingIndicatorColor ?? this.loadingIndicatorColor,
+      titleText: titleText ?? this.titleText,
+      searchHintText: searchHintText ?? this.searchHintText,
+      emptyStateText: emptyStateText ?? this.emptyStateText,
+      selectCountryHintText: selectCountryHintText ?? this.selectCountryHintText,
+      filterTitleText: filterTitleText ?? this.filterTitleText,
+      filterSortByText: filterSortByText ?? this.filterSortByText,
+      filterRegionsText: filterRegionsText ?? this.filterRegionsText,
+      filterAllText: filterAllText ?? this.filterAllText,
+      filterCancelText: filterCancelText ?? this.filterCancelText,
+      filterApplyText: filterApplyText ?? this.filterApplyText,
       emptyStateWidget: emptyStateWidget ?? this.emptyStateWidget,
       errorStateWidget: errorStateWidget ?? this.errorStateWidget,
       customCountryBuilder: customCountryBuilder ?? this.customCountryBuilder,

@@ -194,6 +194,149 @@ void main() {
     });
   });
 
+  group('CountryNameL10n Tests', () {
+    test('should have 132 supported locales', () {
+      final locales = CountryNameL10n.supportedLocales;
+      expect(locales, isNotEmpty);
+      expect(locales.length, 132);
+    });
+
+    test('should contain common language codes', () {
+      final locales = CountryNameL10n.supportedLocales;
+      expect(locales, contains('en'));
+      expect(locales, contains('ar'));
+      expect(locales, contains('de'));
+      expect(locales, contains('es'));
+      expect(locales, contains('fr'));
+      expect(locales, contains('hi'));
+      expect(locales, contains('ja'));
+      expect(locales, contains('ko'));
+      expect(locales, contains('pt'));
+      expect(locales, contains('ru'));
+      expect(locales, contains('zh'));
+    });
+
+    test('should return localized name for valid country and language', () {
+      // German name for United States
+      final name = CountryNameL10n.getLocalizedName('US', 'de');
+      expect(name, isNotNull);
+      expect(name, contains('Vereinigte Staaten'));
+    });
+
+    test('should return Arabic name for a country', () {
+      final name = CountryNameL10n.getLocalizedName('US', 'ar');
+      expect(name, isNotNull);
+      expect(name!.isNotEmpty, isTrue);
+    });
+
+    test('should return Japanese name for a country', () {
+      final name = CountryNameL10n.getLocalizedName('JP', 'ja');
+      expect(name, isNotNull);
+      expect(name, contains('日本'));
+    });
+
+    test('should return null for invalid country code', () {
+      final name = CountryNameL10n.getLocalizedName('XX', 'en');
+      expect(name, isNull);
+    });
+
+    test('should return null for invalid language code', () {
+      final name = CountryNameL10n.getLocalizedName('US', 'zzz');
+      expect(name, isNull);
+    });
+
+    test('should return full translation map for a locale', () {
+      final map = CountryNameL10n.getTranslationsForLocale('fr');
+      expect(map, isNotNull);
+      expect(map, isNotEmpty);
+      expect(map!['FR'], isNotNull); // France in French
+      expect(map['US'], isNotNull); // United States in French
+    });
+
+    test('should return null translation map for invalid locale', () {
+      final map = CountryNameL10n.getTranslationsForLocale('zzz');
+      expect(map, isNull);
+    });
+  });
+
+  group('CountryUtils L10n Tests', () {
+    test('should get country name in a specific language', () {
+      final usa = CountryUtils.getCountryByAlpha2Code('US');
+      expect(usa, isNotNull);
+
+      final nameInGerman =
+          CountryUtils.getCountryNameInLanguage(usa!, 'de');
+      expect(nameInGerman, contains('Vereinigte Staaten'));
+
+      final nameInFrench =
+          CountryUtils.getCountryNameInLanguage(usa, 'fr');
+      expect(nameInFrench, contains('États-Unis'));
+
+      final nameInSpanish =
+          CountryUtils.getCountryNameInLanguage(usa, 'es');
+      expect(nameInSpanish, contains('Estados Unidos'));
+    });
+
+    test('should fall back to English name for unsupported language', () {
+      final usa = CountryUtils.getCountryByAlpha2Code('US');
+      expect(usa, isNotNull);
+
+      final name =
+          CountryUtils.getCountryNameInLanguage(usa!, 'zzz');
+      expect(name, 'United States');
+    });
+
+    test('should prefer nameTranslations over built-in l10n', () {
+      final country = Country(
+        name: 'Test Country',
+        nameTranslations: {'de': 'Custom German Name'},
+        alpha2Code: 'US',
+        alpha3Code: 'USA',
+        numericCode: '840',
+        flagEmoji: '',
+        flagImagePath: '',
+        capital: '',
+        region: '',
+        subregion: '',
+        population: 0,
+        area: 0,
+        callingCodes: [],
+        topLevelDomains: [],
+        currencies: [],
+        languages: [],
+        timezones: [],
+        borders: [],
+        isIndependent: false,
+        isUnMember: false,
+      );
+
+      final name =
+          CountryUtils.getCountryNameInLanguage(country, 'de');
+      expect(name, 'Custom German Name');
+    });
+
+    test('should get country names in all languages', () {
+      final usa = CountryUtils.getCountryByAlpha2Code('US');
+      expect(usa, isNotNull);
+
+      final allNames =
+          CountryUtils.getCountryNamesInAllLanguages(usa!);
+      expect(allNames, isNotEmpty);
+      expect(allNames.length, greaterThanOrEqualTo(130));
+      expect(allNames['de'], isNotNull);
+      expect(allNames['fr'], isNotNull);
+      expect(allNames['ja'], isNotNull);
+    });
+
+    test('should return supported locales', () {
+      final locales = CountryUtils.getSupportedLocales();
+      expect(locales, isNotEmpty);
+      expect(locales.length, 132);
+      expect(locales, contains('en'));
+      expect(locales, contains('zh'));
+    });
+  });
+
   group('Currency Model Tests', () {
     test('should create a currency with all properties', () {
       final currency = Currency(

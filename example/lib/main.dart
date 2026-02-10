@@ -1,6 +1,7 @@
 import 'package:countrify/countrify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,6 +56,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Countrify Example',
       debugShowCheckedModeBanner: false,
+      locale: const Locale('ar'),
+      supportedLocales: const [
+        Locale('ar'),
+        Locale('en'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
         brightness: Brightness.light,
         scaffoldBackgroundColor: CodeableColors.lightBg,
@@ -92,6 +103,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Country? _selectedCountry;
   String _phoneNumber = '';
   Country? _phoneCountry;
+
+  String _getLocalizedCountryName(Country country) {
+    final locale = Localizations.localeOf(context).languageCode;
+    return CountryUtils.getCountryNameInLanguage(country, locale);
+  }
 
   // ─── Light theme (Codeable Blue on white) ─────────────────────────
   CountryPickerTheme get _codeableLightTheme => const CountryPickerTheme(
@@ -309,7 +325,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      _selectedCountry!.name,
+                      _getLocalizedCountryName(_selectedCountry!),
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
@@ -569,6 +585,22 @@ class _MyHomePageState extends State<MyHomePage> {
               label: 'Custom Color Theme',
               icon: CountrifyIcons.paintbrush,
               onPressed: _showCustomColorThemePicker,
+            ),
+            const SizedBox(height: 28),
+
+            // ─── Localization Demo ──────────────────────────────────
+            _buildSectionTitle('Localization (132 Languages)'),
+            const SizedBox(height: 4),
+            const Text(
+              'Select a country above, then explore translations:',
+              style: TextStyle(
+                  fontSize: 14, color: CodeableColors.lightTextSecondary),
+            ),
+            const SizedBox(height: 12),
+            _buildBlueButton(
+              label: 'Show Translations',
+              icon: CountrifyIcons.globe,
+              onPressed: _showLocalizationDemo,
             ),
             const SizedBox(height: 28),
 
@@ -978,6 +1010,175 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
     _updateSelectedCountry(country);
+  }
+
+  // ─── Localization Demo ────────────────────────────────────────────
+  void _showLocalizationDemo() {
+    final country =
+        _selectedCountry ?? CountryUtils.getCountryByAlpha2Code('US');
+    if (country == null) return;
+
+    String displayName(Country country) {
+      final locale = Localizations.localeOf(context).languageCode;
+      return CountryUtils.getCountryNameInLanguage(country, locale);
+    }
+
+    // A curated list of languages to showcase.
+    const showcaseLanguages = <String, String>{
+      'en': 'English',
+      'ar': 'Arabic',
+      'zh': 'Chinese',
+      'nl': 'Dutch',
+      'fr': 'French',
+      'de': 'German',
+      'el': 'Greek',
+      'he': 'Hebrew',
+      'hi': 'Hindi',
+      'it': 'Italian',
+      'ja': 'Japanese',
+      'ko': 'Korean',
+      'fa': 'Persian',
+      'pl': 'Polish',
+      'pt': 'Portuguese',
+      'ru': 'Russian',
+      'es': 'Spanish',
+      'sw': 'Swahili',
+      'sv': 'Swedish',
+      'th': 'Thai',
+      'tr': 'Turkish',
+      'uk': 'Ukrainian',
+      'ur': 'Urdu',
+      'vi': 'Vietnamese',
+      'zu': 'Zulu',
+    };
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: CodeableColors.lightBg,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Image.asset(
+                  country.flagImagePath,
+                  width: 32,
+                  height: 24,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    displayName(country),
+                    style: const TextStyle(
+                      color: CodeableColors.lightText,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '${CountryUtils.getSupportedLocales().length} languages available',
+              style: const TextStyle(
+                fontSize: 13,
+                color: CodeableColors.lightTextMuted,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+        content: SizedBox(
+          width: double.maxFinite,
+          height: 400,
+          child: ListView.separated(
+            itemCount: showcaseLanguages.length,
+            separatorBuilder: (_, __) => const Divider(
+              height: 1,
+              color: CodeableColors.lightDivider,
+            ),
+            itemBuilder: (context, index) {
+              final langCode = showcaseLanguages.keys.elementAt(index);
+              final langName = showcaseLanguages.values.elementAt(index);
+              final translatedName = CountryUtils.getCountryNameInLanguage(
+                country,
+                langCode,
+              );
+              final isRtl = langCode == 'ar' ||
+                  langCode == 'he' ||
+                  langCode == 'fa' ||
+                  langCode == 'ur';
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 24,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: CodeableColors.blueSubtle,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        langCode,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: CodeableColors.blue,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            langName,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: CodeableColors.lightTextMuted,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            translatedName,
+                            textDirection:
+                                isRtl ? TextDirection.rtl : TextDirection.ltr,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: CodeableColors.lightText,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: TextButton.styleFrom(
+              foregroundColor: CodeableColors.blue,
+            ),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
   }
 
   // ─── Data Methods ─────────────────────────────────────────────────
