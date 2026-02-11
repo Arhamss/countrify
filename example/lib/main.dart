@@ -465,7 +465,9 @@ class _MyHomePageState extends State<MyHomePage> {
               initialCountryCode: CountryCode.ad,
               onCountrySelected: _updateSelectedCountry,
               onCountryChanged: _updateSelectedCountry,
-              hintText: 'Select a country',
+              style: CountrifyFieldStyle.defaultStyle().copyWith(
+                hintText: 'Select a country',
+              ),
               showPhoneCode: false,
               showFlag: true,
               searchEnabled: true,
@@ -546,8 +548,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 12),
             PhoneNumberField(
-              hintText: 'Enter phone number',
-              labelText: 'Phone',
+              style: const CountrifyFieldStyle(
+                hintText: 'Enter phone number',
+                labelText: 'Phone',
+                cursorColor: CodeableColors.blue,
+              ),
               initialCountryCode: CountryCode.ad,
               theme: _codeableLightTheme,
               pickerType: PickerOpenType.none,
@@ -615,16 +620,18 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 12),
             PhoneNumberField(
-              hintText: 'Phone number',
               theme: _codeableLightTheme,
               showDropdownIcon: false,
               flagSize: const Size(28, 20),
-              fieldBorderRadius: BorderRadius.circular(16),
               dropdownMaxHeight: 300,
-              dialCodeTextStyle: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: CodeableColors.blue,
+              style: CountrifyFieldStyle.defaultStyle().copyWith(
+                hintText: 'Phone number',
+                fieldBorderRadius: BorderRadius.circular(16),
+                dialCodeTextStyle: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: CodeableColors.blue,
+                ),
               ),
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,

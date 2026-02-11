@@ -3,12 +3,26 @@ import 'package:countrify/src/models/country.dart';
 import 'package:countrify/src/models/country_code.dart';
 import 'package:countrify/src/utils/country_utils.dart';
 import 'package:countrify/src/widgets/comprehensive_country_picker.dart';
+import 'package:countrify/src/widgets/countrify_field_style.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
 import 'package:flutter/material.dart';
 
 /// {@template country_dropdown_field}
-/// A text field-style dropdown for selecting countries with consistent styling
+/// A text field-style dropdown for selecting countries with consistent styling.
+///
+/// Use [CountrifyFieldStyle] to customise every aspect of the field
+/// decoration in one place:
+///
+/// ```dart
+/// CountryDropdownField(
+///   style: CountrifyFieldStyle.defaultStyle().copyWith(
+///     labelText: 'Country',
+///     fillColor: Colors.grey.shade50,
+///   ),
+///   onCountrySelected: (country) => print(country.name),
+/// )
+/// ```
 /// {@endtemplate}
 class CountryDropdownField extends StatefulWidget {
   /// {@macro country_dropdown_field}
@@ -19,10 +33,7 @@ class CountryDropdownField extends StatefulWidget {
     this.onCountryChanged,
     this.theme,
     this.config,
-    this.decoration,
-    this.labelText,
-    this.labelTextStyle,
-    this.hintText,
+    this.style,
     this.enabled = true,
     this.showPhoneCode = true,
     this.showFlag = true,
@@ -34,46 +45,40 @@ class CountryDropdownField extends StatefulWidget {
   /// Initial selected country by enum code.
   final CountryCode? initialCountryCode;
 
-  /// Callback when a country is selected
+  /// Callback when a country is selected.
   final ValueChanged<Country>? onCountrySelected;
 
-  /// Callback when country selection changes
+  /// Callback when country selection changes.
   final ValueChanged<Country>? onCountryChanged;
 
-  /// Theme configuration
+  /// Theme configuration for the picker.
   final CountryPickerTheme? theme;
 
-  /// Configuration options
+  /// Configuration options for the picker.
   final CountryPickerConfig? config;
 
-  /// Input decoration for the field
-  final InputDecoration? decoration;
+  /// Modular style for the field. Controls every aspect of the
+  /// [InputDecoration] plus extras like [selectedCountryTextStyle].
+  ///
+  /// When null, a default style is built from the [theme].
+  final CountrifyFieldStyle? style;
 
-  /// Label text for the field
-  final String? labelText;
-
-  /// Label text style for the field
-  final TextStyle? labelTextStyle;
-
-  /// Hint text for the field
-  final String? hintText;
-
-  /// Whether the field is enabled
+  /// Whether the field is enabled.
   final bool enabled;
 
-  /// Whether to show phone code in the field
+  /// Whether to show phone code in the field.
   final bool showPhoneCode;
 
-  /// Whether to show country flag in the field
+  /// Whether to show country flag in the field.
   final bool showFlag;
 
-  /// Whether search is enabled in the picker
+  /// Whether search is enabled in the picker.
   final bool searchEnabled;
 
-  /// Whether filtering is enabled in the picker
+  /// Whether filtering is enabled in the picker.
   final bool filterEnabled;
 
-  /// Type of picker to display
+  /// Type of picker to display.
   final PickerDisplayType pickerType;
 
   @override
@@ -82,34 +87,6 @@ class CountryDropdownField extends StatefulWidget {
 
 class _CountryDropdownFieldState extends State<CountryDropdownField> {
   Country? _selectedCountry;
-
-  InputDecoration _mergeDecoration(InputDecoration defaultDecoration) {
-    final custom = widget.decoration;
-    if (custom == null) return defaultDecoration;
-
-    return defaultDecoration.copyWith(
-      labelText: custom.labelText ?? defaultDecoration.labelText,
-      labelStyle: custom.labelStyle ?? defaultDecoration.labelStyle,
-      hintText: custom.hintText ?? defaultDecoration.hintText,
-      hintStyle: custom.hintStyle,
-      helperText: custom.helperText,
-      helperStyle: custom.helperStyle,
-      errorText: custom.errorText,
-      errorStyle: custom.errorStyle,
-      prefixIcon: custom.prefixIcon ?? defaultDecoration.prefixIcon,
-      suffixIcon: custom.suffixIcon ?? defaultDecoration.suffixIcon,
-      contentPadding: custom.contentPadding,
-      border: custom.border ?? defaultDecoration.border,
-      enabledBorder: custom.enabledBorder ?? defaultDecoration.enabledBorder,
-      focusedBorder: custom.focusedBorder ?? defaultDecoration.focusedBorder,
-      disabledBorder: custom.disabledBorder,
-      errorBorder: custom.errorBorder,
-      focusedErrorBorder: custom.focusedErrorBorder,
-      filled: custom.filled ?? defaultDecoration.filled,
-      fillColor: custom.fillColor ?? defaultDecoration.fillColor,
-      constraints: custom.constraints,
-    );
-  }
 
   @override
   void initState() {
@@ -232,7 +209,7 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
   String _getDisplayText() {
     final config = widget.config ?? const CountryPickerConfig();
     if (_selectedCountry == null) {
-      return widget.hintText ?? config.selectCountryHintText;
+      return config.selectCountryHintText;
     }
 
     final parts = <String>[_displayName(_selectedCountry!)];
@@ -247,52 +224,42 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
   @override
   Widget build(BuildContext context) {
     final theme = widget.theme ?? CountryPickerTheme.defaultTheme();
+    final effectiveStyle =
+        widget.style ?? CountrifyFieldStyle.defaultStyle();
 
-    final defaultDecoration = InputDecoration(
-      labelText: widget.labelText,
-      labelStyle: widget.labelTextStyle,
-      hintText: widget.hintText ??
-          (widget.config ?? const CountryPickerConfig()).selectCountryHintText,
-      prefixIcon: _selectedCountry != null && widget.showFlag
-          ? Padding(
-              padding: const EdgeInsets.all(12),
-              child: _buildFlagWidget(_selectedCountry!),
-            )
-          : Icon(theme.defaultCountryIcon ?? CountrifyIcons.globe),
-      suffixIcon: Icon(
-        theme.dropdownIcon ?? CountrifyIcons.chevronDown,
-        color: widget.enabled ? null : Colors.grey,
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide:
-            BorderSide(color: theme.borderColor ?? Colors.grey.shade300),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-            color: theme.countryItemSelectedBorderColor ?? Colors.blue,
-            width: 2),
-      ),
-      filled: true,
-      fillColor: widget.enabled ? theme.backgroundColor : Colors.grey.shade100,
+    final prefixWidget = _selectedCountry != null && widget.showFlag
+        ? Padding(
+            padding: const EdgeInsets.all(12),
+            child: _buildFlagWidget(_selectedCountry!),
+          )
+        : Icon(theme.defaultCountryIcon ?? CountrifyIcons.globe);
+
+    final suffixWidget = Icon(
+      theme.dropdownIcon ?? CountrifyIcons.chevronDown,
+      color: widget.enabled ? null : Colors.grey,
+    );
+
+    final borderRadius =
+        effectiveStyle.fieldBorderRadius ?? BorderRadius.circular(12);
+
+    final decoration = effectiveStyle.toInputDecoration(
+      prefixIconOverride: prefixWidget,
+      suffixIconOverride: suffixWidget,
     );
 
     return InkWell(
       onTap: widget.enabled && widget.pickerType != PickerDisplayType.none
           ? _showPicker
           : null,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: borderRadius,
       child: InputDecorator(
-        decoration: _mergeDecoration(defaultDecoration),
+        decoration: decoration,
         isEmpty: _selectedCountry == null,
         child: _selectedCountry != null
             ? Text(
                 _getDisplayText(),
-                style: theme.countryNameTextStyle,
+                style: effectiveStyle.selectedCountryTextStyle ??
+                    theme.countryNameTextStyle,
               )
             : null,
       ),
@@ -336,15 +303,15 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
   }
 }
 
-/// Types of picker display
+/// Types of picker display.
 enum PickerDisplayType {
-  /// Show picker as a bottom sheet
+  /// Show picker as a bottom sheet.
   bottomSheet,
 
-  /// Show picker as a dialog
+  /// Show picker as a dialog.
   dialog,
 
-  /// Show picker as a full screen page
+  /// Show picker as a full screen page.
   fullScreen,
 
   /// Keep current selection and disable opening a picker.

@@ -135,7 +135,7 @@ Add `countrify` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  countrify: ^1.2.0
+  countrify: ^2.0.0
 ```
 
 Then run:
@@ -291,15 +291,14 @@ CountryDropdownField(
   onCountrySelected: (country) {
     setState(() => selectedCountry = country);
   },
-  hintText: 'Select a country',
+  style: CountrifyFieldStyle.defaultStyle().copyWith(
+    hintText: 'Select a country',
+  ),
   showPhoneCode: false,
   showFlag: true,
   searchEnabled: true,
   pickerType: PickerDisplayType.bottomSheet, // or .dialog, .fullScreen, .none
   theme: CountryPickerTheme.defaultTheme(),
-  decoration: const InputDecoration(       // Optional custom decoration
-    border: OutlineInputBorder(),
-  ),
 )
 ```
 
@@ -308,16 +307,15 @@ CountryDropdownField(
 |---|---|---|---|
 | `initialCountryCode` | `CountryCode?` | `null` | Pre-selected country code |
 | `onCountrySelected` | `ValueChanged<Country>?` | — | Selection callback |
-| `labelText` | `String?` | `null` | Field label (shown above the hint) |
-| `labelTextStyle` | `TextStyle?` | `null` | Field label text style |
-| `hintText` | `String?` | `'Select a country'` | Placeholder text |
+| `style` | `CountrifyFieldStyle?` | `null` | Unified style object for label/hint/borders/fill/text styles |
 | `showPhoneCode` | `bool` | `true` | Show calling code in display |
 | `showFlag` | `bool` | `true` | Show flag in prefix |
 | `pickerType` | `PickerDisplayType` | `.bottomSheet` | How the picker opens (`.none` disables selection) |
 | `enabled` | `bool` | `true` | Whether the field is interactive |
-| `decoration` | `InputDecoration?` | — | Custom input decoration |
+| `searchEnabled` | `bool` | `true` | Enables search in the picker |
+| `filterEnabled` | `bool` | `false` | Enables filter chips in the picker |
 
-`decoration` is merged with Countrify defaults, so built-in flag/prefix UI is preserved unless you explicitly override `prefixIcon` / `suffixIcon`.
+Use `style: CountrifyFieldStyle.defaultStyle().copyWith(...)` to customize field decoration and text styles.
 
 ---
 
@@ -328,8 +326,10 @@ A **complete phone number input widget** with an integrated country code picker 
 ```dart
 PhoneNumberField(
   initialCountryCode: CountryCode.us,
-  hintText: 'Enter phone number',
-  labelText: 'Phone',
+  style: const CountrifyFieldStyle(
+    hintText: 'Enter phone number',
+    labelText: 'Phone',
+  ),
   onPhoneNumberChanged: (phoneNumber, country) {
     print('Full number: +${country.callingCodes.first}$phoneNumber');
   },
@@ -348,16 +348,18 @@ PhoneNumberField(
 
 ```dart
 PhoneNumberField(
-  hintText: 'Phone number',
   showDropdownIcon: true,
   flagSize: const Size(28, 20),
-  fieldBorderRadius: BorderRadius.circular(16),
   dropdownMaxHeight: 300,
   pickerType: PickerOpenType.dropdown,  // dropdown, bottomSheet, dialog, fullScreen
-  dialCodeTextStyle: const TextStyle(
-    fontSize: 15,
-    fontWeight: FontWeight.w700,
-    color: Colors.blue,
+  style: CountrifyFieldStyle.defaultStyle().copyWith(
+    hintText: 'Phone number',
+    fieldBorderRadius: BorderRadius.circular(16),
+    dialCodeTextStyle: const TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w700,
+      color: Colors.blue,
+    ),
   ),
   maxLength: 12,
   validator: (value) {
@@ -375,7 +377,7 @@ PhoneNumberField(
 | `controller` | `TextEditingController?` | Internal | Phone text controller |
 | `onPhoneNumberChanged` | `Function(String, Country)?` | — | Called on text or country change |
 | `onCountryChanged` | `ValueChanged<Country>?` | — | Called when country changes |
-| `labelTextStyle` | `TextStyle?` | `null` | Label text style |
+| `style` | `CountrifyFieldStyle?` | `null` | Unified style for decoration, text styles, cursor, divider, and prefix spacing |
 | `showFlag` | `bool` | `true` | Show flag in prefix |
 | `showDialCode` | `bool` | `true` | Show dial code in prefix |
 | `showDropdownIcon` | `bool` | `true` | Show dropdown arrow |
@@ -385,10 +387,8 @@ PhoneNumberField(
 | `validator` | `String? Function(String?)?` | — | Form validation |
 | `inputFormatters` | `List<TextInputFormatter>?` | — | Input formatters |
 | `maxLength` | `int?` | — | Max phone digits |
-| `dividerColor` | `Color?` | — | Prefix divider color |
-| `fieldBorderRadius` | `BorderRadius?` | `12` | Outer field radius |
 
-`decoration` is merged with Countrify defaults, so built-in country prefix UI is preserved unless you explicitly override `prefixIcon`.
+`style.toInputDecoration(...)` preserves built-in country prefix UI by default and only overrides it when you explicitly set `prefixIcon`/`suffixIcon`.
 
 ---
 
@@ -1101,8 +1101,10 @@ class Language {
 
 ```dart
 PhoneNumberField(
-  hintText: 'Enter phone number',
-  labelText: 'Phone',
+  style: const CountrifyFieldStyle(
+    hintText: 'Enter phone number',
+    labelText: 'Phone',
+  ),
   theme: CountryPickerTheme.defaultTheme(),
   inputFormatters: [
     FilteringTextInputFormatter.digitsOnly,
@@ -1125,7 +1127,9 @@ CountryDropdownField(
   onCountrySelected: (country) {
     setState(() => _selectedCountry = country);
   },
-  hintText: 'Select your country',
+  style: CountrifyFieldStyle.defaultStyle().copyWith(
+    hintText: 'Select your country',
+  ),
   showPhoneCode: false,
   showFlag: true,
   searchEnabled: true,

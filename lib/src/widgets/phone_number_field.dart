@@ -4,6 +4,7 @@ import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:countrify/src/models/country.dart';
 import 'package:countrify/src/models/country_code.dart';
 import 'package:countrify/src/utils/country_utils.dart';
+import 'package:countrify/src/widgets/countrify_field_style.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +18,18 @@ import 'package:flutter/services.dart';
 /// opens a compact, scrollable dropdown anchored directly below the field
 /// (default), or optionally a bottom sheet / dialog / full-screen picker.
 ///
-/// Example usage:
+/// Use [CountrifyFieldStyle] to customise every aspect of the field
+/// decoration in one place:
+///
 /// ```dart
 /// PhoneNumberField(
+///   style: CountrifyFieldStyle.defaultStyle().copyWith(
+///     hintText: 'Enter phone number',
+///     fillColor: Colors.grey.shade50,
+///   ),
 ///   onPhoneNumberChanged: (phoneNumber, country) {
 ///     print('Full number: +${country.callingCodes.first}$phoneNumber');
 ///   },
-///   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
 /// )
 /// ```
 /// {@endtemplate}
@@ -39,12 +45,7 @@ class PhoneNumberField extends StatefulWidget {
     this.onSubmitted,
     this.onEditingComplete,
     this.inputFormatters,
-    this.decoration,
-    this.phoneTextStyle,
-    this.dialCodeTextStyle,
-    this.hintText,
-    this.labelText,
-    this.labelTextStyle,
+    this.style,
     this.validator,
     this.theme,
     this.config,
@@ -62,10 +63,6 @@ class PhoneNumberField extends StatefulWidget {
     this.maxLength,
     this.pickerType = PickerOpenType.dropdown,
     this.dropdownMaxHeight = 350,
-    this.dividerColor,
-    this.prefixPadding,
-    this.fieldBorderRadius,
-    this.contentPadding,
   });
 
   /// Initial country selection by enum code.
@@ -96,24 +93,14 @@ class PhoneNumberField extends StatefulWidget {
   /// Use this for validation, e.g. `FilteringTextInputFormatter.digitsOnly`.
   final List<TextInputFormatter>? inputFormatters;
 
-  /// Custom [InputDecoration] for the entire field.
-  /// When provided, this overrides the default decoration.
-  final InputDecoration? decoration;
-
-  /// Text style for the phone number input.
-  final TextStyle? phoneTextStyle;
-
-  /// Text style for the dial code in the prefix.
-  final TextStyle? dialCodeTextStyle;
-
-  /// Hint text displayed in the phone number field.
-  final String? hintText;
-
-  /// Label text for the field.
-  final String? labelText;
-
-  /// Label text style for the field.
-  final TextStyle? labelTextStyle;
+  /// Modular style for the field. Controls every aspect of the
+  /// [InputDecoration] plus field-specific extras like [phoneTextStyle],
+  /// [dialCodeTextStyle], [dividerColor], [prefixPadding], [cursorColor],
+  /// and [fieldBorderRadius].
+  ///
+  /// When null, a default style matching [CountrifyFieldStyle.defaultStyle]
+  /// is used.
+  final CountrifyFieldStyle? style;
 
   /// Optional validator for form integration.
   final String? Function(String?)? validator;
@@ -168,18 +155,6 @@ class PhoneNumberField extends StatefulWidget {
   /// [pickerType] is [PickerOpenType.dropdown]. Defaults to 350.
   final double dropdownMaxHeight;
 
-  /// Color of the divider between the prefix and the text field.
-  final Color? dividerColor;
-
-  /// Padding around the prefix area.
-  final EdgeInsetsGeometry? prefixPadding;
-
-  /// Border radius for the outer field container.
-  final BorderRadius? fieldBorderRadius;
-
-  /// Content padding inside the text field.
-  final EdgeInsetsGeometry? contentPadding;
-
   @override
   State<PhoneNumberField> createState() => _PhoneNumberFieldState();
 }
@@ -196,39 +171,6 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   bool _isDropdownOpen = false;
 
   bool get _effectiveSearchEnabled => widget.config?.enableSearch ?? true;
-
-  InputDecoration _mergeDecoration(InputDecoration defaultDecoration) {
-    final custom = widget.decoration;
-    if (custom == null) return defaultDecoration;
-
-    return defaultDecoration.copyWith(
-      labelText: custom.labelText ?? defaultDecoration.labelText,
-      labelStyle: custom.labelStyle ?? defaultDecoration.labelStyle,
-      hintText: custom.hintText ?? defaultDecoration.hintText,
-      hintStyle: custom.hintStyle ?? defaultDecoration.hintStyle,
-      helperText: custom.helperText,
-      helperStyle: custom.helperStyle,
-      errorText: custom.errorText,
-      errorStyle: custom.errorStyle,
-      prefixIcon: custom.prefixIcon ?? defaultDecoration.prefixIcon,
-      prefixIconConstraints: custom.prefixIconConstraints ??
-          defaultDecoration.prefixIconConstraints,
-      suffixIcon: custom.suffixIcon ?? defaultDecoration.suffixIcon,
-      suffixIconConstraints: custom.suffixIconConstraints,
-      contentPadding: custom.contentPadding ?? defaultDecoration.contentPadding,
-      border: custom.border ?? defaultDecoration.border,
-      enabledBorder: custom.enabledBorder ?? defaultDecoration.enabledBorder,
-      focusedBorder: custom.focusedBorder ?? defaultDecoration.focusedBorder,
-      disabledBorder: custom.disabledBorder ?? defaultDecoration.disabledBorder,
-      errorBorder: custom.errorBorder ?? defaultDecoration.errorBorder,
-      focusedErrorBorder:
-          custom.focusedErrorBorder ?? defaultDecoration.focusedErrorBorder,
-      filled: custom.filled ?? defaultDecoration.filled,
-      fillColor: custom.fillColor ?? defaultDecoration.fillColor,
-      counterText: custom.counterText ?? defaultDecoration.counterText,
-      constraints: custom.constraints,
-    );
-  }
 
   @override
   void initState() {
@@ -480,46 +422,11 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   @override
   Widget build(BuildContext context) {
     final pickerTheme = widget.theme ?? CountryPickerTheme.defaultTheme();
-    final borderRadius = widget.fieldBorderRadius ?? BorderRadius.circular(12);
+    final effectiveStyle =
+        widget.style ?? CountrifyFieldStyle.defaultStyle();
 
-    final defaultDecoration = InputDecoration(
-      labelText: widget.labelText,
-      labelStyle: widget.labelTextStyle,
-      hintText: widget.hintText ?? 'Phone number',
-      hintStyle: pickerTheme.searchHintStyle,
-      prefixIcon: _buildPrefix(pickerTheme),
-      prefixIconConstraints: const BoxConstraints(),
-      contentPadding: widget.contentPadding ??
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      border: OutlineInputBorder(borderRadius: borderRadius),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: borderRadius,
-        borderSide:
-            BorderSide(color: pickerTheme.borderColor ?? Colors.grey.shade300),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: borderRadius,
-        borderSide: BorderSide(
-          color: pickerTheme.countryItemSelectedBorderColor ?? Colors.blue,
-          width: 2,
-        ),
-      ),
-      disabledBorder: OutlineInputBorder(
-        borderRadius: borderRadius,
-        borderSide: BorderSide(color: Colors.grey.shade200),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: borderRadius,
-        borderSide: const BorderSide(color: Colors.red),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: borderRadius,
-        borderSide: const BorderSide(color: Colors.red, width: 2),
-      ),
-      filled: true,
-      fillColor:
-          widget.enabled ? pickerTheme.backgroundColor : Colors.grey.shade100,
-      counterText: '',
+    final decoration = effectiveStyle.toInputDecoration(
+      prefixIconOverride: _buildPrefix(pickerTheme, effectiveStyle),
     );
 
     return CompositedTransformTarget(
@@ -528,23 +435,29 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         key: _fieldKey,
         controller: _controller,
         focusNode: widget.focusNode,
+        cursorColor:
+            effectiveStyle.cursorColor ?? pickerTheme.searchCursorColor,
         enabled: widget.enabled,
         readOnly: widget.readOnly,
         autofocus: widget.autofocus,
         keyboardType: widget.keyboardType,
         textInputAction: widget.textInputAction,
         maxLength: widget.maxLength,
-        style: widget.phoneTextStyle ?? pickerTheme.countryNameTextStyle,
+        style:
+            effectiveStyle.phoneTextStyle ?? pickerTheme.countryNameTextStyle,
         inputFormatters: widget.inputFormatters,
         validator: widget.validator,
         onFieldSubmitted: widget.onSubmitted,
         onEditingComplete: widget.onEditingComplete,
-        decoration: _mergeDecoration(defaultDecoration),
+        decoration: decoration,
       ),
     );
   }
 
-  Widget _buildPrefix(CountryPickerTheme pickerTheme) {
+  Widget _buildPrefix(
+    CountryPickerTheme pickerTheme,
+    CountrifyFieldStyle effectiveStyle,
+  ) {
     final dialCode =
         _selectedCountry != null && _selectedCountry!.callingCodes.isNotEmpty
             ? '+${_selectedCountry!.callingCodes.first}'
@@ -555,7 +468,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
           widget.pickerType == PickerOpenType.none ? null : _openCountryPicker,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: widget.prefixPadding ??
+        padding: effectiveStyle.prefixPadding ??
             const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -567,7 +480,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
             if (widget.showDialCode && dialCode.isNotEmpty)
               Text(
                 dialCode,
-                style: widget.dialCodeTextStyle ??
+                style: effectiveStyle.dialCodeTextStyle ??
                     pickerTheme.compactDialCodeTextStyle ??
                     pickerTheme.countryNameTextStyle?.copyWith(
                       fontWeight: FontWeight.w600,
@@ -592,7 +505,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
             Container(
               width: 1,
               height: 24,
-              color: widget.dividerColor ??
+              color: effectiveStyle.dividerColor ??
                   pickerTheme.borderColor ??
                   Colors.grey.shade300,
             ),

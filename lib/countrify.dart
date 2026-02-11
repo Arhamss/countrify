@@ -22,6 +22,7 @@ export 'src/models/country_code.dart';
 export 'src/utils/country_utils.dart';
 
 export 'src/widgets/comprehensive_country_picker.dart';
+export 'src/widgets/countrify_field_style.dart';
 export 'src/widgets/country_dropdown_field.dart';
 export 'src/widgets/country_picker.dart'
     hide CountryPickerConfig, CountryPickerTheme;

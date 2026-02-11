@@ -1,3 +1,35 @@
+## 2.0.0
+
+### Breaking Changes
+
+- Replaced field-level styling parameters in `CountryDropdownField` and
+  `PhoneNumberField` with a unified `style` API:
+  - Removed direct parameters such as `hintText`, `labelText`,
+    `labelTextStyle`, `decoration`, `phoneTextStyle`, `dialCodeTextStyle`,
+    `dividerColor`, `prefixPadding`, `fieldBorderRadius`, and
+    `contentPadding`.
+  - Use `style: CountrifyFieldStyle(...)` or
+    `CountrifyFieldStyle.defaultStyle().copyWith(...)` instead.
+
+### Added
+
+- Added new public `CountrifyFieldStyle` export in `countrify.dart`.
+- Added `CountrifyFieldStyle` to centralize:
+  - `InputDecoration` properties
+  - phone and dial-code text styling
+  - cursor color, divider color, prefix padding, and border radius
+- Added helper constructors for fast theming:
+  - `defaultStyle()`
+  - `darkStyle()`
+  - `outlineStyle()`
+  - `filledStyle()`
+
+### Changed
+
+- Refactored `CountryDropdownField` and `PhoneNumberField` internals to build
+  decoration via `CountrifyFieldStyle.toInputDecoration()`.
+- Updated README examples and API docs to use `style`.
+
 ## 1.2.0
 
 ### Breaking Changes
