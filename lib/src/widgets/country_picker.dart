@@ -4,6 +4,7 @@ import 'package:countrify/src/utils/country_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:countrify/src/models/country.dart';
+import 'package:countrify/src/models/country_code.dart';
 import 'package:countrify/src/data/all_countries.dart';
 
 /// {@template country_picker_theme}
@@ -30,6 +31,8 @@ class CountryPickerTheme {
     this.countryItemPadding,
     this.countryNameStyle,
     this.countryCodeStyle,
+    this.appBarTitleTextStyle,
+    this.flagEmojiTextStyle,
     this.flagSize,
     this.flagBorderRadius,
     this.dividerColor,
@@ -88,6 +91,12 @@ class CountryPickerTheme {
 
   /// Country code text style
   final TextStyle? countryCodeStyle;
+
+  /// App bar title text style for full-screen wrappers
+  final TextStyle? appBarTitleTextStyle;
+
+  /// Text style for flag emoji fallback rendering
+  final TextStyle? flagEmojiTextStyle;
 
   /// Flag size
   final Size? flagSize;
@@ -326,7 +335,7 @@ class CountryPicker extends StatefulWidget {
     super.key,
     this.theme,
     this.config = const CountryPickerConfig(),
-    this.initialCountry,
+    this.initialCountryCode,
     this.title,
     this.showTitle = true,
     this.titleStyle,
@@ -344,8 +353,8 @@ class CountryPicker extends StatefulWidget {
   /// Configuration for behavior
   final CountryPickerConfig config;
 
-  /// Initially selected country
-  final Country? initialCountry;
+  /// Initially selected country by enum code.
+  final CountryCode? initialCountryCode;
 
   /// Title of the picker
   final String? title;
@@ -376,6 +385,10 @@ class _CountryPickerState extends State<CountryPicker> {
   String _searchQuery = '';
   Timer? _debounceTimer;
   late String _effectiveLocale;
+
+  Country? get _effectiveInitialCountry => CountryUtils.resolveInitialCountry(
+        initialCountryCode: widget.initialCountryCode,
+      );
 
   /// Returns the display name for a country, respecting the locale.
   String _displayName(Country country) {
@@ -577,7 +590,8 @@ class _CountryPickerState extends State<CountryPicker> {
   Widget _buildCountryItem(Country country) {
     final theme = widget.theme;
     final config = widget.config;
-    final isSelected = widget.initialCountry?.alpha2Code == country.alpha2Code;
+    final isSelected =
+        _effectiveInitialCountry?.alpha2Code == country.alpha2Code;
 
     return Container(
       height: config.itemHeight,
@@ -672,7 +686,8 @@ class _CountryPickerState extends State<CountryPicker> {
               child: Center(
                 child: Text(
                   country.flagEmoji,
-                  style: const TextStyle(fontSize: 16),
+                  style: theme?.flagEmojiTextStyle ??
+                      const TextStyle(fontSize: 16),
                 ),
               ),
             );

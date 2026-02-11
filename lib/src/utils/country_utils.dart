@@ -1,6 +1,7 @@
 import '../data/all_countries.dart';
 import '../l10n/country_name_l10n.dart';
 import '../models/country.dart';
+import '../models/country_code.dart';
 
 /// {@template country_utils}
 /// Utility functions for working with country data
@@ -12,27 +13,38 @@ class CountryUtils {
   static List<Country> getAllCountries() => AllCountries.all;
 
   /// Get countries by region
-  static List<Country> getCountriesByRegion(String region) => 
+  static List<Country> getCountriesByRegion(String region) =>
       AllCountries.getByRegion(region);
 
   /// Get countries by subregion
-  static List<Country> getCountriesBySubregion(String subregion) => 
+  static List<Country> getCountriesBySubregion(String subregion) =>
       AllCountries.getBySubregion(subregion);
 
   /// Get country by alpha-2 code
-  static Country? getCountryByAlpha2Code(String alpha2Code) => 
+  static Country? getCountryByAlpha2Code(String alpha2Code) =>
       AllCountries.getByAlpha2Code(alpha2Code);
 
+  /// Get country by [CountryCode]
+  static Country? getCountryByCode(CountryCode countryCode) =>
+      getCountryByAlpha2Code(countryCode.alpha2Code);
+
+  /// Resolve an initial country from enum code.
+  static Country? resolveInitialCountry({
+    CountryCode? initialCountryCode,
+  }) {
+    return initialCountryCode?.country;
+  }
+
   /// Get country by alpha-3 code
-  static Country? getCountryByAlpha3Code(String alpha3Code) => 
+  static Country? getCountryByAlpha3Code(String alpha3Code) =>
       AllCountries.getByAlpha3Code(alpha3Code);
 
   /// Get country by numeric code
-  static Country? getCountryByNumericCode(String numericCode) => 
+  static Country? getCountryByNumericCode(String numericCode) =>
       AllCountries.getByNumericCode(numericCode);
 
   /// Search countries by name
-  static List<Country> searchCountries(String query) => 
+  static List<Country> searchCountries(String query) =>
       AllCountries.searchByName(query);
 
   /// Get independent countries only
@@ -76,27 +88,33 @@ class CountryUtils {
 
   /// Get countries by calling code
   static List<Country> getCountriesByCallingCode(String callingCode) {
-    return AllCountries.all.where((country) => 
-        country.callingCodes.contains(callingCode)).toList();
+    return AllCountries.all
+        .where((country) => country.callingCodes.contains(callingCode))
+        .toList();
   }
 
   /// Get countries by currency code
   static List<Country> getCountriesByCurrencyCode(String currencyCode) {
-    return AllCountries.all.where((country) => 
-        country.currencies.any((currency) => currency.code == currencyCode)).toList();
+    return AllCountries.all
+        .where((country) =>
+            country.currencies.any((currency) => currency.code == currencyCode))
+        .toList();
   }
 
   /// Get countries by language code
   static List<Country> getCountriesByLanguageCode(String languageCode) {
-    return AllCountries.all.where((country) => 
-        country.languages.any((language) => 
-            language.iso6391 == languageCode || language.iso6392 == languageCode)).toList();
+    return AllCountries.all
+        .where((country) => country.languages.any((language) =>
+            language.iso6391 == languageCode ||
+            language.iso6392 == languageCode))
+        .toList();
   }
 
   /// Get countries by timezone
   static List<Country> getCountriesByTimezone(String timezone) {
-    return AllCountries.all.where((country) => 
-        country.timezones.contains(timezone)).toList();
+    return AllCountries.all
+        .where((country) => country.timezones.contains(timezone))
+        .toList();
   }
 
   /// Get countries that border a specific country
@@ -113,14 +131,16 @@ class CountryUtils {
 
   /// Get countries with population greater than specified value
   static List<Country> getCountriesByMinPopulation(int minPopulation) {
-    return AllCountries.all.where((country) => 
-        country.population >= minPopulation).toList();
+    return AllCountries.all
+        .where((country) => country.population >= minPopulation)
+        .toList();
   }
 
   /// Get countries with area greater than specified value
   static List<Country> getCountriesByMinArea(double minArea) {
-    return AllCountries.all.where((country) => 
-        country.area >= minArea).toList();
+    return AllCountries.all
+        .where((country) => country.area >= minArea)
+        .toList();
   }
 
   /// Get countries sorted by population (descending)
@@ -147,22 +167,20 @@ class CountryUtils {
   /// Get the most populous country
   static Country? getMostPopulousCountry() {
     if (AllCountries.all.isEmpty) return null;
-    return AllCountries.all.reduce((a, b) => 
-        a.population > b.population ? a : b);
+    return AllCountries.all
+        .reduce((a, b) => a.population > b.population ? a : b);
   }
 
   /// Get the largest country by area
   static Country? getLargestCountry() {
     if (AllCountries.all.isEmpty) return null;
-    return AllCountries.all.reduce((a, b) => 
-        a.area > b.area ? a : b);
+    return AllCountries.all.reduce((a, b) => a.area > b.area ? a : b);
   }
 
   /// Get the smallest country by area
   static Country? getSmallestCountry() {
     if (AllCountries.all.isEmpty) return null;
-    return AllCountries.all.reduce((a, b) => 
-        a.area < b.area ? a : b);
+    return AllCountries.all.reduce((a, b) => a.area < b.area ? a : b);
   }
 
   /// Get total world population
@@ -209,7 +227,7 @@ class CountryUtils {
   static List<Currency> getAllCurrencies() {
     final currencies = <Currency>[];
     final currencyCodes = <String>{};
-    
+
     for (final country in AllCountries.all) {
       for (final currency in country.currencies) {
         if (!currencyCodes.contains(currency.code)) {
@@ -218,7 +236,7 @@ class CountryUtils {
         }
       }
     }
-    
+
     return currencies..sort((a, b) => a.code.compareTo(b.code));
   }
 
@@ -226,7 +244,7 @@ class CountryUtils {
   static List<Language> getAllLanguages() {
     final languages = <Language>[];
     final languageCodes = <String>{};
-    
+
     for (final country in AllCountries.all) {
       for (final language in country.languages) {
         if (!languageCodes.contains(language.iso6391)) {
@@ -235,7 +253,7 @@ class CountryUtils {
         }
       }
     }
-    
+
     return languages..sort((a, b) => a.name.compareTo(b.name));
   }
 
@@ -267,15 +285,15 @@ class CountryUtils {
   }
 
   /// Check if a country code is valid
-  static bool isValidAlpha2Code(String code) => 
+  static bool isValidAlpha2Code(String code) =>
       getCountryByAlpha2Code(code) != null;
 
   /// Check if a country code is valid
-  static bool isValidAlpha3Code(String code) => 
+  static bool isValidAlpha3Code(String code) =>
       getCountryByAlpha3Code(code) != null;
 
   /// Check if a numeric code is valid
-  static bool isValidNumericCode(String code) => 
+  static bool isValidNumericCode(String code) =>
       getCountryByNumericCode(code) != null;
 
   /// Get country name in a specific language.
@@ -309,23 +327,22 @@ class CountryUtils {
   }
 
   /// Get the list of supported locale codes for country name translations.
-  static List<String> getSupportedLocales() =>
-      CountryNameL10n.supportedLocales;
+  static List<String> getSupportedLocales() => CountryNameL10n.supportedLocales;
 
   /// Format population number with commas
   static String formatPopulation(int population) {
     return population.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (Match match) => '${match[1]},',
-    );
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match match) => '${match[1]},',
+        );
   }
 
   /// Format area number with commas
   static String formatArea(double area) {
     return area.toStringAsFixed(0).replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (Match match) => '${match[1]},',
-    );
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match match) => '${match[1]},',
+        );
   }
 
   /// Get country flag emoji
@@ -343,32 +360,32 @@ class CountryUtils {
   /// Get country calling code
   static String? getCountryCallingCode(String alpha2Code) {
     final country = getCountryByAlpha2Code(alpha2Code);
-    return country?.callingCodes.isNotEmpty == true 
-        ? country!.callingCodes.first 
+    return country?.callingCodes.isNotEmpty == true
+        ? country!.callingCodes.first
         : null;
   }
 
   /// Get country currency
   static Currency? getCountryCurrency(String alpha2Code) {
     final country = getCountryByAlpha2Code(alpha2Code);
-    return country?.currencies.isNotEmpty == true 
-        ? country!.currencies.first 
+    return country?.currencies.isNotEmpty == true
+        ? country!.currencies.first
         : null;
   }
 
   /// Get country primary language
   static Language? getCountryPrimaryLanguage(String alpha2Code) {
     final country = getCountryByAlpha2Code(alpha2Code);
-    return country?.languages.isNotEmpty == true 
-        ? country!.languages.first 
+    return country?.languages.isNotEmpty == true
+        ? country!.languages.first
         : null;
   }
 
   /// Get country timezone
   static String? getCountryTimezone(String alpha2Code) {
     final country = getCountryByAlpha2Code(alpha2Code);
-    return country?.timezones.isNotEmpty == true 
-        ? country!.timezones.first 
+    return country?.timezones.isNotEmpty == true
+        ? country!.timezones.first
         : null;
   }
 

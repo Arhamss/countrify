@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:countrify/src/models/country.dart';
+import 'package:countrify/src/models/country_code.dart';
 import 'package:countrify/src/utils/country_utils.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
@@ -30,7 +31,7 @@ class PhoneNumberField extends StatefulWidget {
   /// {@macro phone_number_field}
   const PhoneNumberField({
     super.key,
-    this.initialCountry,
+    this.initialCountryCode,
     this.controller,
     this.focusNode,
     this.onPhoneNumberChanged,
@@ -43,6 +44,7 @@ class PhoneNumberField extends StatefulWidget {
     this.dialCodeTextStyle,
     this.hintText,
     this.labelText,
+    this.labelTextStyle,
     this.validator,
     this.theme,
     this.config,
@@ -66,9 +68,8 @@ class PhoneNumberField extends StatefulWidget {
     this.contentPadding,
   });
 
-  /// Initial country selection. If null, defaults to first country with
-  /// a calling code.
-  final Country? initialCountry;
+  /// Initial country selection by enum code.
+  final CountryCode? initialCountryCode;
 
   /// Controller for the phone number text field.
   /// If not provided, an internal controller is used.
@@ -110,6 +111,9 @@ class PhoneNumberField extends StatefulWidget {
 
   /// Label text for the field.
   final String? labelText;
+
+  /// Label text style for the field.
+  final TextStyle? labelTextStyle;
 
   /// Optional validator for form integration.
   final String? Function(String?)? validator;
@@ -191,6 +195,41 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   final LayerLink _layerLink = LayerLink();
   bool _isDropdownOpen = false;
 
+  bool get _effectiveSearchEnabled => widget.config?.enableSearch ?? true;
+
+  InputDecoration _mergeDecoration(InputDecoration defaultDecoration) {
+    final custom = widget.decoration;
+    if (custom == null) return defaultDecoration;
+
+    return defaultDecoration.copyWith(
+      labelText: custom.labelText ?? defaultDecoration.labelText,
+      labelStyle: custom.labelStyle ?? defaultDecoration.labelStyle,
+      hintText: custom.hintText ?? defaultDecoration.hintText,
+      hintStyle: custom.hintStyle ?? defaultDecoration.hintStyle,
+      helperText: custom.helperText,
+      helperStyle: custom.helperStyle,
+      errorText: custom.errorText,
+      errorStyle: custom.errorStyle,
+      prefixIcon: custom.prefixIcon ?? defaultDecoration.prefixIcon,
+      prefixIconConstraints: custom.prefixIconConstraints ??
+          defaultDecoration.prefixIconConstraints,
+      suffixIcon: custom.suffixIcon ?? defaultDecoration.suffixIcon,
+      suffixIconConstraints: custom.suffixIconConstraints,
+      contentPadding: custom.contentPadding ?? defaultDecoration.contentPadding,
+      border: custom.border ?? defaultDecoration.border,
+      enabledBorder: custom.enabledBorder ?? defaultDecoration.enabledBorder,
+      focusedBorder: custom.focusedBorder ?? defaultDecoration.focusedBorder,
+      disabledBorder: custom.disabledBorder ?? defaultDecoration.disabledBorder,
+      errorBorder: custom.errorBorder ?? defaultDecoration.errorBorder,
+      focusedErrorBorder:
+          custom.focusedErrorBorder ?? defaultDecoration.focusedErrorBorder,
+      filled: custom.filled ?? defaultDecoration.filled,
+      fillColor: custom.fillColor ?? defaultDecoration.fillColor,
+      counterText: custom.counterText ?? defaultDecoration.counterText,
+      constraints: custom.constraints,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -205,8 +244,11 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   }
 
   void _initCountry() {
-    if (widget.initialCountry != null) {
-      _selectedCountry = widget.initialCountry;
+    final resolvedCountry = CountryUtils.resolveInitialCountry(
+      initialCountryCode: widget.initialCountryCode,
+    );
+    if (resolvedCountry != null) {
+      _selectedCountry = resolvedCountry;
     } else {
       final countries = CountryUtils.getAllCountries()
           .where((c) => c.callingCodes.isNotEmpty)
@@ -231,11 +273,8 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       _controller = widget.controller!;
       _controller.addListener(_onPhoneChanged);
     }
-    if (widget.initialCountry != oldWidget.initialCountry &&
-        widget.initialCountry != null) {
-      setState(() {
-        _selectedCountry = widget.initialCountry;
-      });
+    if (widget.initialCountryCode != oldWidget.initialCountryCode) {
+      setState(_initCountry);
     }
   }
 
@@ -269,7 +308,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   // ─── Picker open logic ─────────────────────────────────────────────
 
   void _openCountryPicker() {
-    if (!widget.enabled) return;
+    if (!widget.enabled || widget.pickerType == PickerOpenType.none) return;
     if (widget.pickerType == PickerOpenType.dropdown) {
       _toggleDropdown();
     } else {
@@ -302,6 +341,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         fieldWidth: fieldSize.width,
         maxHeight: widget.dropdownMaxHeight,
         theme: pickerTheme,
+        searchEnabled: _effectiveSearchEnabled,
         config: widget.config,
         selectedCountry: _selectedCountry,
         showFlag: widget.showFlag,
@@ -344,6 +384,8 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         selected = await _showFullScreen();
       case PickerOpenType.dropdown:
         return; // handled via overlay
+      case PickerOpenType.none:
+        return; // picker disabled
     }
 
     if (selected != null) {
@@ -359,6 +401,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => _ModalCountryList(
         theme: pickerTheme,
+        searchEnabled: _effectiveSearchEnabled,
         config: widget.config,
         selectedCountry: _selectedCountry,
         showFlag: widget.showFlag,
@@ -385,6 +428,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
           height: MediaQuery.of(ctx).size.height * 0.55,
           child: _ModalCountryList(
             theme: pickerTheme,
+            searchEnabled: _effectiveSearchEnabled,
             config: widget.config,
             selectedCountry: _selectedCountry,
             showFlag: widget.showFlag,
@@ -407,7 +451,8 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
             backgroundColor: pickerTheme.headerColor,
             title: Text(
                 (widget.config ?? const CountryPickerConfig()).titleText,
-                style: pickerTheme.headerTextStyle),
+                style: pickerTheme.appBarTitleTextStyle ??
+                    pickerTheme.headerTextStyle),
             leading: IconButton(
               icon: Icon(pickerTheme.closeIcon ?? CountrifyIcons.x,
                   color: pickerTheme.headerIconColor),
@@ -416,6 +461,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
           ),
           body: _ModalCountryList(
             theme: pickerTheme,
+            searchEnabled: _effectiveSearchEnabled,
             config: widget.config,
             selectedCountry: _selectedCountry,
             showFlag: widget.showFlag,
@@ -438,6 +484,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
 
     final defaultDecoration = InputDecoration(
       labelText: widget.labelText,
+      labelStyle: widget.labelTextStyle,
       hintText: widget.hintText ?? 'Phone number',
       hintStyle: pickerTheme.searchHintStyle,
       prefixIcon: _buildPrefix(pickerTheme),
@@ -492,7 +539,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         validator: widget.validator,
         onFieldSubmitted: widget.onSubmitted,
         onEditingComplete: widget.onEditingComplete,
-        decoration: widget.decoration ?? defaultDecoration,
+        decoration: _mergeDecoration(defaultDecoration),
       ),
     );
   }
@@ -504,7 +551,8 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
             : '';
 
     return GestureDetector(
-      onTap: _openCountryPicker,
+      onTap:
+          widget.pickerType == PickerOpenType.none ? null : _openCountryPicker,
       behavior: HitTestBehavior.opaque,
       child: Container(
         padding: widget.prefixPadding ??
@@ -520,16 +568,13 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
               Text(
                 dialCode,
                 style: widget.dialCodeTextStyle ??
+                    pickerTheme.compactDialCodeTextStyle ??
                     pickerTheme.countryNameTextStyle?.copyWith(
                       fontWeight: FontWeight.w600,
-                    ) ??
-                    const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
                     ),
               ),
-            if (widget.showDropdownIcon) ...[
+            if (widget.showDropdownIcon &&
+                widget.pickerType != PickerOpenType.none) ...[
               const SizedBox(width: 4),
               AnimatedRotation(
                 turns: _isDropdownOpen ? 0.5 : 0,
@@ -558,6 +603,8 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   }
 
   Widget _buildFlagImage(Country country) {
+    final pickerTheme = widget.theme ?? CountryPickerTheme.defaultTheme();
+
     return Container(
       width: widget.flagSize.width,
       height: widget.flagSize.height,
@@ -575,7 +622,10 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
             child: Center(
               child: Text(
                 country.flagEmoji,
-                style: TextStyle(fontSize: widget.flagSize.width * 0.5),
+                style: pickerTheme.flagEmojiTextStyle?.copyWith(
+                      fontSize: widget.flagSize.width * 0.5,
+                    ) ??
+                    TextStyle(fontSize: widget.flagSize.width * 0.5),
               ),
             ),
           ),
@@ -595,6 +645,7 @@ class _DropdownOverlay extends StatefulWidget {
     required this.fieldWidth,
     required this.maxHeight,
     required this.theme,
+    required this.searchEnabled,
     required this.onSelected,
     required this.onDismiss,
     this.config,
@@ -609,6 +660,7 @@ class _DropdownOverlay extends StatefulWidget {
   final double fieldWidth;
   final double maxHeight;
   final CountryPickerTheme theme;
+  final bool searchEnabled;
   final CountryPickerConfig? config;
   final Country? selectedCountry;
   final bool showFlag;
@@ -766,7 +818,7 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildSearch(theme),
+                    if (widget.searchEnabled) _buildSearch(theme),
                     Flexible(child: _buildList(theme)),
                   ],
                 ),
@@ -846,8 +898,8 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
               const SizedBox(height: 6),
               Text(
                 config.emptyStateText,
-                style: theme.countrySubtitleTextStyle ??
-                    const TextStyle(fontSize: 13, color: Colors.grey),
+                style: theme.readOnlyHintTextStyle ??
+                    theme.countrySubtitleTextStyle,
               ),
             ],
           ),
@@ -883,11 +935,11 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
                   width: 48,
                   child: Text(
                     '+${country.callingCodes.first}',
-                    style: theme.countryNameTextStyle?.copyWith(
+                    style: theme.compactDialCodeTextStyle?.copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ) ??
-                        const TextStyle(
+                        theme.countryNameTextStyle?.copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
@@ -903,7 +955,7 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
                       style: theme.countrySubtitleTextStyle?.copyWith(
                             fontSize: 13,
                           ) ??
-                          const TextStyle(fontSize: 13, color: Colors.black54),
+                          theme.compactCountryNameTextStyle,
                     ),
                   ),
                 ],
@@ -925,6 +977,8 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
   }
 
   Widget _buildFlagTile(Country country) {
+    final theme = widget.theme;
+
     return Container(
       width: widget.flagSize.width,
       height: widget.flagSize.height,
@@ -942,7 +996,10 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
             child: Center(
               child: Text(
                 country.flagEmoji,
-                style: TextStyle(fontSize: widget.flagSize.width * 0.5),
+                style: theme.flagEmojiTextStyle?.copyWith(
+                      fontSize: widget.flagSize.width * 0.5,
+                    ) ??
+                    TextStyle(fontSize: widget.flagSize.width * 0.5),
               ),
             ),
           ),
@@ -959,6 +1016,7 @@ class _DropdownOverlayState extends State<_DropdownOverlay> {
 class _ModalCountryList extends StatefulWidget {
   const _ModalCountryList({
     required this.theme,
+    required this.searchEnabled,
     required this.onSelected,
     this.config,
     this.selectedCountry,
@@ -970,6 +1028,7 @@ class _ModalCountryList extends StatefulWidget {
   });
 
   final CountryPickerTheme theme;
+  final bool searchEnabled;
   final CountryPickerConfig? config;
   final Country? selectedCountry;
   final bool showFlag;
@@ -1087,7 +1146,7 @@ class _ModalCountryListState extends State<_ModalCountryList> {
     final body = Column(
       children: [
         if (widget.showHeader) _buildHeader(theme),
-        _buildSearchBar(theme),
+        if (widget.searchEnabled) _buildSearchBar(theme),
         Expanded(child: _buildList(theme)),
       ],
     );
@@ -1196,8 +1255,8 @@ class _ModalCountryListState extends State<_ModalCountryList> {
             const SizedBox(height: 8),
             Text(
               config.emptyStateText,
-              style: theme.countrySubtitleTextStyle ??
-                  const TextStyle(color: Colors.grey),
+              style:
+                  theme.readOnlyHintTextStyle ?? theme.countrySubtitleTextStyle,
             ),
           ],
         ),
@@ -1244,11 +1303,12 @@ class _ModalCountryListState extends State<_ModalCountryList> {
               overflow: TextOverflow.ellipsis),
           trailing: Text(
             '+${country.callingCodes.first}',
-            style: theme.countrySubtitleTextStyle?.copyWith(
+            style: theme.compactDialCodeTextStyle?.copyWith(
                   fontWeight: FontWeight.w600,
                 ) ??
-                const TextStyle(
-                    fontWeight: FontWeight.w600, color: Colors.black54),
+                theme.countrySubtitleTextStyle?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
           ),
         );
       },
@@ -1269,4 +1329,7 @@ enum PickerOpenType {
 
   /// Show picker as a full screen page.
   fullScreen,
+
+  /// Disable picker opening and keep the selected country unchanged.
+  none,
 }

@@ -1,6 +1,7 @@
 import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:countrify/src/models/country.dart';
+import 'package:countrify/src/models/country_code.dart';
 import 'package:countrify/src/widgets/country_picker.dart';
 
 /// {@template modal_country_picker}
@@ -12,7 +13,7 @@ class ModalCountryPicker {
     required BuildContext context,
     CountryPickerTheme? theme,
     CountryPickerConfig? config,
-    Country? initialCountry,
+    CountryCode? initialCountryCode,
     String? title,
     bool showTitle = true,
     TextStyle? titleStyle,
@@ -49,7 +50,7 @@ class ModalCountryPicker {
       builder: (context) => _CountryPickerModal(
         theme: theme,
         config: config ?? const CountryPickerConfig(),
-        initialCountry: initialCountry,
+        initialCountryCode: initialCountryCode,
         title: title,
         showTitle: showTitle,
         titleStyle: titleStyle,
@@ -65,7 +66,7 @@ class ModalCountryPicker {
     required BuildContext context,
     CountryPickerTheme? theme,
     CountryPickerConfig? config,
-    Country? initialCountry,
+    CountryCode? initialCountryCode,
     String? title,
     bool showTitle = true,
     TextStyle? titleStyle,
@@ -101,7 +102,7 @@ class ModalCountryPicker {
           child: _CountryPickerModal(
             theme: theme,
             config: config ?? const CountryPickerConfig(),
-            initialCountry: initialCountry,
+            initialCountryCode: initialCountryCode,
             title: title,
             showTitle: showTitle,
             titleStyle: titleStyle,
@@ -119,7 +120,7 @@ class ModalCountryPicker {
     required BuildContext context,
     CountryPickerTheme? theme,
     CountryPickerConfig? config,
-    Country? initialCountry,
+    CountryCode? initialCountryCode,
     String? title,
     bool showTitle = true,
     TextStyle? titleStyle,
@@ -135,7 +136,7 @@ class ModalCountryPicker {
         builder: (context) => _CountryPickerFullScreen(
           theme: theme,
           config: config ?? const CountryPickerConfig(),
-          initialCountry: initialCountry,
+          initialCountryCode: initialCountryCode,
           title: title,
           showTitle: showTitle,
           titleStyle: titleStyle,
@@ -156,7 +157,7 @@ class _CountryPickerModal extends StatefulWidget {
   const _CountryPickerModal({
     required this.theme,
     required this.config,
-    required this.initialCountry,
+    required this.initialCountryCode,
     required this.title,
     required this.showTitle,
     required this.titleStyle,
@@ -167,7 +168,7 @@ class _CountryPickerModal extends StatefulWidget {
 
   final CountryPickerTheme? theme;
   final CountryPickerConfig config;
-  final Country? initialCountry;
+  final CountryCode? initialCountryCode;
   final String? title;
   final bool showTitle;
   final TextStyle? titleStyle;
@@ -190,7 +191,7 @@ class _CountryPickerModalState extends State<_CountryPickerModal> {
       onCountrySelected: _onCountrySelected,
       theme: widget.theme,
       config: widget.config,
-      initialCountry: widget.initialCountry,
+      initialCountryCode: widget.initialCountryCode,
       title: widget.title,
       showTitle: widget.showTitle,
       titleStyle: widget.titleStyle,
@@ -206,7 +207,7 @@ class _CountryPickerFullScreen extends StatefulWidget {
   const _CountryPickerFullScreen({
     required this.theme,
     required this.config,
-    required this.initialCountry,
+    required this.initialCountryCode,
     required this.title,
     required this.showTitle,
     required this.titleStyle,
@@ -217,7 +218,7 @@ class _CountryPickerFullScreen extends StatefulWidget {
 
   final CountryPickerTheme? theme;
   final CountryPickerConfig config;
-  final Country? initialCountry;
+  final CountryCode? initialCountryCode;
   final String? title;
   final bool showTitle;
   final TextStyle? titleStyle;
@@ -240,9 +241,12 @@ class _CountryPickerFullScreenState extends State<_CountryPickerFullScreen> {
     return Scaffold(
       backgroundColor: widget.theme?.backgroundColor ?? Colors.white,
       appBar: AppBar(
-        title: Text(widget.title ?? widget.config.titleText),
+        title: Text(
+          widget.title ?? widget.config.titleText,
+          style: widget.titleStyle ?? widget.theme?.appBarTitleTextStyle,
+        ),
         backgroundColor: widget.theme?.backgroundColor ?? Colors.white,
-        foregroundColor: Colors.black,
+        foregroundColor: widget.theme?.searchBarIconColor ?? Colors.black,
         elevation: 0,
         leading: widget.showCloseButton
             ? (widget.closeButton ??
@@ -256,7 +260,7 @@ class _CountryPickerFullScreenState extends State<_CountryPickerFullScreen> {
         onCountrySelected: _onCountrySelected,
         theme: widget.theme,
         config: widget.config,
-        initialCountry: widget.initialCountry,
+        initialCountryCode: widget.initialCountryCode,
         showTitle: false, // Title is shown in AppBar
         showCloseButton: false, // Close button is shown in AppBar
       ),

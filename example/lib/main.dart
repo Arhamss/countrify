@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Countrify Example',
       debugShowCheckedModeBanner: false,
-      locale: const Locale('ar'),
+      locale: const Locale('en'),
       supportedLocales: const [
         Locale('ar'),
         Locale('en'),
@@ -101,6 +101,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Country? _selectedCountry;
+  CountryCode? get _selectedCountryCode =>
+      CountryCodeExtension.fromAlpha2Code(_selectedCountry?.alpha2Code ?? '');
   String _phoneNumber = '';
   Country? _phoneCountry;
 
@@ -229,6 +231,82 @@ class _MyHomePageState extends State<MyHomePage> {
         dropdownMenuBorderRadius: BorderRadius.all(Radius.circular(12)),
         dropdownMenuBorderColor: CodeableColors.darkBorder,
         dropdownMenuBorderWidth: 1,
+      );
+
+  // ─── Text style showcase theme (exercises all text-style hooks) ───────
+  CountryPickerTheme get _textStyleShowcaseTheme => const CountryPickerTheme(
+        backgroundColor: Color(0xFFFFFCF5),
+        headerColor: Color(0xFFFFF3D6),
+        headerTextStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: Color(0xFF5B2E00),
+          letterSpacing: 0.2,
+        ),
+        appBarTitleTextStyle: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+          color: Color(0xFF3F1F00),
+          letterSpacing: 0.3,
+        ),
+        searchTextStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: Color(0xFF4A2900),
+        ),
+        searchHintStyle: TextStyle(
+          fontSize: 15,
+          fontStyle: FontStyle.italic,
+          color: Color(0xFF9A6A2A),
+        ),
+        filterTextStyle: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          color: Color(0xFF4A2900),
+        ),
+        countryNameTextStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+          color: Color(0xFF3F1F00),
+        ),
+        countrySubtitleTextStyle: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+          color: Color(0xFF7A4A10),
+        ),
+        compactCountryNameTextStyle: TextStyle(
+          fontSize: 12,
+          fontStyle: FontStyle.italic,
+          color: Color(0xFF8A5415),
+        ),
+        compactDialCodeTextStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w800,
+          color: Color(0xFF8E1E00),
+        ),
+        readOnlyHintTextStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: Color(0xFFB07A3A),
+        ),
+        flagEmojiTextStyle: TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.w700,
+        ),
+        dialogOptionTextStyle: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          color: Color(0xFF3F1F00),
+        ),
+        dialogActionTextStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w800,
+          color: Color(0xFFC23E00),
+        ),
+        borderColor: Color(0xFFF1C485),
+        countryItemSelectedColor: Color(0xFFFFE7BF),
+        countryItemSelectedBorderColor: Color(0xFFC46B00),
+        countryItemSelectedIconColor: Color(0xFFC23E00),
       );
 
   @override
@@ -364,7 +442,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 12),
             ModalComprehensivePicker.dropdown(
-              initialCountry: _selectedCountry,
+              initialCountryCode: CountryCode.ad,
               onCountrySelected: _updateSelectedCountry,
               onCountryChanged: _updateSelectedCountry,
               showPhoneCode: false,
@@ -384,14 +462,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 12),
             CountryDropdownField(
-              initialCountry: _selectedCountry,
+              initialCountryCode: CountryCode.ad,
               onCountrySelected: _updateSelectedCountry,
               onCountryChanged: _updateSelectedCountry,
               hintText: 'Select a country',
               showPhoneCode: false,
               showFlag: true,
               searchEnabled: true,
-              pickerType: PickerDisplayType.bottomSheet,
+              pickerType: PickerDisplayType.none,
               theme: _codeableLightTheme,
             ),
             const SizedBox(height: 28),
@@ -470,7 +548,13 @@ class _MyHomePageState extends State<MyHomePage> {
             PhoneNumberField(
               hintText: 'Enter phone number',
               labelText: 'Phone',
+              initialCountryCode: CountryCode.ad,
               theme: _codeableLightTheme,
+              pickerType: PickerOpenType.none,
+              showDropdownIcon: true,
+              config: const CountryPickerConfig(
+                enableSearch: false,
+              ),
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(15),
@@ -533,7 +617,7 @@ class _MyHomePageState extends State<MyHomePage> {
             PhoneNumberField(
               hintText: 'Phone number',
               theme: _codeableLightTheme,
-              showDropdownIcon: true,
+              showDropdownIcon: false,
               flagSize: const Size(28, 20),
               fieldBorderRadius: BorderRadius.circular(16),
               dropdownMaxHeight: 300,
@@ -585,6 +669,12 @@ class _MyHomePageState extends State<MyHomePage> {
               label: 'Custom Color Theme',
               icon: CountrifyIcons.paintbrush,
               onPressed: _showCustomColorThemePicker,
+            ),
+            const SizedBox(height: 10),
+            _buildOutlinedBlueButton(
+              label: 'Text Style Showcase',
+              icon: CountrifyIcons.sparkles,
+              onPressed: _showTextStyleShowcasePicker,
             ),
             const SizedBox(height: 28),
 
@@ -845,7 +935,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showBottomSheetPicker() async {
     final country = await ModalCountryPicker.showBottomSheet(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
     );
     _updateSelectedCountry(country);
   }
@@ -853,7 +943,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showDialogPicker() async {
     final country = await ModalCountryPicker.showDialogPicker(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
     );
     _updateSelectedCountry(country);
   }
@@ -861,7 +951,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showFullScreenPicker() async {
     final country = await ModalCountryPicker.showFullScreen(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
     );
     _updateSelectedCountry(country);
   }
@@ -869,7 +959,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showCustomizedPicker() async {
     final country = await ModalCountryPicker.showBottomSheet(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
     );
     _updateSelectedCountry(country);
   }
@@ -877,7 +967,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showFilteredPicker() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
       config: const CountryPickerConfig(
         includeRegions: ['Europe'],
       ),
@@ -892,7 +982,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showComprehensiveBottomSheet() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
       showPhoneCode: true,
       searchEnabled: true,
       theme: _codeableLightTheme,
@@ -903,7 +993,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showComprehensiveDialog() async {
     final country = await ModalComprehensivePicker.showDialog(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
       showPhoneCode: true,
       searchEnabled: true,
       theme: _codeableLightTheme,
@@ -914,7 +1004,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showComprehensiveFullScreen() async {
     final country = await ModalComprehensivePicker.showFullScreen(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
       showPhoneCode: true,
       searchEnabled: true,
       theme: _codeableLightTheme,
@@ -925,7 +1015,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showPhoneCodePicker() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
       showPhoneCode: true,
       searchEnabled: true,
       theme: _codeableLightTheme,
@@ -937,14 +1027,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showCircularFlagsPicker() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
       showPhoneCode: true,
       searchEnabled: true,
       theme: _codeableLightTheme,
-      config: const CountryPickerConfig(
-        flagShape: FlagShape.circular,
-        flagSize: Size(40, 40),
-      ),
+      flagShape: FlagShape.circular,
+      flagSize: const Size(40, 40),
     );
     _updateSelectedCountry(country);
   }
@@ -952,14 +1040,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showRoundedFlagsPicker() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
       showPhoneCode: true,
       searchEnabled: true,
       theme: _codeableLightTheme,
-      config: const CountryPickerConfig(
-        flagShape: FlagShape.rounded,
-        flagSize: Size(40, 28),
-      ),
+      flagShape: FlagShape.rounded,
+      flagSize: const Size(40, 28),
     );
     _updateSelectedCountry(country);
   }
@@ -967,18 +1053,18 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showShadowFlagsPicker() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
       showPhoneCode: true,
       searchEnabled: true,
       theme: _codeableLightTheme,
       config: const CountryPickerConfig(
-        flagShape: FlagShape.rectangular,
-        flagSize: Size(42, 30),
         flagBorderRadius: BorderRadius.all(Radius.circular(6)),
-        flagShadowColor: Color(0x333B82F6),
-        flagShadowBlur: 8,
-        flagShadowOffset: Offset(0, 3),
       ),
+      flagShape: FlagShape.rectangular,
+      flagSize: const Size(42, 30),
+      flagShadowColor: const Color(0x333B82F6),
+      flagShadowBlur: 8,
+      flagShadowOffset: const Offset(0, 3),
     );
     _updateSelectedCountry(country);
   }
@@ -987,7 +1073,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showDarkThemePicker() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
       showPhoneCode: true,
       searchEnabled: true,
       theme: _codeableDarkTheme,
@@ -998,7 +1084,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showCustomColorThemePicker() async {
     final country = await ModalComprehensivePicker.showBottomSheet(
       context: context,
-      initialCountry: _selectedCountry,
+      initialCountryCode: _selectedCountryCode,
       showPhoneCode: true,
       searchEnabled: true,
       theme: CountryPickerTheme.custom(
@@ -1008,6 +1094,18 @@ class _MyHomePageState extends State<MyHomePage> {
         onSurfaceColor: CodeableColors.lightText,
         isDark: false,
       ),
+    );
+    _updateSelectedCountry(country);
+  }
+
+  void _showTextStyleShowcasePicker() async {
+    final country = await ModalComprehensivePicker.showFullScreen(
+      context: context,
+      initialCountryCode: _selectedCountryCode,
+      showPhoneCode: true,
+      searchEnabled: true,
+      filterEnabled: true,
+      theme: _textStyleShowcaseTheme,
     );
     _updateSelectedCountry(country);
   }

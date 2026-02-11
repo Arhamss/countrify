@@ -36,6 +36,13 @@ class CountryPickerTheme {
     this.countryItemBorderRadius,
     this.countryNameTextStyle,
     this.countrySubtitleTextStyle,
+    this.compactCountryNameTextStyle,
+    this.compactDialCodeTextStyle,
+    this.readOnlyHintTextStyle,
+    this.flagEmojiTextStyle,
+    this.appBarTitleTextStyle,
+    this.dialogOptionTextStyle,
+    this.dialogActionTextStyle,
     this.borderColor,
     this.borderRadius,
     this.scrollbarThickness,
@@ -146,6 +153,27 @@ class CountryPickerTheme {
 
   /// Country subtitle text style
   final TextStyle? countrySubtitleTextStyle;
+
+  /// Compact list country name style (used in small dropdown/overlay rows)
+  final TextStyle? compactCountryNameTextStyle;
+
+  /// Compact list dial code style (used in small dropdown/overlay rows)
+  final TextStyle? compactDialCodeTextStyle;
+
+  /// Read-only/hint text style when no country is selected
+  final TextStyle? readOnlyHintTextStyle;
+
+  /// Text style for flag emoji fallback rendering
+  final TextStyle? flagEmojiTextStyle;
+
+  /// App bar title text style (for full-screen wrappers)
+  final TextStyle? appBarTitleTextStyle;
+
+  /// Dialog option label style (e.g. filter radios/checkboxes)
+  final TextStyle? dialogOptionTextStyle;
+
+  /// Dialog action button text style
+  final TextStyle? dialogActionTextStyle;
 
   /// General border color
   final Color? borderColor;
@@ -267,6 +295,36 @@ class CountryPickerTheme {
         fontSize: 14,
         color: Colors.black54,
       ),
+      compactCountryNameTextStyle: TextStyle(
+        fontSize: 13,
+        color: Colors.black54,
+      ),
+      compactDialCodeTextStyle: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: Colors.black87,
+      ),
+      readOnlyHintTextStyle: TextStyle(
+        fontSize: 14,
+        color: Colors.black54,
+      ),
+      flagEmojiTextStyle: TextStyle(
+        fontSize: 16,
+      ),
+      appBarTitleTextStyle: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: Colors.black87,
+      ),
+      dialogOptionTextStyle: TextStyle(
+        fontSize: 14,
+        color: Colors.black87,
+      ),
+      dialogActionTextStyle: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF2196F3),
+      ),
       borderColor: Color(0xFFE0E0E0),
       borderRadius: BorderRadius.all(Radius.circular(20)),
       scrollbarThickness: 6,
@@ -325,6 +383,36 @@ class CountryPickerTheme {
         fontSize: 14,
         color: Colors.white70,
       ),
+      compactCountryNameTextStyle: TextStyle(
+        fontSize: 13,
+        color: Colors.white70,
+      ),
+      compactDialCodeTextStyle: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+      readOnlyHintTextStyle: TextStyle(
+        fontSize: 14,
+        color: Colors.white70,
+      ),
+      flagEmojiTextStyle: TextStyle(
+        fontSize: 16,
+      ),
+      appBarTitleTextStyle: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+      dialogOptionTextStyle: TextStyle(
+        fontSize: 14,
+        color: Colors.white,
+      ),
+      dialogActionTextStyle: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF64B5F6),
+      ),
       borderColor: Color(0xFF404040),
       borderRadius: BorderRadius.all(Radius.circular(20)),
       scrollbarThickness: 6,
@@ -378,6 +466,36 @@ class CountryPickerTheme {
       countrySubtitleTextStyle: TextStyle(
         fontSize: 14,
         color: Color(0xFF49454F),
+      ),
+      compactCountryNameTextStyle: TextStyle(
+        fontSize: 13,
+        color: Color(0xFF49454F),
+      ),
+      compactDialCodeTextStyle: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF1C1B1F),
+      ),
+      readOnlyHintTextStyle: TextStyle(
+        fontSize: 14,
+        color: Color(0xFF49454F),
+      ),
+      flagEmojiTextStyle: TextStyle(
+        fontSize: 16,
+      ),
+      appBarTitleTextStyle: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF1C1B1F),
+      ),
+      dialogOptionTextStyle: TextStyle(
+        fontSize: 14,
+        color: Color(0xFF1C1B1F),
+      ),
+      dialogActionTextStyle: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF6750A4),
       ),
       borderColor: Color(0xFF79747E),
       borderRadius: BorderRadius.all(Radius.circular(28)),
@@ -449,6 +567,36 @@ class CountryPickerTheme {
         fontSize: 14,
         color: onSurface.withValues(alpha: 0.7),
       ),
+      compactCountryNameTextStyle: TextStyle(
+        fontSize: 13,
+        color: onSurface.withValues(alpha: 0.75),
+      ),
+      compactDialCodeTextStyle: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: onSurface,
+      ),
+      readOnlyHintTextStyle: TextStyle(
+        fontSize: 14,
+        color: onSurface.withValues(alpha: 0.65),
+      ),
+      flagEmojiTextStyle: const TextStyle(
+        fontSize: 16,
+      ),
+      appBarTitleTextStyle: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: onSurface,
+      ),
+      dialogOptionTextStyle: TextStyle(
+        fontSize: 14,
+        color: onSurface,
+      ),
+      dialogActionTextStyle: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: baseColor,
+      ),
       borderColor: onSurface.withValues(alpha: 0.2),
       borderRadius: const BorderRadius.all(Radius.circular(20)),
       scrollbarThickness: 6,
@@ -491,6 +639,13 @@ class CountryPickerTheme {
     BorderRadius? countryItemBorderRadius,
     TextStyle? countryNameTextStyle,
     TextStyle? countrySubtitleTextStyle,
+    TextStyle? compactCountryNameTextStyle,
+    TextStyle? compactDialCodeTextStyle,
+    TextStyle? readOnlyHintTextStyle,
+    TextStyle? flagEmojiTextStyle,
+    TextStyle? appBarTitleTextStyle,
+    TextStyle? dialogOptionTextStyle,
+    TextStyle? dialogActionTextStyle,
     Color? borderColor,
     BorderRadius? borderRadius,
     double? scrollbarThickness,
@@ -554,6 +709,18 @@ class CountryPickerTheme {
       countryNameTextStyle: countryNameTextStyle ?? this.countryNameTextStyle,
       countrySubtitleTextStyle:
           countrySubtitleTextStyle ?? this.countrySubtitleTextStyle,
+      compactCountryNameTextStyle:
+          compactCountryNameTextStyle ?? this.compactCountryNameTextStyle,
+      compactDialCodeTextStyle:
+          compactDialCodeTextStyle ?? this.compactDialCodeTextStyle,
+      readOnlyHintTextStyle:
+          readOnlyHintTextStyle ?? this.readOnlyHintTextStyle,
+      flagEmojiTextStyle: flagEmojiTextStyle ?? this.flagEmojiTextStyle,
+      appBarTitleTextStyle: appBarTitleTextStyle ?? this.appBarTitleTextStyle,
+      dialogOptionTextStyle:
+          dialogOptionTextStyle ?? this.dialogOptionTextStyle,
+      dialogActionTextStyle:
+          dialogActionTextStyle ?? this.dialogActionTextStyle,
       borderColor: borderColor ?? this.borderColor,
       borderRadius: borderRadius ?? this.borderRadius,
       scrollbarThickness: scrollbarThickness ?? this.scrollbarThickness,

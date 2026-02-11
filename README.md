@@ -91,7 +91,7 @@ Countrify is the most feature-rich country picker for Flutter. It ships with **2
 - **Custom Sorting** — Sort by name, population, area, region, or capital
 - **Flag Customization** — Rectangular, circular, or rounded shapes with borders and shadows
 - **Custom Builders** — Provide your own widgets for country items, headers, search bars, and filters
-- **Customizable Strings** — Every user-facing text (titles, hints, empty states, filter labels) is overridable via config
+- **Customizable Strings** — Shared UI text via `CountryPickerConfig`, plus comprehensive filter labels via widget parameters
 - **132 Language Translations** — Auto-detects your app locale; all pickers display localized country names, search, and sorting out of the box. Zero runtime dependencies
 - **Rich Country Data** — 15+ fields per country including capitals, currencies, languages, timezones, borders
 - **40+ Utility Methods** — Programmatic access to country data, search, statistics, and validation
@@ -135,7 +135,7 @@ Add `countrify` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  countrify: ^1.1.1
+  countrify: ^1.2.0
 ```
 
 Then run:
@@ -214,7 +214,7 @@ An embeddable dropdown widget that shows the selected country and opens a popup 
 
 ```dart
 ModalComprehensivePicker.dropdown(
-  initialCountry: selectedCountry,
+  initialCountryCode: CountryCode.us,
   onCountrySelected: (country) {
     setState(() => selectedCountry = country);
   },
@@ -230,7 +230,7 @@ An inline picker that renders directly within your layout. Best for dashboard or
 
 ```dart
 ModalComprehensivePicker.showInline(
-  initialCountry: selectedCountry,
+  initialCountryCode: CountryCode.us,
   onCountrySelected: (country) {
     setState(() => selectedCountry = country);
   },
@@ -251,7 +251,7 @@ The **primary API** for showing country pickers. Provides static methods for all
 // All modal methods share these common parameters:
 final country = await ModalComprehensivePicker.showBottomSheet(
   context: context,
-  initialCountry: preselectedCountry,     // Pre-select a country
+  initialCountryCode: CountryCode.us,         // Pre-select a country
   onCountrySelected: (country) { },       // Callback on selection
   onCountryChanged: (country) { },        // Callback on change
   onSearchChanged: (query) { },           // Callback on search input
@@ -287,7 +287,7 @@ A form-friendly widget that looks and behaves like a `TextFormField`. Tapping it
 
 ```dart
 CountryDropdownField(
-  initialCountry: selectedCountry,
+  initialCountryCode: CountryCode.us,
   onCountrySelected: (country) {
     setState(() => selectedCountry = country);
   },
@@ -295,7 +295,7 @@ CountryDropdownField(
   showPhoneCode: false,
   showFlag: true,
   searchEnabled: true,
-  pickerType: PickerDisplayType.bottomSheet, // or .dialog, .fullScreen
+  pickerType: PickerDisplayType.bottomSheet, // or .dialog, .fullScreen, .none
   theme: CountryPickerTheme.defaultTheme(),
   decoration: const InputDecoration(       // Optional custom decoration
     border: OutlineInputBorder(),
@@ -306,15 +306,18 @@ CountryDropdownField(
 **Key Properties:**
 | Property | Type | Default | Description |
 |---|---|---|---|
-| `initialCountry` | `Country?` | `null` | Pre-selected country |
+| `initialCountryCode` | `CountryCode?` | `null` | Pre-selected country code |
 | `onCountrySelected` | `ValueChanged<Country>?` | — | Selection callback |
 | `labelText` | `String?` | `null` | Field label (shown above the hint) |
+| `labelTextStyle` | `TextStyle?` | `null` | Field label text style |
 | `hintText` | `String?` | `'Select a country'` | Placeholder text |
 | `showPhoneCode` | `bool` | `true` | Show calling code in display |
 | `showFlag` | `bool` | `true` | Show flag in prefix |
-| `pickerType` | `PickerDisplayType` | `.bottomSheet` | How the picker opens |
+| `pickerType` | `PickerDisplayType` | `.bottomSheet` | How the picker opens (`.none` disables selection) |
 | `enabled` | `bool` | `true` | Whether the field is interactive |
 | `decoration` | `InputDecoration?` | — | Custom input decoration |
+
+`decoration` is merged with Countrify defaults, so built-in flag/prefix UI is preserved unless you explicitly override `prefixIcon` / `suffixIcon`.
 
 ---
 
@@ -324,6 +327,7 @@ A **complete phone number input widget** with an integrated country code picker 
 
 ```dart
 PhoneNumberField(
+  initialCountryCode: CountryCode.us,
   hintText: 'Enter phone number',
   labelText: 'Phone',
   onPhoneNumberChanged: (phoneNumber, country) {
@@ -367,14 +371,15 @@ PhoneNumberField(
 **Key Properties:**
 | Property | Type | Default | Description |
 |---|---|---|---|
-| `initialCountry` | `Country?` | First country with calling code | Pre-selected country |
+| `initialCountryCode` | `CountryCode?` | First country with calling code | Pre-selected country code |
 | `controller` | `TextEditingController?` | Internal | Phone text controller |
 | `onPhoneNumberChanged` | `Function(String, Country)?` | — | Called on text or country change |
 | `onCountryChanged` | `ValueChanged<Country>?` | — | Called when country changes |
+| `labelTextStyle` | `TextStyle?` | `null` | Label text style |
 | `showFlag` | `bool` | `true` | Show flag in prefix |
 | `showDialCode` | `bool` | `true` | Show dial code in prefix |
 | `showDropdownIcon` | `bool` | `true` | Show dropdown arrow |
-| `pickerType` | `PickerOpenType` | `.dropdown` | How the picker opens |
+| `pickerType` | `PickerOpenType` | `.dropdown` | How the picker opens (`.none` disables selection) |
 | `dropdownMaxHeight` | `double` | `350` | Max height of dropdown overlay |
 | `flagSize` | `Size` | `Size(24, 18)` | Flag dimensions |
 | `validator` | `String? Function(String?)?` | — | Form validation |
@@ -382,6 +387,8 @@ PhoneNumberField(
 | `maxLength` | `int?` | — | Max phone digits |
 | `dividerColor` | `Color?` | — | Prefix divider color |
 | `fieldBorderRadius` | `BorderRadius?` | `12` | Outer field radius |
+
+`decoration` is merged with Countrify defaults, so built-in country prefix UI is preserved unless you explicitly override `prefixIcon`.
 
 ---
 
@@ -391,7 +398,7 @@ A specialized widget for selecting phone/calling codes. Available in all 5 displ
 
 ```dart
 PhoneCodePicker(
-  initialCountry: selectedCountry,
+  initialCountryCode: CountryCode.us,
   onCountrySelected: (country) {
     setState(() => selectedCountry = country);
   },
@@ -415,19 +422,19 @@ A simpler modal picker API with bottom sheet, dialog, and full screen modes. Use
 final country = await ModalCountryPicker.showBottomSheet(
   context: context,
   title: 'Select Country',
-  initialCountry: selectedCountry,
+  initialCountryCode: CountryCode.us,
 );
 
 // Dialog
 final country = await ModalCountryPicker.showDialogPicker(
   context: context,
-  initialCountry: selectedCountry,
+  initialCountryCode: CountryCode.us,
 );
 
 // Full screen
 final country = await ModalCountryPicker.showFullScreen(
   context: context,
-  initialCountry: selectedCountry,
+  initialCountryCode: CountryCode.us,
 );
 ```
 
@@ -520,6 +527,13 @@ const theme = CountryPickerTheme(
   countryItemBorderRadius: BorderRadius.all(Radius.circular(8)),
   countryNameTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
   countrySubtitleTextStyle: TextStyle(fontSize: 14, color: Colors.grey),
+  compactCountryNameTextStyle: TextStyle(fontSize: 13, color: Colors.black54),
+  compactDialCodeTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+  readOnlyHintTextStyle: TextStyle(fontSize: 14, color: Colors.black54),
+  flagEmojiTextStyle: TextStyle(fontSize: 16),
+  appBarTitleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+  dialogOptionTextStyle: TextStyle(fontSize: 14),
+  dialogActionTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
 
   // ─── Filter Chips ────────────────────────────────
   filterBackgroundColor: Color(0xFFF0F0F0),
@@ -566,56 +580,45 @@ const theme = CountryPickerTheme(
 
 ## Configuration
 
-Use `CountryPickerConfig` to control picker behavior, data display, flag styling, filtering, sorting, and custom builders.
+`CountryPickerConfig` now contains only **shared** options used across multiple widgets.
+
+Use widget-level parameters on `ComprehensiveCountryPicker` / `ModalComprehensivePicker` for comprehensive-only behavior (custom builders, sorting/filter defaults, advanced flag shape/size/shadow, sizing, etc.).
 
 ### Display Options
 
 ```dart
 const config = CountryPickerConfig(
-  showDialCode: true,         // Show phone/dial codes
-  showCapital: false,         // Show capital cities
-  showRegion: false,          // Show geographic regions
-  showPopulation: false,      // Show population
-  showFlag: true,             // Show flag images
-  showCountryName: true,      // Show country names
-  enableSearch: true,         // Enable search bar
-  enableFilter: false,        // Enable filter chips
-  enableScrollbar: true,      // Enable scrollbar
-  enableHapticFeedback: true, // Enable haptic feedback
+  locale: 'en',                      // Optional locale override
+  enableSearch: true,                // Shared search toggle
+  includeRegions: ['Europe'],        // Shared include filter
+  excludeRegions: ['Antarctica'],    // Shared exclude filter
+  includeCountries: ['US', 'CA'],    // Shared include by alpha-2
+  excludeCountries: ['AQ'],          // Shared exclude by alpha-2
 );
 ```
 
 ### Flag Customization
 
-Countrify supports three flag shapes with full border and shadow control.
+Shared flag styling via config (border only):
 
 ```dart
-// Circular flags
 const config = CountryPickerConfig(
-  flagShape: FlagShape.circular,
-  flagSize: Size(40, 40),
+  flagBorderRadius: BorderRadius.all(Radius.circular(6)),
+  flagBorderColor: Colors.grey,
+  flagBorderWidth: 2,
 );
+```
 
-// Rounded flags
-const config = CountryPickerConfig(
+Advanced flag styling for comprehensive pickers (widget-level):
+
+```dart
+final country = await ModalComprehensivePicker.showBottomSheet(
+  context: context,
   flagShape: FlagShape.rounded,
   flagSize: Size(40, 28),
-);
-
-// Flags with shadows
-const config = CountryPickerConfig(
-  flagShape: FlagShape.rectangular,
-  flagSize: Size(42, 30),
-  flagBorderRadius: BorderRadius.all(Radius.circular(6)),
   flagShadowColor: Colors.black26,
   flagShadowBlur: 6,
   flagShadowOffset: Offset(0, 3),
-);
-
-// Flags with border
-const config = CountryPickerConfig(
-  flagBorderColor: Colors.grey,
-  flagBorderWidth: 2.0,
 );
 ```
 
@@ -634,17 +637,16 @@ const config = CountryPickerConfig(
 
   // Exclude specific countries (by alpha-2 code)
   excludeCountries: ['XX'],
-
-  // Filter by status
-  includeIndependent: true,
-  includeUnMembers: true,
 );
 ```
 
 ### Sorting
 
+Sorting for comprehensive pickers is now widget-level:
+
 ```dart
-const config = CountryPickerConfig(
+final country = await ModalComprehensivePicker.showBottomSheet(
+  context: context,
   sortBy: CountrySortBy.name,        // Alphabetical (default)
   // sortBy: CountrySortBy.population, // Most populous first
   // sortBy: CountrySortBy.area,       // Largest area first
@@ -655,9 +657,11 @@ const config = CountryPickerConfig(
 
 ### Sizing
 
+Sizing for comprehensive pickers is widget-level:
+
 ```dart
-const config = CountryPickerConfig(
-  itemHeight: 60.0,           // Height of each country item
+final country = await ModalComprehensivePicker.showBottomSheet(
+  context: context,
   maxHeight: 600.0,           // Maximum picker height
   minHeight: 200.0,           // Minimum picker height
   dropdownMaxHeight: 400.0,   // Maximum dropdown menu height
@@ -666,10 +670,11 @@ const config = CountryPickerConfig(
 
 ### Custom Builders
 
-Override the default UI with your own widgets:
+Custom builders are available on comprehensive picker APIs (not shared config):
 
 ```dart
-CountryPickerConfig(
+ModalComprehensivePicker.showBottomSheet(
+  context: context,
   // Custom country item
   customCountryBuilder: (context, country, isSelected) {
     return ListTile(
@@ -733,22 +738,28 @@ CountryPickerConfig(
 
 ### Customizable Strings
 
-Every user-facing text string in the picker widgets is configurable. This makes it easy to localize the picker UI itself (not just country names) or customize labels to match your app's tone.
-
-**`CountryPickerConfig` (used by `ModalComprehensivePicker`, `PhoneNumberField`, `PhoneCodePicker`, `CountryDropdownField`):**
+`CountryPickerConfig` controls **shared** strings used by multiple widgets:
 
 ```dart
 const config = CountryPickerConfig(
-  titleText: 'Choose Your Country',       // Picker header title
-  searchHintText: 'Type to search...',     // Search bar placeholder
-  emptyStateText: 'Nothing found',         // Shown when search has no results
-  selectCountryHintText: 'Tap to choose',  // Placeholder when nothing is selected
+  titleText: 'Choose Your Country',       // Shared picker title
+  searchHintText: 'Type to search...',    // Shared search placeholder
+  emptyStateText: 'Nothing found',        // Shared empty state message
+  selectCountryHintText: 'Tap to choose', // Shared unselected hint
+);
+```
+
+Comprehensive-specific filter labels are widget-level:
+
+```dart
+ModalComprehensivePicker.showBottomSheet(
+  context: context,
   filterTitleText: 'Filter Options',       // Filter dialog title
-  filterSortByText: 'Sort:',              // Filter sort label
+  filterSortByText: 'Sort:',               // Filter sort label
   filterRegionsText: 'Regions:',           // Filter regions label
   filterAllText: 'All',                    // "All" filter chip label
-  filterCancelText: 'Cancel',             // Filter cancel button
-  filterApplyText: 'Done',                // Filter apply button
+  filterCancelText: 'Cancel',              // Filter cancel button
+  filterApplyText: 'Done',                 // Filter apply button
 );
 ```
 
@@ -771,12 +782,7 @@ All strings have sensible English defaults, so existing apps require **zero chan
 | `searchHintText` / `searchHint` | `'Search countries...'` | Search bar placeholder |
 | `emptyStateText` / `emptyStateMessage` | `'No countries found'` | Empty search results |
 | `selectCountryHintText` | `'Select a country'` | Dropdown/field placeholder |
-| `filterTitleText` | `'Filter Countries'` | Filter dialog title |
-| `filterSortByText` | `'Sort by:'` | Filter dialog |
-| `filterRegionsText` | `'Regions:'` | Filter dialog |
-| `filterAllText` | `'All'` | Filter chip |
-| `filterCancelText` | `'Cancel'` | Filter dialog button |
-| `filterApplyText` | `'Apply'` | Filter dialog button |
+| `filter*Text` | Widget-level params | Comprehensive filter UI |
 
 ---
 
@@ -1066,6 +1072,7 @@ class Language {
 | `CountryPickerType.fullScreen` | Full screen page |
 | `CountryPickerType.dropdown` | Inline dropdown with popup menu |
 | `CountryPickerType.inline` | Embedded inline list |
+| `CountryPickerType.none` | Read-only mode (disables changing selection) |
 
 ### `PickerDisplayType` (for `CountryDropdownField`)
 
@@ -1074,6 +1081,7 @@ class Language {
 | `PickerDisplayType.bottomSheet` | Opens bottom sheet picker |
 | `PickerDisplayType.dialog` | Opens dialog picker |
 | `PickerDisplayType.fullScreen` | Opens full screen picker |
+| `PickerDisplayType.none` | Read-only mode (disables changing selection) |
 
 ### `PickerOpenType` (for `PhoneNumberField`)
 
@@ -1083,15 +1091,7 @@ class Language {
 | `PickerOpenType.bottomSheet` | Modal bottom sheet |
 | `PickerOpenType.dialog` | Dialog popup |
 | `PickerOpenType.fullScreen` | Full screen page |
-
-### `CountryGroupBy`
-
-| Value | Description |
-|---|---|
-| `CountryGroupBy.region` | Group by geographic region |
-| `CountryGroupBy.subregion` | Group by subregion |
-| `CountryGroupBy.firstLetter` | Group by first letter of name |
-| `CountryGroupBy.population` | Group by population bracket |
+| `PickerOpenType.none` | Read-only mode (disables changing selection) |
 
 ---
 
@@ -1121,7 +1121,7 @@ PhoneNumberField(
 
 ```dart
 CountryDropdownField(
-  initialCountry: _selectedCountry,
+  initialCountryCode: _selectedCountryCode,
   onCountrySelected: (country) {
     setState(() => _selectedCountry = country);
   },
@@ -1162,10 +1162,8 @@ final country = await ModalComprehensivePicker.showBottomSheet(
 ```dart
 final country = await ModalComprehensivePicker.showBottomSheet(
   context: context,
-  config: const CountryPickerConfig(
-    flagShape: FlagShape.circular,
-    flagSize: Size(40, 40),
-  ),
+  flagShape: FlagShape.circular,
+  flagSize: const Size(40, 40),
   showPhoneCode: true,
 );
 ```
@@ -1175,48 +1173,45 @@ final country = await ModalComprehensivePicker.showBottomSheet(
 ```dart
 final country = await ModalComprehensivePicker.showBottomSheet(
   context: context,
-  config: CountryPickerConfig(
-    customCountryBuilder: (context, country, isSelected) {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.blue.shade50 : Colors.white,
-          border: Border.all(
-            color: isSelected ? Colors.blue : Colors.grey.shade300,
+  customCountryBuilder: (context, country, isSelected) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: isSelected ? Colors.blue.shade50 : Colors.white,
+        border: Border.all(
+          color: isSelected ? Colors.blue : Colors.grey.shade300,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: Image.asset(
+              country.flagImagePath,
+              package: 'countrify',
+              width: 48,
+              height: 36,
+            ),
           ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Image.asset(
-                country.flagImagePath,
-                package: 'countrify',
-                width: 48,
-                height: 36,
-              ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(country.name,
+                    style: const TextStyle(fontWeight: FontWeight.w600)),
+                Text('+${country.callingCodes.first}',
+                    style: TextStyle(color: Colors.grey.shade600)),
+              ],
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(country.name,
-                      style: const TextStyle(fontWeight: FontWeight.w600)),
-                  Text('+${country.callingCodes.first}',
-                      style: TextStyle(color: Colors.grey.shade600)),
-                ],
-              ),
-            ),
-            if (isSelected)
-              const Icon(Icons.check_circle, color: Colors.blue),
-          ],
-        ),
-      );
-    },
-  ),
+          ),
+          if (isSelected) const Icon(Icons.check_circle, color: Colors.blue),
+        ],
+      ),
+    );
+  },
 );
 ```
 
@@ -1283,12 +1278,12 @@ final country = CountryUtils.getCountryByAlpha2Code('US'); // Correct
 <details>
 <summary><strong>Selected country not appearing at top of list</strong></summary>
 
-Pass the `initialCountry` parameter so the picker places it at the top:
+Pass the `initialCountryCode` parameter so the picker places it at the top:
 
 ```dart
 final country = await ModalComprehensivePicker.showBottomSheet(
   context: context,
-  initialCountry: _selectedCountry,
+  initialCountryCode: _selectedCountryCode,
 );
 ```
 
@@ -1338,19 +1333,19 @@ All picker widgets **auto-detect** the locale from your `MaterialApp`. If your a
 <details>
 <summary><strong>Can I customize the picker's UI text strings?</strong></summary>
 
-Yes. Every user-facing string — titles, search hints, empty state messages, filter labels, and buttons — is overridable via `CountryPickerConfig`. See the [Customizable Strings](#customizable-strings) section.
+Yes. Shared strings (title/search/empty/hint) are configurable via `CountryPickerConfig`. Comprehensive-only filter labels are configurable via `ComprehensiveCountryPicker` / `ModalComprehensivePicker` parameters.
 </details>
 
 <details>
 <summary><strong>Can I filter countries?</strong></summary>
 
-Yes. Filter by region, subregion, specific country codes, independence status, and UN membership using `CountryPickerConfig`.
+Yes. Use shared include/exclude filters in `CountryPickerConfig` and comprehensive-specific sorting/filter defaults via `ComprehensiveCountryPicker` / `ModalComprehensivePicker` parameters.
 </details>
 
 <details>
 <summary><strong>Can I provide my own country item UI?</strong></summary>
 
-Yes. Use `customCountryBuilder` in `CountryPickerConfig` to return any widget for each country row.
+Yes. Use `customCountryBuilder` (and related custom builders) on `ComprehensiveCountryPicker` / `ModalComprehensivePicker`.
 </details>
 
 <details>

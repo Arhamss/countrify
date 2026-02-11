@@ -1,3 +1,42 @@
+## 1.2.0
+
+### Breaking Changes
+
+- Removed `initialCountry` (`Country?`) from public picker/field APIs.
+- Initial selection is now enum-based only via `initialCountryCode` (`CountryCode?`).
+
+### Added
+
+- Added `CountryCode` enum support across all picker entry points.
+- Added disabled selection modes:
+  - `CountryPickerType.none`
+  - `PickerDisplayType.none`
+  - `PickerOpenType.none`
+- Added `labelTextStyle` support to:
+  - `CountryDropdownField`
+  - `PhoneNumberField`
+- Expanded text-style theming in `CountryPickerTheme`:
+  - `compactCountryNameTextStyle`
+  - `compactDialCodeTextStyle`
+  - `readOnlyHintTextStyle`
+  - `flagEmojiTextStyle`
+  - `appBarTitleTextStyle`
+  - `dialogOptionTextStyle`
+  - `dialogActionTextStyle`
+
+### Changed
+
+- Updated example app to use enum-based initial country (`initialCountryCode`).
+- Updated README examples, enum reference, and theme-property docs to match current API.
+- Refactored `CountryPickerConfig` to shared-only fields used across multiple widgets.
+- Moved comprehensive-specific options from shared config to `ComprehensiveCountryPicker` / `ModalComprehensivePicker` parameters:
+  - sorting/filter defaults, filter dialog labels, custom builders
+  - list sizing/debounce/scrollbar options
+  - advanced flag shape/size/shadow options
+- `enableSearch` is now enforced consistently across picker variants, including phone picker overlays/modals.
+- Wired shared `emptyStateText` into pickers that previously rendered blank empty lists.
+- `InputDecoration` handling in `PhoneNumberField` and `CountryDropdownField` now merges with built-in defaults instead of replacing them, so country prefix/flag UI is preserved unless explicitly overridden.
+
 ## 1.1.1
 
 - Added Buy Me a Coffee support link to README
