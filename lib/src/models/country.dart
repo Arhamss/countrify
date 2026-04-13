@@ -1,3 +1,5 @@
+import 'phone_metadata.dart';
+
 /// {@template country}
 /// A model representing a country with all its relevant information
 /// {@endtemplate}
