@@ -6,7 +6,7 @@ Countrify is a **highly customizable, feature-rich Flutter package** for country
 
 ### Version & Metadata
 - **Package Name**: countrify
-- **Version**: 1.0.0
+- **Version**: 2.1.0
 - **SDK Requirements**: 
   - Dart: ^3.0.0
   - Flutter: ^3.0.0

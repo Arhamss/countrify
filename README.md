@@ -35,11 +35,11 @@ A comprehensive Flutter package for country selection with **250 countries**, **
   - [Dropdown](#4-dropdown)
   - [Inline](#5-inline)
 - [Widgets](#widgets)
-  - [ModalComprehensivePicker](#modalcomprehensivepicker)
-  - [CountryDropdownField](#countrydropdownfield)
+  - [CountryPicker](#countrypicker)
   - [PhoneNumberField](#phonenumberfield)
+  - [CountryDropdownField](#countrydropdownfield)
   - [PhoneCodePicker](#phonecodepicker)
-  - [ModalCountryPicker](#modalcountrypicker)
+  - [Shared Building Blocks](#shared-building-blocks)
 - [Theming](#theming)
   - [Built-in Themes](#built-in-themes)
   - [Custom Themes](#custom-themes)
@@ -99,6 +99,10 @@ Countrify is the most feature-rich country picker for Flutter. It ships with **2
 - **Smooth Animations** — Fade transitions with configurable duration
 - **Full Null Safety** — Sound null safety throughout
 - **Custom Icons** — Ships with its own icon font (CountrifyIcons) — no Material Icons dependency for picker UI
+- **Shared Building Blocks** — `CountryFlag`, `CountryListTile`, `CountrySearchBar`, `CountryListView` available as standalone widgets
+- **Phone Validation** — Lightweight `PhoneMetadata` with auto-validation on `PhoneNumberField`
+- **Accessibility** — `Semantics` labels and `Tooltip` on all interactive elements
+- **focusedFillColor** — Separate fill color when field has focus via `CountrifyFieldStyle`
 
 ---
 
@@ -135,7 +139,7 @@ Add `countrify` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  countrify: ^2.0.0
+  countrify: ^2.1.0
 ```
 
 Then run:
@@ -152,36 +156,38 @@ import 'package:countrify/countrify.dart';
 
 ### Quick Start
 
-The simplest way to show a country picker:
+The simplest way to add a phone number input:
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
-);
-
-if (country != null) {
-  print('Selected: ${country.name}');
-  print('Code: ${country.alpha2Code}');
-  print('Phone: +${country.callingCodes.first}');
-}
+PhoneNumberField(
+  initialCountryCode: CountryCode.us,
+  onChanged: (phoneNumber, country) {
+    print('Full number: +${country.callingCodes.first}$phoneNumber');
+  },
+)
 ```
 
 ---
 
 ## Display Modes
 
-Countrify supports **five** display modes out of the box. Each mode is suited for different UI scenarios.
+Countrify supports **five** display modes out of the box via the `CountryPickerMode` enum. Each mode is suited for different UI scenarios. Set the mode with the `pickerMode` parameter on any widget.
 
 ### 1. Bottom Sheet
 
 A modal bottom sheet that slides up from the bottom of the screen. Best for mobile-first UIs.
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
-  showPhoneCode: true,
-  searchEnabled: true,
-);
+PhoneNumberField(
+  pickerMode: CountryPickerMode.bottomSheet,
+  onChanged: (phoneNumber, country) { },
+)
+
+// Or with CountryDropdownField:
+CountryDropdownField(
+  pickerMode: CountryPickerMode.bottomSheet,
+  onChanged: (country) { },
+)
 ```
 
 ### 2. Dialog
@@ -189,11 +195,10 @@ final country = await ModalComprehensivePicker.showBottomSheet(
 A centered dialog popup. Best for tablet and desktop layouts.
 
 ```dart
-final country = await ModalComprehensivePicker.showDialog(
-  context: context,
-  showPhoneCode: true,
-  searchEnabled: true,
-);
+CountryDropdownField(
+  pickerMode: CountryPickerMode.dialog,
+  onChanged: (country) { },
+)
 ```
 
 ### 3. Full Screen
@@ -201,36 +206,29 @@ final country = await ModalComprehensivePicker.showDialog(
 A full-screen page with an AppBar. Best for complex selection flows.
 
 ```dart
-final country = await ModalComprehensivePicker.showFullScreen(
-  context: context,
-  showPhoneCode: true,
-  searchEnabled: true,
-);
+CountryDropdownField(
+  pickerMode: CountryPickerMode.fullScreen,
+  onChanged: (country) { },
+)
 ```
 
 ### 4. Dropdown
 
-An embeddable dropdown widget that shows the selected country and opens a popup menu when tapped. Best for forms.
+A compact scrollable dropdown anchored below the field. Best for forms.
 
 ```dart
-ModalComprehensivePicker.dropdown(
-  initialCountryCode: CountryCode.us,
-  onCountrySelected: (country) {
-    setState(() => selectedCountry = country);
-  },
-  showPhoneCode: true,
-  showFlag: true,
-  showCountryName: true,
+PhoneNumberField(
+  pickerMode: CountryPickerMode.dropdown,
+  onChanged: (phoneNumber, country) { },
 )
 ```
 
 ### 5. Inline
 
-An inline picker that renders directly within your layout. Best for dashboard or settings pages.
+Use `CountryPicker` directly in your layout for an inline embedded list. Best for dashboard or settings pages.
 
 ```dart
-ModalComprehensivePicker.showInline(
-  initialCountryCode: CountryCode.us,
+CountryPicker(
   onCountrySelected: (country) {
     setState(() => selectedCountry = country);
   },
@@ -243,79 +241,28 @@ ModalComprehensivePicker.showInline(
 
 ## Widgets
 
-### `ModalComprehensivePicker`
+### `CountryPicker`
 
-The **primary API** for showing country pickers. Provides static methods for all display modes.
-
-```dart
-// All modal methods share these common parameters:
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
-  initialCountryCode: CountryCode.us,         // Pre-select a country
-  onCountrySelected: (country) { },       // Callback on selection
-  onCountryChanged: (country) { },        // Callback on change
-  onSearchChanged: (query) { },           // Callback on search input
-  onFilterChanged: (filter) { },          // Callback on filter change
-  theme: CountryPickerTheme.darkTheme(),  // Apply a theme
-  config: const CountryPickerConfig(),    // Configuration options
-  showPhoneCode: true,                    // Show calling codes
-  showFlag: true,                         // Show flag images
-  showCountryName: true,                  // Show country names
-  showCapital: false,                     // Show capital cities
-  showRegion: false,                      // Show geographic regions
-  showPopulation: false,                  // Show population
-  searchEnabled: true,                    // Enable search bar
-  filterEnabled: false,                   // Enable filter chips
-  hapticFeedback: true,                   // Enable haptic feedback
-);
-```
-
-**Available methods:**
-| Method | Returns | Description |
-|---|---|---|
-| `showBottomSheet()` | `Future<Country?>` | Modal bottom sheet |
-| `showDialog()` | `Future<Country?>` | Centered dialog |
-| `showFullScreen()` | `Future<Country?>` | Full screen page |
-| `dropdown()` | `Widget` | Embeddable dropdown widget |
-| `showInline()` | `Widget` | Embeddable inline list |
-
----
-
-### `CountryDropdownField`
-
-A form-friendly widget that looks and behaves like a `TextFormField`. Tapping it opens a country picker. Ideal for registration forms and settings pages.
+The **primary widget** for country selection. Embed it directly in your layout or use it as the foundation for custom picker UIs. Supports rich theming, filtering, sorting, and all display options.
 
 ```dart
-CountryDropdownField(
+CountryPicker(
   initialCountryCode: CountryCode.us,
   onCountrySelected: (country) {
-    setState(() => selectedCountry = country);
+    print('Selected: ${country.name}');
   },
-  style: CountrifyFieldStyle.defaultStyle().copyWith(
-    hintText: 'Select a country',
-  ),
-  showPhoneCode: false,
+  theme: CountryPickerTheme.darkTheme(),
+  config: const CountryPickerConfig(),
+  showPhoneCode: true,
   showFlag: true,
+  showCountryName: true,
+  showCapital: false,
+  showRegion: false,
+  showPopulation: false,
   searchEnabled: true,
-  pickerType: PickerDisplayType.bottomSheet, // or .dialog, .fullScreen, .none
-  theme: CountryPickerTheme.defaultTheme(),
+  filterEnabled: false,
 )
 ```
-
-**Key Properties:**
-| Property | Type | Default | Description |
-|---|---|---|---|
-| `initialCountryCode` | `CountryCode?` | `null` | Pre-selected country code |
-| `onCountrySelected` | `ValueChanged<Country>?` | — | Selection callback |
-| `style` | `CountrifyFieldStyle?` | `null` | Unified style object for label/hint/borders/fill/text styles |
-| `showPhoneCode` | `bool` | `true` | Show calling code in display |
-| `showFlag` | `bool` | `true` | Show flag in prefix |
-| `pickerType` | `PickerDisplayType` | `.bottomSheet` | How the picker opens (`.none` disables selection) |
-| `enabled` | `bool` | `true` | Whether the field is interactive |
-| `searchEnabled` | `bool` | `true` | Enables search in the picker |
-| `filterEnabled` | `bool` | `false` | Enables filter chips in the picker |
-
-Use `style: CountrifyFieldStyle.defaultStyle().copyWith(...)` to customize field decoration and text styles.
 
 ---
 
@@ -330,7 +277,7 @@ PhoneNumberField(
     hintText: 'Enter phone number',
     labelText: 'Phone',
   ),
-  onPhoneNumberChanged: (phoneNumber, country) {
+  onChanged: (phoneNumber, country) {
     print('Full number: +${country.callingCodes.first}$phoneNumber');
   },
   onCountryChanged: (country) {
@@ -351,9 +298,10 @@ PhoneNumberField(
   showDropdownIcon: true,
   flagSize: const Size(28, 20),
   dropdownMaxHeight: 300,
-  pickerType: PickerOpenType.dropdown,  // dropdown, bottomSheet, dialog, fullScreen
+  pickerMode: CountryPickerMode.dropdown,  // dropdown, bottomSheet, dialog, fullScreen
   style: CountrifyFieldStyle.defaultStyle().copyWith(
     hintText: 'Phone number',
+    focusedFillColor: Colors.blue.shade50,
     fieldBorderRadius: BorderRadius.circular(16),
     dialCodeTextStyle: const TextStyle(
       fontSize: 15,
@@ -366,7 +314,7 @@ PhoneNumberField(
     if (value == null || value.isEmpty) return 'Phone number is required';
     return null;
   },
-  onPhoneNumberChanged: (phoneNumber, country) { },
+  onChanged: (phoneNumber, country) { },
 )
 ```
 
@@ -375,13 +323,13 @@ PhoneNumberField(
 |---|---|---|---|
 | `initialCountryCode` | `CountryCode?` | First country with calling code | Pre-selected country code |
 | `controller` | `TextEditingController?` | Internal | Phone text controller |
-| `onPhoneNumberChanged` | `Function(String, Country)?` | — | Called on text or country change |
+| `onChanged` | `Function(String, Country)?` | — | Called on text or country change |
 | `onCountryChanged` | `ValueChanged<Country>?` | — | Called when country changes |
 | `style` | `CountrifyFieldStyle?` | `null` | Unified style for decoration, text styles, cursor, divider, and prefix spacing |
 | `showFlag` | `bool` | `true` | Show flag in prefix |
 | `showDialCode` | `bool` | `true` | Show dial code in prefix |
 | `showDropdownIcon` | `bool` | `true` | Show dropdown arrow |
-| `pickerType` | `PickerOpenType` | `.dropdown` | How the picker opens (`.none` disables selection) |
+| `pickerMode` | `CountryPickerMode` | `.dropdown` | How the picker opens (`.none` disables selection) |
 | `dropdownMaxHeight` | `double` | `350` | Max height of dropdown overlay |
 | `flagSize` | `Size` | `Size(24, 18)` | Flag dimensions |
 | `validator` | `String? Function(String?)?` | — | Form validation |
@@ -392,6 +340,44 @@ PhoneNumberField(
 
 ---
 
+### `CountryDropdownField`
+
+A form-friendly widget that looks and behaves like a `TextFormField`. Tapping it opens a country picker. Ideal for registration forms and settings pages.
+
+```dart
+CountryDropdownField(
+  initialCountryCode: CountryCode.us,
+  onChanged: (country) {
+    setState(() => selectedCountry = country);
+  },
+  style: CountrifyFieldStyle.defaultStyle().copyWith(
+    hintText: 'Select a country',
+  ),
+  showPhoneCode: false,
+  showFlag: true,
+  searchEnabled: true,
+  pickerMode: CountryPickerMode.bottomSheet, // or .dialog, .fullScreen, .none
+  theme: CountryPickerTheme.defaultTheme(),
+)
+```
+
+**Key Properties:**
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `initialCountryCode` | `CountryCode?` | `null` | Pre-selected country code |
+| `onChanged` | `ValueChanged<Country>?` | — | Selection callback |
+| `style` | `CountrifyFieldStyle?` | `null` | Unified style object for label/hint/borders/fill/text styles |
+| `showPhoneCode` | `bool` | `true` | Show calling code in display |
+| `showFlag` | `bool` | `true` | Show flag in prefix |
+| `pickerMode` | `CountryPickerMode` | `.bottomSheet` | How the picker opens (`.none` disables selection) |
+| `enabled` | `bool` | `true` | Whether the field is interactive |
+| `searchEnabled` | `bool` | `true` | Enables search in the picker |
+| `filterEnabled` | `bool` | `false` | Enables filter chips in the picker |
+
+Use `style: CountrifyFieldStyle.defaultStyle().copyWith(...)` to customize field decoration and text styles.
+
+---
+
 ### `PhoneCodePicker`
 
 A specialized widget for selecting phone/calling codes. Available in all 5 display modes.
@@ -399,7 +385,7 @@ A specialized widget for selecting phone/calling codes. Available in all 5 displ
 ```dart
 PhoneCodePicker(
   initialCountryCode: CountryCode.us,
-  onCountrySelected: (country) {
+  onChanged: (country) {
     setState(() => selectedCountry = country);
   },
   showFlag: true,
@@ -407,35 +393,43 @@ PhoneCodePicker(
   showDialCode: true,
   flagShape: FlagShape.circular,
   searchEnabled: true,
-  pickerType: CountryPickerType.bottomSheet,
+  pickerMode: CountryPickerMode.bottomSheet,
 )
 ```
 
 ---
 
-### `ModalCountryPicker`
+### Shared Building Blocks
 
-A simpler modal picker API with bottom sheet, dialog, and full screen modes. Uses the basic `CountryPicker` widget internally.
+Countrify exposes the internal building-block widgets so you can compose custom UIs:
+
+**`CountryFlag`** — Displays a country's flag image with automatic emoji fallback:
 
 ```dart
-// Bottom sheet
-final country = await ModalCountryPicker.showBottomSheet(
-  context: context,
-  title: 'Select Country',
-  initialCountryCode: CountryCode.us,
-);
+CountryFlag(
+  country: CountryUtils.getCountryByAlpha2Code('US')!,
+  size: const Size(32, 24),
+  borderRadius: BorderRadius.circular(4),
+)
+```
 
-// Dialog
-final country = await ModalCountryPicker.showDialogPicker(
-  context: context,
-  initialCountryCode: CountryCode.us,
-);
+**`CountryListTile`** — A ready-made list tile showing flag, name, and optional phone code:
 
-// Full screen
-final country = await ModalCountryPicker.showFullScreen(
-  context: context,
-  initialCountryCode: CountryCode.us,
-);
+```dart
+CountryListTile(
+  country: country,
+  showPhoneCode: true,
+  onTap: () => print(country.name),
+)
+```
+
+**`CountrySearchBar`** — A themed search bar wired up for country filtering:
+
+```dart
+CountrySearchBar(
+  onChanged: (query) => print('Searching: $query'),
+  theme: CountryPickerTheme.defaultTheme(),
+)
 ```
 
 ---
@@ -467,10 +461,10 @@ CountryPickerTheme.custom(
 ### Applying a Theme
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   theme: CountryPickerTheme.darkTheme(),
-);
+)
 ```
 
 ### Custom Themes
@@ -582,7 +576,7 @@ const theme = CountryPickerTheme(
 
 `CountryPickerConfig` now contains only **shared** options used across multiple widgets.
 
-Use widget-level parameters on `ComprehensiveCountryPicker` / `ModalComprehensivePicker` for comprehensive-only behavior (custom builders, sorting/filter defaults, advanced flag shape/size/shadow, sizing, etc.).
+Use widget-level parameters on `CountryPicker` for advanced behavior (custom builders, sorting/filter defaults, advanced flag shape/size/shadow, sizing, etc.).
 
 ### Display Options
 
@@ -609,17 +603,17 @@ const config = CountryPickerConfig(
 );
 ```
 
-Advanced flag styling for comprehensive pickers (widget-level):
+Advanced flag styling via `CountryPicker` (widget-level):
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   flagShape: FlagShape.rounded,
   flagSize: Size(40, 28),
   flagShadowColor: Colors.black26,
   flagShadowBlur: 6,
   flagShadowOffset: Offset(0, 3),
-);
+)
 ```
 
 ### Filtering Countries
@@ -642,39 +636,39 @@ const config = CountryPickerConfig(
 
 ### Sorting
 
-Sorting for comprehensive pickers is now widget-level:
+Sorting is a widget-level parameter on `CountryPicker`:
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   sortBy: CountrySortBy.name,        // Alphabetical (default)
   // sortBy: CountrySortBy.population, // Most populous first
   // sortBy: CountrySortBy.area,       // Largest area first
   // sortBy: CountrySortBy.region,     // Grouped by region
   // sortBy: CountrySortBy.capital,    // Alphabetical by capital
-);
+)
 ```
 
 ### Sizing
 
-Sizing for comprehensive pickers is widget-level:
+Sizing is a widget-level parameter on `CountryPicker`:
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   maxHeight: 600.0,           // Maximum picker height
   minHeight: 200.0,           // Minimum picker height
   dropdownMaxHeight: 400.0,   // Maximum dropdown menu height
-);
+)
 ```
 
 ### Custom Builders
 
-Custom builders are available on comprehensive picker APIs (not shared config):
+Custom builders are available on `CountryPicker` (not shared config):
 
 ```dart
-ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   // Custom country item
   customCountryBuilder: (context, country, isSelected) {
     return ListTile(
@@ -749,21 +743,21 @@ const config = CountryPickerConfig(
 );
 ```
 
-Comprehensive-specific filter labels are widget-level:
+Filter labels are widget-level parameters on `CountryPicker`:
 
 ```dart
-ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   filterTitleText: 'Filter Options',       // Filter dialog title
   filterSortByText: 'Sort:',               // Filter sort label
   filterRegionsText: 'Regions:',           // Filter regions label
   filterAllText: 'All',                    // "All" filter chip label
   filterCancelText: 'Cancel',              // Filter cancel button
   filterApplyText: 'Done',                 // Filter apply button
-);
+)
 ```
 
-**`CountryPickerConfig` from `CountryPicker` (used by `ModalCountryPicker`):**
+**`CountryPickerConfig` from `CountryPicker`:**
 
 ```dart
 const config = CountryPickerConfig(
@@ -906,7 +900,9 @@ MaterialApp(
 
 // 3. That's it! All Countrify pickers now show Japanese country names.
 //    No per-widget configuration needed.
-ModalComprehensivePicker.showBottomSheet(context: context);
+PhoneNumberField(
+  onChanged: (phoneNumber, country) { },
+)
 // → shows アメリカ合衆国, ドイツ, フランス, ...
 ```
 
@@ -918,15 +914,16 @@ Use `CountryPickerConfig.locale` to override the auto-detected locale for a spec
 
 ```dart
 // Force German names on this picker, regardless of app locale
-ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   config: CountryPickerConfig(locale: 'de'),
-);
+)
 
 // Force English even if app locale is non-English
 PhoneNumberField(
+  onChanged: (phoneNumber, country) { },
   config: CountryPickerConfig(locale: 'en'),
-);
+)
 ```
 
 | Scenario | What to do |
@@ -1074,24 +1071,17 @@ class Language {
 | `CountryPickerType.inline` | Embedded inline list |
 | `CountryPickerType.none` | Read-only mode (disables changing selection) |
 
-### `PickerDisplayType` (for `CountryDropdownField`)
+### `CountryPickerMode`
+
+Used by `PhoneNumberField`, `CountryDropdownField`, and `PhoneCodePicker` to control how the picker is presented.
 
 | Value | Description |
 |---|---|
-| `PickerDisplayType.bottomSheet` | Opens bottom sheet picker |
-| `PickerDisplayType.dialog` | Opens dialog picker |
-| `PickerDisplayType.fullScreen` | Opens full screen picker |
-| `PickerDisplayType.none` | Read-only mode (disables changing selection) |
-
-### `PickerOpenType` (for `PhoneNumberField`)
-
-| Value | Description |
-|---|---|
-| `PickerOpenType.dropdown` | Compact overlay dropdown below the field (default) |
-| `PickerOpenType.bottomSheet` | Modal bottom sheet |
-| `PickerOpenType.dialog` | Dialog popup |
-| `PickerOpenType.fullScreen` | Full screen page |
-| `PickerOpenType.none` | Read-only mode (disables changing selection) |
+| `CountryPickerMode.dropdown` | Compact scrollable dropdown anchored below the field |
+| `CountryPickerMode.bottomSheet` | Modal bottom sheet |
+| `CountryPickerMode.dialog` | Centered dialog popup |
+| `CountryPickerMode.fullScreen` | Full screen page |
+| `CountryPickerMode.none` | Read-only mode (disables changing selection) |
 
 ---
 
@@ -1110,7 +1100,7 @@ PhoneNumberField(
     FilteringTextInputFormatter.digitsOnly,
     LengthLimitingTextInputFormatter(15),
   ],
-  onPhoneNumberChanged: (phoneNumber, country) {
+  onChanged: (phoneNumber, country) {
     print('Full number: +${country.callingCodes.first}$phoneNumber');
   },
   onCountryChanged: (country) {
@@ -1124,7 +1114,7 @@ PhoneNumberField(
 ```dart
 CountryDropdownField(
   initialCountryCode: _selectedCountryCode,
-  onCountrySelected: (country) {
+  onChanged: (country) {
     setState(() => _selectedCountry = country);
   },
   style: CountrifyFieldStyle.defaultStyle().copyWith(
@@ -1133,50 +1123,50 @@ CountryDropdownField(
   showPhoneCode: false,
   showFlag: true,
   searchEnabled: true,
-  pickerType: PickerDisplayType.bottomSheet,
+  pickerMode: CountryPickerMode.bottomSheet,
 )
 ```
 
 ### European Countries Only
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   config: const CountryPickerConfig(
     includeRegions: ['Europe'],
   ),
   showPhoneCode: true,
   searchEnabled: true,
-);
+)
 ```
 
 ### Dark Theme Picker
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   theme: CountryPickerTheme.darkTheme(),
   showPhoneCode: true,
   searchEnabled: true,
-);
+)
 ```
 
 ### Circular Flags
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   flagShape: FlagShape.circular,
   flagSize: const Size(40, 40),
   showPhoneCode: true,
-);
+)
 ```
 
 ### Custom Country Item Builder
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
+  onCountrySelected: (country) { },
   customCountryBuilder: (context, country, isSelected) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -1216,17 +1206,27 @@ final country = await ModalComprehensivePicker.showBottomSheet(
       ),
     );
   },
-);
+)
 ```
 
-### Using Flag Images Directly
+### Using CountryFlag Standalone
 
-When displaying a country's flag outside of the picker widgets, always include the `package` parameter:
+Use the `CountryFlag` widget to display a country's flag anywhere in your app:
+
+```dart
+CountryFlag(
+  country: CountryUtils.getCountryByAlpha2Code('US')!,
+  size: const Size(32, 24),
+  borderRadius: BorderRadius.circular(4),
+)
+```
+
+If you need direct asset access, include the `package` parameter:
 
 ```dart
 Image.asset(
   country.flagImagePath,
-  package: 'countrify',  // Required when using outside the package
+  package: 'countrify',
   width: 32,
   height: 24,
 )
@@ -1239,9 +1239,16 @@ Image.asset(
 <details>
 <summary><strong>Flag images not loading</strong></summary>
 
-When using flag images outside of the built-in picker widgets, always include the `package` parameter:
+Use the `CountryFlag` widget for automatic fallback handling. If using `Image.asset` directly, always include the `package` parameter:
 
 ```dart
+// Recommended:
+CountryFlag(
+  country: country,
+  size: const Size(32, 24),
+)
+
+// Or with Image.asset directly:
 Image.asset(
   country.flagImagePath,
   package: 'countrify',  // Don't forget this!
@@ -1255,15 +1262,7 @@ Image.asset(
 <details>
 <summary><strong>Picker not appearing</strong></summary>
 
-Ensure the `BuildContext` is valid and the widget is still mounted:
-
-```dart
-if (mounted) {
-  final country = await ModalComprehensivePicker.showBottomSheet(
-    context: context,
-  );
-}
-```
+Ensure the widget is placed inside a valid widget tree with a `BuildContext` that has access to a `Navigator`. If using `CountryDropdownField` or `PhoneNumberField`, ensure they are inside a `Scaffold` or similar root widget.
 
 </details>
 
@@ -1285,10 +1284,10 @@ final country = CountryUtils.getCountryByAlpha2Code('US'); // Correct
 Pass the `initialCountryCode` parameter so the picker places it at the top:
 
 ```dart
-final country = await ModalComprehensivePicker.showBottomSheet(
-  context: context,
+CountryPicker(
   initialCountryCode: _selectedCountryCode,
-);
+  onCountrySelected: (country) { },
+)
 ```
 
 </details>
@@ -1337,31 +1336,25 @@ All picker widgets **auto-detect** the locale from your `MaterialApp`. If your a
 <details>
 <summary><strong>Can I customize the picker's UI text strings?</strong></summary>
 
-Yes. Shared strings (title/search/empty/hint) are configurable via `CountryPickerConfig`. Comprehensive-only filter labels are configurable via `ComprehensiveCountryPicker` / `ModalComprehensivePicker` parameters.
+Yes. Shared strings (title/search/empty/hint) are configurable via `CountryPickerConfig`. Filter labels are configurable via `CountryPicker` widget parameters.
 </details>
 
 <details>
 <summary><strong>Can I filter countries?</strong></summary>
 
-Yes. Use shared include/exclude filters in `CountryPickerConfig` and comprehensive-specific sorting/filter defaults via `ComprehensiveCountryPicker` / `ModalComprehensivePicker` parameters.
+Yes. Use shared include/exclude filters in `CountryPickerConfig` and sorting/filter defaults via `CountryPicker` widget parameters.
 </details>
 
 <details>
 <summary><strong>Can I provide my own country item UI?</strong></summary>
 
-Yes. Use `customCountryBuilder` (and related custom builders) on `ComprehensiveCountryPicker` / `ModalComprehensivePicker`.
+Yes. Use `customCountryBuilder` (and related custom builders) on `CountryPicker`.
 </details>
 
 <details>
 <summary><strong>Is the country data accurate?</strong></summary>
 
 The data is sourced from public ISO 3166-1 records and is kept as current as possible. Please report any inaccuracies via GitHub issues.
-</details>
-
-<details>
-<summary><strong>What's the difference between ModalComprehensivePicker and ModalCountryPicker?</strong></summary>
-
-`ModalComprehensivePicker` uses the advanced `ComprehensiveCountryPicker` widget with rich theming, filtering, and all 5 display modes. `ModalCountryPicker` is a simpler API using the basic `CountryPicker` widget with fewer customization options. For new projects, prefer `ModalComprehensivePicker`.
 </details>
 
 <details>
