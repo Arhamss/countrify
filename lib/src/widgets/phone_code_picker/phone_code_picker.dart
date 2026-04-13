@@ -356,6 +356,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
           style: theme.appBarTitleTextStyle ?? theme.headerTextStyle,
         ),
         leading: IconButton(
+          tooltip: 'Close',
           icon: Icon(theme.closeIcon ?? CountrifyIcons.x,
               color: theme.headerIconColor),
           onPressed: () => Navigator.of(context).pop(),
@@ -418,6 +419,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
           ),
           const Spacer(),
           IconButton(
+            tooltip: 'Close',
             icon: Icon(theme.closeIcon ?? CountrifyIcons.x,
                 color: theme.headerIconColor),
             onPressed: () => Navigator.of(context).pop(),
@@ -439,6 +441,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
               color: theme.searchIconColor),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
+                  tooltip: 'Clear search',
                   icon: Icon(theme.clearIcon ?? CountrifyIcons.circleX,
                       color: theme.searchIconColor),
                   onPressed: () {
@@ -471,12 +474,15 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
 
     return Container(
       padding: const EdgeInsets.all(16),
-      child: TextField(
-        controller: _searchController,
-        onChanged: _onSearchChanged,
-        style: theme.searchTextStyle,
-        cursorColor: theme.searchCursorColor,
-        decoration: effectiveDecoration,
+      child: Semantics(
+        label: 'Search countries',
+        child: TextField(
+          controller: _searchController,
+          onChanged: _onSearchChanged,
+          style: theme.searchTextStyle,
+          cursorColor: theme.searchCursorColor,
+          decoration: effectiveDecoration,
+        ),
       ),
     );
   }

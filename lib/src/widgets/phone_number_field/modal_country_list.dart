@@ -180,10 +180,13 @@ class _PhoneModalCountryListState extends State<PhoneModalCountryList> {
           Text((widget.config ?? const CountryPickerConfig()).titleText,
               style: theme.headerTextStyle),
           const Spacer(),
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Icon(theme.closeIcon ?? CountrifyIcons.x,
-                color: theme.headerIconColor, size: 22),
+          Tooltip(
+            message: 'Close',
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Icon(theme.closeIcon ?? CountrifyIcons.x,
+                  color: theme.headerIconColor, size: 22),
+            ),
           ),
         ],
       ),
@@ -202,6 +205,7 @@ class _PhoneModalCountryListState extends State<PhoneModalCountryList> {
               color: theme.searchIconColor),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
+                  tooltip: 'Clear search',
                   icon: Icon(theme.clearIcon ?? CountrifyIcons.circleX,
                       color: theme.searchIconColor),
                   onPressed: () {
@@ -234,12 +238,15 @@ class _PhoneModalCountryListState extends State<PhoneModalCountryList> {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      child: TextField(
-        controller: _searchController,
-        onChanged: _onSearchChanged,
-        style: theme.searchTextStyle,
-        cursorColor: theme.searchCursorColor,
-        decoration: effectiveDecoration,
+      child: Semantics(
+        label: 'Search countries',
+        child: TextField(
+          controller: _searchController,
+          onChanged: _onSearchChanged,
+          style: theme.searchTextStyle,
+          cursorColor: theme.searchCursorColor,
+          decoration: effectiveDecoration,
+        ),
       ),
     );
   }

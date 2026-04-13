@@ -216,6 +216,7 @@ class _PhoneDropdownOverlayState extends State<PhoneDropdownOverlay> {
               color: theme.searchIconColor),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
+                  tooltip: 'Clear search',
                   icon: Icon(theme.clearIcon ?? CountrifyIcons.circleX,
                       color: theme.searchIconColor),
                   onPressed: () {
@@ -248,12 +249,15 @@ class _PhoneDropdownOverlayState extends State<PhoneDropdownOverlay> {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 8),
-      child: TextField(
-        controller: _searchController,
-        onChanged: _onSearchChanged,
-        style: theme.searchTextStyle,
-        cursorColor: theme.searchCursorColor,
-        decoration: effectiveDecoration,
+      child: Semantics(
+        label: 'Search countries',
+        child: TextField(
+          controller: _searchController,
+          onChanged: _onSearchChanged,
+          style: theme.searchTextStyle,
+          cursorColor: theme.searchCursorColor,
+          decoration: effectiveDecoration,
+        ),
       ),
     );
   }

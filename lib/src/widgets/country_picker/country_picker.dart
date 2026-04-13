@@ -538,6 +538,7 @@ class _CountryPickerState extends State<CountryPicker>
           style: theme.appBarTitleTextStyle ?? theme.headerTextStyle,
         ),
         leading: IconButton(
+          tooltip: 'Close',
           icon: Icon(theme.closeIcon ?? CountrifyIcons.x,
               color: theme.headerIconColor),
           onPressed: () => Navigator.of(context).pop(),
@@ -545,6 +546,7 @@ class _CountryPickerState extends State<CountryPicker>
         actions: [
           if (widget.filterEnabled)
             IconButton(
+              tooltip: 'Filter countries',
               icon: Icon(theme.filterIcon ?? CountrifyIcons.listFilter,
                   color: theme.headerIconColor),
               onPressed: () => _showFilterDialog(theme),
@@ -820,6 +822,7 @@ class _CountryPickerState extends State<CountryPicker>
           ),
           const Spacer(),
           IconButton(
+            tooltip: 'Close',
             icon: Icon(theme.closeIcon ?? CountrifyIcons.x,
                 color: theme.headerIconColor),
             onPressed: () => Navigator.of(context).pop(),
@@ -849,6 +852,7 @@ class _CountryPickerState extends State<CountryPicker>
               color: theme.searchIconColor),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
+                  tooltip: 'Clear search',
                   icon: Icon(theme.clearIcon ?? CountrifyIcons.circleX,
                       color: theme.searchIconColor),
                   onPressed: () {
@@ -881,12 +885,15 @@ class _CountryPickerState extends State<CountryPicker>
 
     return Container(
       padding: const EdgeInsets.all(16),
-      child: TextField(
-        controller: _searchController,
-        onChanged: _onSearchChanged,
-        style: theme.searchTextStyle,
-        cursorColor: theme.searchCursorColor,
-        decoration: effectiveDecoration,
+      child: Semantics(
+        label: 'Search countries',
+        child: TextField(
+          controller: _searchController,
+          onChanged: _onSearchChanged,
+          style: theme.searchTextStyle,
+          cursorColor: theme.searchCursorColor,
+          decoration: effectiveDecoration,
+        ),
       ),
     );
   }
@@ -917,6 +924,7 @@ class _CountryPickerState extends State<CountryPicker>
             ),
           ),
           IconButton(
+            tooltip: 'Filter countries',
             icon: Icon(theme.filterIcon ?? CountrifyIcons.listFilter,
                 color: theme.filterIconColor),
             onPressed: () => _showFilterDialog(theme),
