@@ -9,6 +9,15 @@ import 'package:flutter/material.dart';
 /// and accessibility support.
 ///
 /// Replaces duplicated search field patterns across the country picker widgets.
+///
+/// Example:
+/// ```dart
+/// CountrySearchBar(
+///   onChanged: (query) => print('Search: $query'),
+///   hintText: 'Search countries',
+///   debounceDuration: const Duration(milliseconds: 300),
+/// )
+/// ```
 /// {@endtemplate}
 class CountrySearchBar extends StatefulWidget {
   /// {@macro country_search_bar}

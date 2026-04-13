@@ -9,7 +9,17 @@ import 'package:countrify/src/widgets/country_picker_theme.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 
 /// {@template country_picker}
-/// A highly customizable and modern country picker with extensive styling options
+/// A highly customizable and modern country picker with extensive styling
+/// options.
+///
+/// Example:
+/// ```dart
+/// CountryPicker(
+///   initialCountryCode: CountryCode.US,
+///   onCountrySelected: (country) => print(country.name),
+///   pickerType: CountryPickerType.bottomSheet,
+/// )
+/// ```
 /// {@endtemplate}
 class CountryPicker extends StatefulWidget {
   /// {@macro country_picker}
@@ -1179,13 +1189,24 @@ class _CountryPickerState extends State<CountryPicker>
   }
 }
 
-/// Types of country picker displays
+/// Types of country picker displays.
 enum CountryPickerType {
+  /// Show picker as a modal bottom sheet.
   bottomSheet,
+
+  /// Show picker as a dialog.
   dialog,
+
+  /// Show picker as a full screen page.
   fullScreen,
+
+  /// Show picker as a dropdown.
   dropdown,
+
+  /// Show picker inline within the widget tree.
   inline,
+
+  /// Disable picker display.
   none,
 }
 

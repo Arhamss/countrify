@@ -1,7 +1,14 @@
 /// How the country picker is displayed.
 ///
-/// Used by PhoneNumberField, CountryDropdownField, and PhoneCodePicker
+/// Used by `PhoneNumberField`, `CountryDropdownField`, and `PhoneCodePicker`
 /// to determine the picker presentation style.
+///
+/// Example:
+/// ```dart
+/// PhoneNumberField(
+///   pickerMode: CountryPickerMode.bottomSheet,
+/// )
+/// ```
 enum CountryPickerMode {
   /// Show a compact scrollable dropdown anchored below the field.
   dropdown,

@@ -12,7 +12,16 @@ import 'package:countrify/src/widgets/country_picker_mode.dart';
 import 'package:countrify/src/widgets/shared/country_list_tile.dart';
 
 /// {@template phone_code_picker}
-/// A specialized country picker for phone code selection with modern UI
+/// A specialized country picker for phone code selection with modern UI.
+///
+/// Example:
+/// ```dart
+/// PhoneCodePicker(
+///   initialCountryCode: CountryCode.US,
+///   onChanged: (country) => print(country.callingCodes.first),
+///   pickerMode: CountryPickerMode.bottomSheet,
+/// )
+/// ```
 /// {@endtemplate}
 class PhoneCodePicker extends StatefulWidget {
   /// {@macro phone_code_picker}

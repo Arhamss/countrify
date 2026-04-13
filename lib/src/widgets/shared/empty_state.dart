@@ -2,6 +2,14 @@ import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:flutter/material.dart';
 
 /// Displayed when a country search or filter yields no results.
+///
+/// Example:
+/// ```dart
+/// CountryEmptyState(
+///   text: 'No countries found',
+///   icon: Icons.search_off,
+/// )
+/// ```
 class CountryEmptyState extends StatelessWidget {
   /// Creates a [CountryEmptyState].
   const CountryEmptyState({

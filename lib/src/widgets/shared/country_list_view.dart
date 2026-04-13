@@ -5,6 +5,15 @@ import 'package:countrify/src/widgets/shared/empty_state.dart';
 import 'package:flutter/material.dart';
 
 /// A scrollable list of countries with selection support and empty state.
+///
+/// Example:
+/// ```dart
+/// CountryListView(
+///   countries: CountryUtils.getAllCountries(),
+///   onSelected: (country) => print(country.name),
+///   selectedCountry: currentCountry,
+/// )
+/// ```
 class CountryListView extends StatelessWidget {
   /// Creates a [CountryListView].
   const CountryListView({
