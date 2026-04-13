@@ -3,9 +3,11 @@ import 'package:countrify/src/models/country.dart';
 import 'package:countrify/src/models/country_code.dart';
 import 'package:countrify/src/utils/country_utils.dart';
 import 'package:countrify/src/widgets/country_picker/country_picker.dart';
-import 'package:countrify/src/widgets/countrify_field_style.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
+import 'package:countrify/src/widgets/country_picker_mode.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
+import 'package:countrify/src/widgets/countrify_field_style.dart';
+import 'package:countrify/src/widgets/shared/country_flag.dart';
 import 'package:flutter/material.dart';
 
 /// {@template country_dropdown_field}
@@ -20,7 +22,7 @@ import 'package:flutter/material.dart';
 ///     labelText: 'Country',
 ///     fillColor: Colors.grey.shade50,
 ///   ),
-///   onCountrySelected: (country) => print(country.name),
+///   onChanged: (country) => print(country.name),
 /// )
 /// ```
 /// {@endtemplate}
@@ -29,8 +31,7 @@ class CountryDropdownField extends StatefulWidget {
   const CountryDropdownField({
     super.key,
     this.initialCountryCode,
-    this.onCountrySelected,
-    this.onCountryChanged,
+    this.onChanged,
     this.theme,
     this.config,
     this.style,
@@ -39,17 +40,14 @@ class CountryDropdownField extends StatefulWidget {
     this.showFlag = true,
     this.searchEnabled = true,
     this.filterEnabled = false,
-    this.pickerType = PickerDisplayType.bottomSheet,
+    this.pickerMode = CountryPickerMode.bottomSheet,
   });
 
   /// Initial selected country by enum code.
   final CountryCode? initialCountryCode;
 
   /// Callback when a country is selected.
-  final ValueChanged<Country>? onCountrySelected;
-
-  /// Callback when country selection changes.
-  final ValueChanged<Country>? onCountryChanged;
+  final ValueChanged<Country>? onChanged;
 
   /// Theme configuration for the picker.
   final CountryPickerTheme? theme;
@@ -58,7 +56,7 @@ class CountryDropdownField extends StatefulWidget {
   final CountryPickerConfig? config;
 
   /// Modular style for the field. Controls every aspect of the
-  /// [InputDecoration] plus extras like [selectedCountryTextStyle].
+  /// [InputDecoration] plus extras like [CountrifyFieldStyle.selectedCountryTextStyle].
   ///
   /// When null, a default style is built from the [theme].
   final CountrifyFieldStyle? style;
@@ -78,8 +76,8 @@ class CountryDropdownField extends StatefulWidget {
   /// Whether filtering is enabled in the picker.
   final bool filterEnabled;
 
-  /// Type of picker to display.
-  final PickerDisplayType pickerType;
+  /// How the picker is displayed.
+  final CountryPickerMode pickerMode;
 
   @override
   State<CountryDropdownField> createState() => _CountryDropdownFieldState();
@@ -109,18 +107,19 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
   }
 
   Future<void> _showPicker() async {
-    if (!widget.enabled || widget.pickerType == PickerDisplayType.none) return;
+    if (!widget.enabled || widget.pickerMode == CountryPickerMode.none) return;
 
     Country? selectedCountry;
 
-    switch (widget.pickerType) {
-      case PickerDisplayType.bottomSheet:
+    switch (widget.pickerMode) {
+      case CountryPickerMode.bottomSheet:
         selectedCountry = await _showBottomSheetPicker();
-      case PickerDisplayType.dialog:
+      case CountryPickerMode.dialog:
         selectedCountry = await _showDialogPicker();
-      case PickerDisplayType.fullScreen:
+      case CountryPickerMode.fullScreen:
         selectedCountry = await _showFullScreenPicker();
-      case PickerDisplayType.none:
+      case CountryPickerMode.dropdown:
+      case CountryPickerMode.none:
         return;
     }
 
@@ -128,8 +127,7 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
       setState(() {
         _selectedCountry = selectedCountry;
       });
-      widget.onCountrySelected?.call(selectedCountry);
-      widget.onCountryChanged?.call(selectedCountry);
+      widget.onChanged?.call(selectedCountry);
     }
   }
 
@@ -230,7 +228,17 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
     final prefixWidget = _selectedCountry != null && widget.showFlag
         ? Padding(
             padding: const EdgeInsets.all(12),
-            child: _buildFlagWidget(_selectedCountry!),
+            child: CountryFlag(
+              country: _selectedCountry!,
+              size: const Size(32, 24),
+              borderRadius:
+                  (widget.config ?? const CountryPickerConfig()).flagBorderRadius,
+              borderColor: (widget.config ?? const CountryPickerConfig())
+                  .flagBorderColor,
+              borderWidth: (widget.config ?? const CountryPickerConfig())
+                  .flagBorderWidth,
+              emojiTextStyle: theme.flagEmojiTextStyle,
+            ),
           )
         : Icon(theme.defaultCountryIcon ?? CountrifyIcons.globe);
 
@@ -248,7 +256,7 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
     );
 
     return InkWell(
-      onTap: widget.enabled && widget.pickerType != PickerDisplayType.none
+      onTap: widget.enabled && widget.pickerMode != CountryPickerMode.none
           ? _showPicker
           : null,
       borderRadius: borderRadius,
@@ -265,55 +273,4 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
       ),
     );
   }
-
-  Widget _buildFlagWidget(Country country) {
-    final config = widget.config ?? const CountryPickerConfig();
-    final theme = widget.theme ?? CountryPickerTheme.defaultTheme();
-
-    return Container(
-      width: 32,
-      height: 24,
-      decoration: BoxDecoration(
-        borderRadius: config.flagBorderRadius,
-        border: config.flagBorderColor != null
-            ? Border.all(
-                color: config.flagBorderColor!, width: config.flagBorderWidth)
-            : null,
-      ),
-      child: ClipRRect(
-        borderRadius: config.flagBorderRadius,
-        child: Image.asset(
-          country.flagImagePath,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return ColoredBox(
-              color: Colors.grey.shade300,
-              child: Center(
-                child: Text(
-                  country.flagEmoji,
-                  style:
-                      theme.flagEmojiTextStyle ?? const TextStyle(fontSize: 16),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-/// Types of picker display.
-enum PickerDisplayType {
-  /// Show picker as a bottom sheet.
-  bottomSheet,
-
-  /// Show picker as a dialog.
-  dialog,
-
-  /// Show picker as a full screen page.
-  fullScreen,
-
-  /// Keep current selection and disable opening a picker.
-  none,
 }
