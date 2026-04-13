@@ -161,8 +161,11 @@ class PhoneNumberField extends StatefulWidget {
 
 class _PhoneNumberFieldState extends State<PhoneNumberField> {
   late TextEditingController _controller;
+  late FocusNode _focusNode;
+  bool _isInternalFocusNode = false;
   Country? _selectedCountry;
   bool _isInternalController = false;
+  bool _isFocused = false;
 
   // Overlay dropdown state
   final GlobalKey _fieldKey = GlobalKey();
@@ -181,6 +184,13 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       _controller = TextEditingController();
       _isInternalController = true;
     }
+    if (widget.focusNode != null) {
+      _focusNode = widget.focusNode!;
+    } else {
+      _focusNode = FocusNode();
+      _isInternalFocusNode = true;
+    }
+    _focusNode.addListener(_onFocusChanged);
     _initCountry();
     _controller.addListener(_onPhoneChanged);
   }
@@ -215,6 +225,15 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       _controller = widget.controller!;
       _controller.addListener(_onPhoneChanged);
     }
+    if (widget.focusNode != null && widget.focusNode != _focusNode) {
+      _focusNode.removeListener(_onFocusChanged);
+      if (_isInternalFocusNode) {
+        _focusNode.dispose();
+        _isInternalFocusNode = false;
+      }
+      _focusNode = widget.focusNode!;
+      _focusNode.addListener(_onFocusChanged);
+    }
     if (widget.initialCountryCode != oldWidget.initialCountryCode) {
       setState(_initCountry);
     }
@@ -223,11 +242,21 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   @override
   void dispose() {
     _removeOverlay();
+    _focusNode.removeListener(_onFocusChanged);
     _controller.removeListener(_onPhoneChanged);
+    if (_isInternalFocusNode) {
+      _focusNode.dispose();
+    }
     if (_isInternalController) {
       _controller.dispose();
     }
     super.dispose();
+  }
+
+  void _onFocusChanged() {
+    setState(() {
+      _isFocused = _focusNode.hasFocus;
+    });
   }
 
   // ─── Callbacks ──────────────────────────────────────────────────────
@@ -427,6 +456,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
 
     final decoration = effectiveStyle.toInputDecoration(
       prefixIconOverride: _buildPrefix(pickerTheme, effectiveStyle),
+      isFocused: _isFocused,
     );
 
     return CompositedTransformTarget(
@@ -434,7 +464,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       child: TextFormField(
         key: _fieldKey,
         controller: _controller,
-        focusNode: widget.focusNode,
+        focusNode: _focusNode,
         cursorColor:
             effectiveStyle.cursorColor ?? pickerTheme.searchCursorColor,
         enabled: widget.enabled,

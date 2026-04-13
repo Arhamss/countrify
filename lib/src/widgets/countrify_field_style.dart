@@ -84,6 +84,7 @@ class CountrifyFieldStyle {
     this.prefixPadding,
     this.cursorColor,
     this.fieldBorderRadius,
+    this.focusedFillColor,
   });
 
   /// Default light style that matches the current built-in field defaults.
@@ -456,6 +457,10 @@ class CountrifyFieldStyle {
   /// generates [OutlineInputBorder] instances using this radius.
   final BorderRadius? fieldBorderRadius;
 
+  /// The fill color of the decoration's container when the field has input
+  /// focus. When null, [fillColor] is used regardless of focus state.
+  final Color? focusedFillColor;
+
   // ═══════════════════════════════════════════════════════════════════════
   // toInputDecoration
   // ═══════════════════════════════════════════════════════════════════════
@@ -471,6 +476,7 @@ class CountrifyFieldStyle {
   InputDecoration toInputDecoration({
     Widget? prefixIconOverride,
     Widget? suffixIconOverride,
+    bool isFocused = false,
   }) {
     final radius = fieldBorderRadius ?? BorderRadius.circular(12);
 
@@ -515,7 +521,9 @@ class CountrifyFieldStyle {
       counterText: counterText,
       counterStyle: counterStyle,
       filled: filled,
-      fillColor: fillColor,
+      fillColor: isFocused && focusedFillColor != null
+          ? focusedFillColor
+          : fillColor,
       focusColor: focusColor,
       hoverColor: hoverColor,
       errorBorder: errorBorder ??
@@ -619,6 +627,7 @@ class CountrifyFieldStyle {
     EdgeInsetsGeometry? prefixPadding,
     Color? cursorColor,
     BorderRadius? fieldBorderRadius,
+    Color? focusedFillColor,
   }) {
     return CountrifyFieldStyle(
       icon: icon ?? this.icon,
@@ -686,6 +695,7 @@ class CountrifyFieldStyle {
       prefixPadding: prefixPadding ?? this.prefixPadding,
       cursorColor: cursorColor ?? this.cursorColor,
       fieldBorderRadius: fieldBorderRadius ?? this.fieldBorderRadius,
+      focusedFillColor: focusedFillColor ?? this.focusedFillColor,
     );
   }
 }
