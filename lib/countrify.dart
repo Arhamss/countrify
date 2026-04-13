@@ -29,7 +29,7 @@ export 'src/widgets/country_picker_config.dart';
 export 'src/widgets/country_picker_mode.dart';
 export 'src/widgets/country_picker_theme.dart';
 export 'src/widgets/phone_code_picker.dart';
-export 'src/widgets/phone_number_field.dart';
+export 'src/widgets/phone_number_field/phone_number_field.dart';
 export 'src/widgets/shared/country_flag.dart';
 export 'src/widgets/shared/country_list_tile.dart';
 export 'src/widgets/shared/country_list_view.dart';
