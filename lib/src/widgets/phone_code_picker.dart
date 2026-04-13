@@ -8,7 +8,7 @@ import 'package:countrify/src/utils/country_utils.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart'
     as picker_config;
-import 'package:countrify/src/widgets/comprehensive_country_picker.dart';
+import 'package:countrify/src/widgets/country_picker/country_picker.dart';
 
 /// {@template phone_code_picker}
 /// A specialized country picker for phone code selection with modern UI

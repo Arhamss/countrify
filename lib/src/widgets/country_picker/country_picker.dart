@@ -8,12 +8,12 @@ import 'package:countrify/src/utils/country_utils.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 
-/// {@template comprehensive_country_picker}
+/// {@template country_picker}
 /// A highly customizable and modern country picker with extensive styling options
 /// {@endtemplate}
-class ComprehensiveCountryPicker extends StatefulWidget {
-  /// {@macro comprehensive_country_picker}
-  const ComprehensiveCountryPicker({
+class CountryPicker extends StatefulWidget {
+  /// {@macro country_picker}
+  const CountryPicker({
     super.key,
     this.initialCountryCode,
     this.onCountrySelected,
@@ -195,11 +195,11 @@ class ComprehensiveCountryPicker extends StatefulWidget {
   final Duration debounceDuration;
 
   @override
-  State<ComprehensiveCountryPicker> createState() =>
-      _ComprehensiveCountryPickerState();
+  State<CountryPicker> createState() =>
+      _CountryPickerState();
 }
 
-class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
+class _CountryPickerState extends State<CountryPicker>
     with TickerProviderStateMixin {
   Country? _selectedCountry;
   String _searchQuery = '';
@@ -255,7 +255,7 @@ class _ComprehensiveCountryPickerState extends State<ComprehensiveCountryPicker>
   }
 
   @override
-  void didUpdateWidget(ComprehensiveCountryPicker oldWidget) {
+  void didUpdateWidget(CountryPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Update internal state when parent's initialCountryCode changes
     if (widget.initialCountryCode != oldWidget.initialCountryCode) {

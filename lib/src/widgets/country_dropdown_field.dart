@@ -2,7 +2,7 @@ import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:countrify/src/models/country.dart';
 import 'package:countrify/src/models/country_code.dart';
 import 'package:countrify/src/utils/country_utils.dart';
-import 'package:countrify/src/widgets/comprehensive_country_picker.dart';
+import 'package:countrify/src/widgets/country_picker/country_picker.dart';
 import 'package:countrify/src/widgets/countrify_field_style.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
@@ -144,7 +144,7 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
           color: widget.theme?.backgroundColor ?? Colors.white,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        child: ComprehensiveCountryPicker(
+        child: CountryPicker(
           initialCountryCode: CountryCodeExtension.fromAlpha2Code(
               _selectedCountry?.alpha2Code ?? ''),
           theme: widget.theme,
@@ -165,7 +165,7 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
         child: SizedBox(
           width: MediaQuery.of(dialogContext).size.width * 0.9,
           height: MediaQuery.of(dialogContext).size.height * 0.8,
-          child: ComprehensiveCountryPicker(
+          child: CountryPicker(
             initialCountryCode: CountryCodeExtension.fromAlpha2Code(
                 _selectedCountry?.alpha2Code ?? ''),
             theme: widget.theme,
@@ -184,7 +184,7 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
   Future<Country?> _showFullScreenPicker() async {
     return Navigator.of(context).push<Country>(
       MaterialPageRoute(
-        builder: (routeContext) => ComprehensiveCountryPicker(
+        builder: (routeContext) => CountryPicker(
           initialCountryCode: CountryCodeExtension.fromAlpha2Code(
               _selectedCountry?.alpha2Code ?? ''),
           theme: widget.theme,

@@ -22,7 +22,7 @@ export 'src/models/phone_metadata.dart';
 
 export 'src/utils/country_utils.dart';
 
-export 'src/widgets/comprehensive_country_picker.dart';
+export 'src/widgets/country_picker/country_picker.dart';
 export 'src/widgets/countrify_field_style.dart';
 export 'src/widgets/country_dropdown_field.dart';
 export 'src/widgets/country_picker_config.dart';
