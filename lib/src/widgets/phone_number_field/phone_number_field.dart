@@ -450,6 +450,18 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
     );
   }
 
+  // --- Auto-validation ---
+
+  String? _autoValidator(String? value) {
+    if (widget.validator != null) return widget.validator!(value);
+    final meta = _selectedCountry?.phoneMetadata;
+    if (meta == null || value == null || value.isEmpty) return null;
+    if (!meta.isValidLength(value)) {
+      return 'Phone number must be ${meta.minLength}-${meta.maxLength} digits';
+    }
+    return null;
+  }
+
   // --- Build ---
 
   @override
@@ -457,6 +469,17 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
     final pickerTheme = widget.theme ?? CountryPickerTheme.defaultTheme();
     final effectiveStyle =
         widget.style ?? CountrifyFieldStyle.defaultStyle();
+
+    // Auto hint text from phone metadata example number.
+    var resolvedStyle = effectiveStyle;
+    final meta = _selectedCountry?.phoneMetadata;
+    if (resolvedStyle.hintText == null && meta?.exampleNumber != null) {
+      resolvedStyle = resolvedStyle.copyWith(hintText: meta!.exampleNumber);
+    }
+
+    // Auto maxLength from phone metadata.
+    final effectiveMaxLength =
+        widget.maxLength ?? _selectedCountry?.phoneMetadata?.maxLength;
 
     final prefix = PhonePrefix(
       selectedCountry: _selectedCountry,
@@ -473,7 +496,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       onTap: _openCountryPicker,
     );
 
-    final decoration = effectiveStyle.toInputDecoration(
+    final decoration = resolvedStyle.toInputDecoration(
       prefixIconOverride: prefix,
       isFocused: _isFocused,
     );
@@ -485,17 +508,17 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         controller: _controller,
         focusNode: _focusNode,
         cursorColor:
-            effectiveStyle.cursorColor ?? pickerTheme.searchCursorColor,
+            resolvedStyle.cursorColor ?? pickerTheme.searchCursorColor,
         enabled: widget.enabled,
         readOnly: widget.readOnly,
         autofocus: widget.autofocus,
         keyboardType: widget.keyboardType,
         textInputAction: widget.textInputAction,
-        maxLength: widget.maxLength,
+        maxLength: effectiveMaxLength,
         style:
-            effectiveStyle.phoneTextStyle ?? pickerTheme.countryNameTextStyle,
+            resolvedStyle.phoneTextStyle ?? pickerTheme.countryNameTextStyle,
         inputFormatters: widget.inputFormatters,
-        validator: widget.validator,
+        validator: _autoValidator,
         onFieldSubmitted: widget.onSubmitted,
         onEditingComplete: widget.onEditingComplete,
         decoration: decoration,
