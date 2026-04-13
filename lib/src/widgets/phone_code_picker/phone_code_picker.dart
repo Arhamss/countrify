@@ -8,7 +8,8 @@ import 'package:countrify/src/utils/country_utils.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart'
     as picker_config;
-import 'package:countrify/src/widgets/country_picker/country_picker.dart';
+import 'package:countrify/src/widgets/country_picker_mode.dart';
+import 'package:countrify/src/widgets/shared/country_list_tile.dart';
 
 /// {@template phone_code_picker}
 /// A specialized country picker for phone code selection with modern UI
@@ -18,7 +19,7 @@ class PhoneCodePicker extends StatefulWidget {
   const PhoneCodePicker({
     super.key,
     this.initialCountryCode,
-    this.onCountrySelected,
+    this.onChanged,
     this.onCountryChanged,
     this.theme,
     this.config,
@@ -38,7 +39,7 @@ class PhoneCodePicker extends StatefulWidget {
     this.debounceDuration = const Duration(milliseconds: 300),
     this.searchEnabled = true,
     this.filterEnabled = false,
-    this.pickerType = CountryPickerType.bottomSheet,
+    this.pickerMode = CountryPickerMode.bottomSheet,
     this.isDismissible = true,
     this.enableDrag = true,
     this.isScrollControlled = true,
@@ -54,9 +55,9 @@ class PhoneCodePicker extends StatefulWidget {
   final CountryCode? initialCountryCode;
 
   /// Callback when a country is selected
-  final ValueChanged<Country>? onCountrySelected;
+  final ValueChanged<Country>? onChanged;
 
-  /// Callback when country selection changes
+  /// Callback when country selection changes during browsing
   final ValueChanged<Country>? onCountryChanged;
 
   /// Theme configuration
@@ -113,8 +114,8 @@ class PhoneCodePicker extends StatefulWidget {
   /// Whether filtering is enabled
   final bool filterEnabled;
 
-  /// Type of picker to display
-  final CountryPickerType pickerType;
+  /// Mode of picker to display
+  final CountryPickerMode pickerMode;
 
   /// Whether the picker is dismissible
   final bool isDismissible;
@@ -262,7 +263,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
   }
 
   void _onCountrySelected(Country country) {
-    if (widget.pickerType == CountryPickerType.none) return;
+    if (widget.pickerMode == CountryPickerMode.none) return;
 
     if (widget.hapticFeedback) {
       HapticFeedback.lightImpact();
@@ -272,7 +273,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
       _selectedCountry = country;
     });
 
-    widget.onCountrySelected?.call(country);
+    widget.onChanged?.call(country);
     widget.onCountryChanged?.call(country);
   }
 
@@ -289,18 +290,16 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
 
   Widget _buildPickerContent(
       CountryPickerTheme theme, picker_config.CountryPickerConfig config) {
-    switch (widget.pickerType) {
-      case CountryPickerType.bottomSheet:
+    switch (widget.pickerMode) {
+      case CountryPickerMode.bottomSheet:
         return _buildBottomSheetPicker(theme, config);
-      case CountryPickerType.dialog:
+      case CountryPickerMode.dialog:
         return _buildDialogPicker(theme, config);
-      case CountryPickerType.fullScreen:
+      case CountryPickerMode.fullScreen:
         return _buildFullScreenPicker(theme, config);
-      case CountryPickerType.dropdown:
+      case CountryPickerMode.dropdown:
         return _buildDropdownPicker(theme, config);
-      case CountryPickerType.inline:
-        return _buildInlinePicker(theme, config);
-      case CountryPickerType.none:
+      case CountryPickerMode.none:
         return _buildReadOnlyPicker(theme, config);
     }
   }
@@ -390,7 +389,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
               child: _buildCountryItem(country, theme, config),
             );
           }).toList(),
-          onChanged: widget.pickerType == CountryPickerType.none
+          onChanged: widget.pickerMode == CountryPickerMode.none
               ? null
               : (country) {
                   if (country != null) {
@@ -398,27 +397,6 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
                   }
                 },
         ),
-      ),
-    );
-  }
-
-  Widget _buildInlinePicker(
-      CountryPickerTheme theme, picker_config.CountryPickerConfig config) {
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.backgroundColor,
-        borderRadius:
-            theme.borderRadius ?? const BorderRadius.all(Radius.circular(12)),
-        border: Border.all(color: theme.borderColor ?? Colors.grey.shade300),
-      ),
-      child: Column(
-        children: [
-          if (_effectiveSearchEnabled) _buildSearchBar(theme, config),
-          SizedBox(
-            height: 200,
-            child: _buildCountryList(theme, config),
-          ),
-        ],
       ),
     );
   }
@@ -536,96 +514,23 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
       picker_config.CountryPickerConfig config) {
     final isSelected = _selectedCountry?.alpha2Code == country.alpha2Code;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(
-        color: isSelected
-            ? theme.countryItemSelectedColor
-            : theme.countryItemBackgroundColor,
-        borderRadius: theme.countryItemBorderRadius ??
-            const BorderRadius.all(Radius.circular(8)),
-        border: isSelected
-            ? Border.all(
-                color: theme.countryItemSelectedBorderColor ?? Colors.blue)
-            : null,
-      ),
-      child: ListTile(
-        onTap: widget.pickerType == CountryPickerType.none
-            ? null
-            : () => _onCountrySelected(country),
-        leading: widget.showFlag ? _buildFlag(country, theme, config) : null,
-        title:
-            widget.showCountryName ? _buildCountryName(country, theme) : null,
-        subtitle: widget.showDialCode ? _buildDialCode(country, theme) : null,
-        trailing: isSelected
-            ? Icon(theme.selectedIcon ?? CountrifyIcons.circleCheckBig,
-                color: theme.countryItemSelectedIconColor)
-            : null,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      ),
-    );
-  }
-
-  Widget _buildFlag(Country country, CountryPickerTheme theme,
-      picker_config.CountryPickerConfig config) {
-    return Container(
-      width: widget.flagSize.width,
-      height: widget.flagSize.height,
-      decoration: BoxDecoration(
-        borderRadius: widget.flagShape == picker_config.FlagShape.circular
-            ? BorderRadius.circular(widget.flagSize.width / 2)
-            : widget.flagBorderRadius,
-        border: widget.flagBorderColor != null
-            ? Border.all(
-                color: widget.flagBorderColor!, width: widget.flagBorderWidth)
-            : null,
-        boxShadow: widget.flagShadowColor != null
-            ? [
-                BoxShadow(
-                  color: widget.flagShadowColor!,
-                  blurRadius: widget.flagShadowBlur,
-                  offset: widget.flagShadowOffset,
-                ),
-              ]
-            : null,
-      ),
-      child: ClipRRect(
-        borderRadius: widget.flagShape == picker_config.FlagShape.circular
-            ? BorderRadius.circular(widget.flagSize.width / 2)
-            : widget.flagBorderRadius,
-        child: Image.asset(
-          country.flagImagePath,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return ColoredBox(
-              color: Colors.grey.shade300,
-              child: Center(
-                child: Text(
-                  country.flagEmoji,
-                  style: theme.flagEmojiTextStyle?.copyWith(
-                        fontSize: widget.flagSize.width * 0.6,
-                      ) ??
-                      TextStyle(fontSize: widget.flagSize.width * 0.6),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCountryName(Country country, CountryPickerTheme theme) {
-    return Text(
-      _displayName(country),
-      style: theme.countryNameTextStyle,
-    );
-  }
-
-  Widget _buildDialCode(Country country, CountryPickerTheme theme) {
-    return Text(
-      '+${country.callingCodes.first}',
-      style: theme.countrySubtitleTextStyle,
+    return CountryListTile(
+      country: country,
+      onTap: widget.pickerMode == CountryPickerMode.none
+          ? (_) {}
+          : _onCountrySelected,
+      isSelected: isSelected,
+      showFlag: widget.showFlag,
+      showCountryName: widget.showCountryName,
+      showDialCode: widget.showDialCode,
+      flagSize: widget.flagSize,
+      flagBorderRadius: widget.flagBorderRadius,
+      countryNameStyle: theme.countryNameTextStyle,
+      dialCodeStyle: theme.countrySubtitleTextStyle,
+      selectedColor: theme.countryItemSelectedColor,
+      selectedIconColor: theme.countryItemSelectedIconColor,
+      selectedIcon: theme.selectedIcon ?? CountrifyIcons.circleCheckBig,
+      displayName: _displayName(country),
     );
   }
 
