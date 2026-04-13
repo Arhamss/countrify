@@ -100,6 +100,7 @@ class Country {
     List<String>? borders,
     bool? isIndependent,
     bool? isUnMember,
+    String? largestCity,
   }) {
     return Country(
       name: name ?? this.name,
@@ -122,6 +123,7 @@ class Country {
       borders: borders ?? this.borders,
       isIndependent: isIndependent ?? this.isIndependent,
       isUnMember: isUnMember ?? this.isUnMember,
+      largestCity: largestCity ?? this.largestCity,
     );
   }
 

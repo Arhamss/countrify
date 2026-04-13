@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:countrify/countrify.dart';
 
@@ -45,6 +46,40 @@ void main() {
       expect(country.borders, ['CAN', 'MEX']);
       expect(country.isIndependent, true);
       expect(country.isUnMember, true);
+    });
+
+    test('copyWith should handle largestCity correctly', () {
+      final country = Country(
+        name: 'United States',
+        nameTranslations: {'en': 'United States'},
+        alpha2Code: 'US',
+        alpha3Code: 'USA',
+        numericCode: '840',
+        flagEmoji: '🇺🇸',
+        flagImagePath: 'packages/countrify/src/flag_images/US.png',
+        capital: 'Washington, D.C.',
+        region: 'Americas',
+        subregion: 'Northern America',
+        population: 331002651,
+        area: 9833517.0,
+        callingCodes: ['1'],
+        topLevelDomains: ['.us'],
+        currencies: [],
+        languages: [],
+        timezones: [],
+        borders: [],
+        isIndependent: true,
+        isUnMember: true,
+        largestCity: 'New York City',
+      );
+
+      // copyWith with new largestCity should change it
+      final updated = country.copyWith(largestCity: 'Los Angeles');
+      expect(updated.largestCity, 'Los Angeles');
+
+      // copyWith with no args should preserve largestCity
+      final copied = country.copyWith();
+      expect(copied.largestCity, 'New York City');
     });
 
     test('should support equality comparison', () {
@@ -397,6 +432,50 @@ void main() {
 
       expect(language1, equals(language2));
       expect(language1, isNot(equals(language3)));
+    });
+  });
+
+  group('CountrifyFieldStyle', () {
+    test('toInputDecoration uses fillColor when not focused', () {
+      final style = CountrifyFieldStyle(
+        filled: true,
+        fillColor: Colors.white,
+        focusedFillColor: Colors.blue.shade50,
+      );
+
+      final decoration = style.toInputDecoration(isFocused: false);
+      expect(decoration.fillColor, Colors.white);
+    });
+
+    test('toInputDecoration uses focusedFillColor when focused', () {
+      final style = CountrifyFieldStyle(
+        filled: true,
+        fillColor: Colors.white,
+        focusedFillColor: Colors.blue.shade50,
+      );
+
+      final decoration = style.toInputDecoration(isFocused: true);
+      expect(decoration.fillColor, Colors.blue.shade50);
+    });
+
+    test('toInputDecoration falls back to fillColor when focusedFillColor is null', () {
+      const style = CountrifyFieldStyle(
+        filled: true,
+        fillColor: Colors.white,
+      );
+
+      final decoration = style.toInputDecoration(isFocused: true);
+      expect(decoration.fillColor, Colors.white);
+    });
+
+    test('copyWith preserves focusedFillColor', () {
+      final style = CountrifyFieldStyle(
+        focusedFillColor: Colors.blue.shade50,
+      );
+
+      final copied = style.copyWith(fillColor: Colors.red);
+      expect(copied.focusedFillColor, Colors.blue.shade50);
+      expect(copied.fillColor, Colors.red);
     });
   });
 }
