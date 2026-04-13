@@ -14,7 +14,7 @@ class Country {
     required this.flagEmoji,
     required this.flagImagePath,
     required this.capital,
-    required this.region, required this.subregion, required this.population, required this.area, required this.callingCodes, required this.topLevelDomains, required this.currencies, required this.languages, required this.timezones, required this.borders, required this.isIndependent, required this.isUnMember, this.largestCity,
+    required this.region, required this.subregion, required this.population, required this.area, required this.callingCodes, required this.topLevelDomains, required this.currencies, required this.languages, required this.timezones, required this.borders, required this.isIndependent, required this.isUnMember, this.largestCity, this.phoneMetadata,
   });
 
   /// The common name of the country
@@ -80,6 +80,9 @@ class Country {
   /// Whether the country is a UN member
   final bool isUnMember;
 
+  /// Phone number metadata for lightweight validation
+  final PhoneMetadata? phoneMetadata;
+
   /// Creates a copy of this country with the given fields replaced
   Country copyWith({
     String? name,
@@ -103,6 +106,7 @@ class Country {
     bool? isIndependent,
     bool? isUnMember,
     String? largestCity,
+    PhoneMetadata? phoneMetadata,
   }) {
     return Country(
       name: name ?? this.name,
@@ -126,6 +130,7 @@ class Country {
       isIndependent: isIndependent ?? this.isIndependent,
       isUnMember: isUnMember ?? this.isUnMember,
       largestCity: largestCity ?? this.largestCity,
+      phoneMetadata: phoneMetadata ?? this.phoneMetadata,
     );
   }
 

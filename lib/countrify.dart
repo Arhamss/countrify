@@ -18,6 +18,7 @@ export 'src/l10n/country_name_l10n.dart';
 
 export 'src/models/country.dart';
 export 'src/models/country_code.dart';
+export 'src/models/phone_metadata.dart';
 
 export 'src/utils/country_utils.dart';
 
