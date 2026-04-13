@@ -1,3 +1,37 @@
+## 2.1.0
+
+### Breaking Changes
+- Removed legacy `CountryPicker` widget — use the new `CountryPicker` (formerly `ComprehensiveCountryPicker`)
+- Removed `ModalCountryPicker` and `ModalComprehensivePicker` — use `CountryPickerMode` parameter on widgets instead
+- Replaced `PickerOpenType` and `PickerDisplayType` with unified `CountryPickerMode` enum
+- Renamed `onCountrySelected` to `onChanged` across all widgets
+- Renamed `onPhoneNumberChanged` to `onChanged` on `PhoneNumberField`
+- Renamed `pickerType` to `pickerMode` on all widgets
+
+### Added
+- `focusedFillColor` on `CountrifyFieldStyle` — separate fill color when field has focus
+- `CountryFlag` widget — standalone, accessible flag display (public API)
+- `CountryListTile` widget — reusable country row with selection support (public API)
+- `CountrySearchBar` widget — debounced, theme-aware search field (public API)
+- `CountryListView` widget — filtered country list with empty state (public API)
+- `CountryEmptyState` widget — customizable empty state display (public API)
+- `CountryPickerMode` — unified enum for all picker display modes
+- `PhoneMetadata` — lightweight phone number length validation (zero dependencies)
+- Auto-validation on `PhoneNumberField` when `PhoneMetadata` is available
+- Hint text from example phone numbers
+- Accessibility: `Semantics` labels on all flags, list items, and interactive elements
+- Accessibility: `Tooltip` on all icon buttons
+- Per-locale l10n files with lazy loading (was single 33K-line file)
+
+### Fixed
+- `Country.copyWith()` now includes `largestCity` parameter
+
+### Internal
+- Extracted shared widgets (flag, list tile, search bar, list view, empty state)
+- Each widget in its own file/folder following clean architecture
+- Widget tests for shared components
+- Comprehensive example app with 5 demo tabs
+
 ## 2.0.0
 
 ### Breaking Changes
