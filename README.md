@@ -17,7 +17,7 @@
 
 ---
 
-A comprehensive Flutter package for country selection with **250 countries**, **132 language translations**, beautiful UI, extensive theming, and **zero runtime dependencies**.
+A comprehensive Flutter package for country selection with **250 countries**, **5,296 states / provinces**, **153,823 cities**, **132 language translations**, beautiful UI, extensive theming, and **zero runtime dependencies**.
 
 </div>
 
@@ -39,6 +39,11 @@ A comprehensive Flutter package for country selection with **250 countries**, **
   - [PhoneNumberField](#phonenumberfield)
   - [CountryDropdownField](#countrydropdownfield)
   - [PhoneCodePicker](#phonecodepicker)
+  - [CountryStateCityField](#countrystatecityfield)
+  - [StatePicker](#statepicker)
+  - [CityPicker](#citypicker)
+  - [StateDropdownField](#statedropdownfield)
+  - [CityDropdownField](#citydropdownfield)
   - [Shared Building Blocks](#shared-building-blocks)
 - [Theming](#theming)
   - [Built-in Themes](#built-in-themes)
@@ -395,6 +400,199 @@ PhoneCodePicker(
   searchEnabled: true,
   pickerMode: CountryPickerMode.bottomSheet,
 )
+```
+
+---
+
+### CountryStateCityField
+
+A composite cascading form widget that captures a complete
+**country → state → city** selection with three stacked dropdowns. Country
+data loads eagerly, states and cities are loaded lazily on demand from
+bundled assets, and selecting a parent clears the children.
+
+```dart
+CountryStateCityField(
+  initialCountryCode: CountryCode.us,
+  onChanged: (selection) {
+    print(selection.country?.name);   // e.g. "United States"
+    print(selection.state?.name);     // e.g. "California"
+    print(selection.city?.name);      // e.g. "San Francisco"
+  },
+  style: CountrifyFieldStyle.defaultStyle(),
+  searchEnabled: true,
+)
+```
+
+The dataset ships with **250 countries**, **5,296 states / provinces**, and
+**153,823 cities** — sourced from
+[dr5hn/countries-states-cities-database](https://github.com/dr5hn/countries-states-cities-database)
+and split into per-country / per-state JSON files under `assets/geo/` so
+only the records for the currently selected country / state are decoded.
+
+For programmatic access, use `GeoRepository`:
+
+```dart
+final repo = GeoRepository.instance;
+final states = await repo.statesOf('PK');     // List<CountryState>
+final cities = await repo.citiesOf(states.first.id); // List<City>
+```
+
+---
+
+### StatePicker
+
+Standalone picker for the states / provinces / regions of a single country.
+Supports four display modes (`bottomSheet`, `dialog`, `fullScreen`,
+`dropdown`) and is fully themeable.
+
+```dart
+StatePicker(
+  countryIso2: 'US',
+  initialStateId: 1416,
+  pickerMode: CountryPickerMode.bottomSheet,
+  sortBy: StateSortBy.name,          // or .type, .id
+  theme: GeoPickerTheme.light(),
+  config: const GeoPickerConfig(
+    title: 'Pick your state',
+    searchHintText: 'Search states',
+    hapticFeedback: true,
+  ),
+  customStateBuilder: (ctx, state, selected) => Row(
+    children: [
+      Expanded(child: Text(state.name)),
+      if (state.iso2 != null) Text(state.iso2!),
+    ],
+  ),
+  onStateSelected: (state) => print(state.name),
+)
+```
+
+Every picker supports:
+
+- **Display modes** via `pickerMode` — bottom sheet, dialog, full screen, dropdown, or `none` to suppress opening
+- **Sort order** via `sortBy`
+- **Accent-insensitive search** — `sao paulo` matches `São Paulo` (toggle via `GeoPickerConfig.accentInsensitiveSearch`)
+- **Debounced search** with configurable delay, initial query, and autofocus
+- **Live clear button** that reacts instantly to typing
+- **`onSearchChanged(query)`** and **`onResultsChanged(List<T>)`** callbacks for observing search state
+- **`customMatcher`** hook for fully custom matching logic (fuzzy search, ISO-only search, etc.)
+- **Theme** (`GeoPickerTheme`) — 35 visual properties + light/dark presets
+- **Config** (`GeoPickerConfig`) — behavior, haptics, heights, text labels
+- **Custom row builder** (`customStateBuilder`)
+- **Custom header / search / empty-state builders** for full control
+
+#### Search example
+
+```dart
+StatePicker(
+  countryIso2: 'BR',
+  config: const GeoPickerConfig(
+    initialSearchText: 'sao',            // Pre-fills the search field
+    searchDebounce: Duration(milliseconds: 200),
+    accentInsensitiveSearch: true,       // "sao paulo" matches "São Paulo"
+    autofocusSearch: true,
+  ),
+  onSearchChanged: (q) => print('typed: $q'),
+  onResultsChanged: (results) => print('${results.length} match'),
+  customMatcher: (state, query) =>
+      state.name.toLowerCase().contains(query) ||
+      (state.iso2?.toLowerCase() == query),
+  onStateSelected: (s) => print(s.name),
+)
+```
+
+Or build a completely custom search field using `customSearchBuilder`:
+
+```dart
+StatePicker(
+  countryIso2: 'US',
+  customSearchBuilder: (context, controller) => TextField(
+    controller: controller,               // Wiring the provided controller is required
+    decoration: InputDecoration(
+      prefixIcon: const Icon(Icons.travel_explore),
+      labelText: 'Find your state',
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+    ),
+  ),
+  onStateSelected: (s) => print(s.name),
+)
+```
+
+---
+
+### CityPicker
+
+Mirrors `StatePicker` but takes a `stateId` instead of `countryIso2`.
+
+```dart
+CityPicker(
+  stateId: 1416,
+  initialCityId: 111825,
+  pickerMode: CountryPickerMode.dialog,
+  showCoordinates: true,
+  sortBy: CitySortBy.name,
+  theme: GeoPickerTheme.dark(),
+  onCitySelected: (city) => print('${city.name} (${city.latitude}, ${city.longitude})'),
+)
+```
+
+---
+
+### StateDropdownField
+
+Form-style dropdown trigger that opens `StatePicker`. Uses
+`CountrifyFieldStyle` for decoration so it matches `PhoneNumberField` and
+`CountryDropdownField` out of the box.
+
+```dart
+String? _countryIso2 = 'US';
+CountryState? _state;
+
+StateDropdownField(
+  countryIso2: _countryIso2,                // null → disabled
+  initialStateId: _state?.id,
+  style: CountrifyFieldStyle.defaultStyle().copyWith(labelText: 'State'),
+  pickerTheme: GeoPickerTheme.light(),
+  pickerConfig: const GeoPickerConfig(searchEnabled: true),
+  pickerMode: CountryPickerMode.bottomSheet,
+  sortBy: StateSortBy.name,
+  showType: true,                            // "province" / "region" as subtitle
+  onChanged: (s) => setState(() => _state = s),
+)
+```
+
+Changing `countryIso2` automatically clears the selection and refetches
+states. The field shows an inline spinner while loading.
+
+---
+
+### CityDropdownField
+
+Companion of `StateDropdownField` — cascades from `stateId`.
+
+```dart
+CityDropdownField(
+  stateId: _state?.id,
+  initialCityId: _city?.id,
+  style: CountrifyFieldStyle.outlineStyle(),
+  pickerMode: CountryPickerMode.bottomSheet,
+  showCoordinates: false,
+  onChanged: (c) => setState(() => _city = c),
+)
+```
+
+---
+
+#### Regenerating the bundled dataset
+
+When the upstream dataset releases a new revision, regenerate the vendored
+assets with:
+
+```bash
+dart run tool/sync_geo_data.dart                     # latest master
+dart run tool/sync_geo_data.dart --ref v2.6          # specific tag
+dart run tool/sync_geo_data.dart --input path.json   # offline source
 ```
 
 ---

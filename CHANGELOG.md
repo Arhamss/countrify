@@ -1,3 +1,106 @@
+## 2.2.0
+
+Full country → state → city support with standalone pickers, cascading form
+widget, and a polished search experience. Purely additive — no existing
+widget, model, utility, or export was modified or removed.
+
+### Added — Data
+
+- Bundled the dr5hn `countries-states-cities-database` revision current as
+  of release time: **250 countries**, **5,296 states / provinces**, and
+  **153,823 cities**.
+- Split the upstream dataset into per-country and per-state JSON files
+  (`assets/geo/states/{ISO2}.json`, `assets/geo/cities/{stateId}.json`) so
+  only the records the user actually selects are decoded into memory. Total
+  bundled size ~28 MB across ~5,500 tiny files.
+- `tool/sync_geo_data.dart` — regenerates the split assets from upstream.
+  Supports `--ref <tag>` and `--input <path>` for reproducible rebuilds.
+
+### Added — Models
+
+- `CountryState` — state / province / region with `id`, `name`,
+  `countryIso2`, ISO 3166-2 subdivision code, `type`, lat/lng, and
+  `iso3166Code` helper.
+- `City` — city / populated place with `id`, `name`, `stateId`, lat/lng.
+- Both are `@immutable`, implement value equality, and document the JSON
+  schema used by the bundled assets.
+
+### Added — Data layer
+
+- `GeoRepository` — lazy loader backed by the bundled assets. Caches
+  per-country states and per-state cities in memory, deduplicates concurrent
+  loads, returns `const []` on missing assets, and accepts an injectable
+  `AssetBundle` for tests. Exposed as a singleton via
+  `GeoRepository.instance`.
+
+### Added — Widgets
+
+- `StatePicker` — standalone state / province picker with 4 display modes
+  (`bottomSheet`, `dialog`, `fullScreen`, `dropdown`), sort orders
+  (`StateSortBy.name` / `type` / `id`), and fully customizable row / header
+  / search / empty-state builders.
+- `CityPicker` — standalone city picker mirroring `StatePicker`'s surface
+  (`CitySortBy.name` / `id`, `showCoordinates`, same custom-builder hooks).
+- `StateDropdownField` — form-style trigger that opens `StatePicker`.
+  Reactive to `countryIso2` changes (auto-clears selection + re-fetches).
+- `CityDropdownField` — form-style trigger that opens `CityPicker`.
+  Reactive to `stateId` changes.
+- `CountryStateCityField` — composite cascading widget that stacks
+  `CountryDropdownField` + `StateDropdownField` + `CityDropdownField` for a
+  complete country → state → city form input.
+- `CountryStateCitySelection` — immutable selection snapshot with
+  `isComplete` getter and value equality.
+- `GeoItemPicker<T>` — generic picker scaffold powering the state + city
+  pickers. Publicly exported for custom adapters on top of the same modes,
+  theming, and search pipeline.
+
+### Added — Theming & configuration
+
+- `GeoPickerTheme` — 35 visual properties shared by state + city pickers
+  (backgrounds, header, search field, item rows, icons, borders, shadows,
+  scrollbar, empty state). Includes `GeoPickerTheme.light()` and
+  `GeoPickerTheme.dark()` presets.
+- `GeoPickerConfig` — behavior + text knobs (title, search hint,
+  empty-state text, debounce, haptics, min/max height, scrollbar, content
+  padding, item extent, selected-icon toggle, initial search text,
+  autofocus, accent-insensitive search flag).
+- `StateSortBy` / `CitySortBy` enums.
+- Typedefs: `StateItemBuilder`, `CityItemBuilder`, `StateMatcher`,
+  `CityMatcher`, `GeoItemBuilder`, `GeoHeaderBuilder`, `GeoSearchBuilder`,
+  `GeoEmptyStateBuilder`.
+
+### Added — Search
+
+- **Accent-insensitive search** (default on) — `sao paulo` matches `São
+  Paulo`, `lodz` matches `Łódź`, etc. Toggle via
+  `GeoPickerConfig.accentInsensitiveSearch`.
+- **Live clear button** — the trailing ✕ appears/disappears instantly while
+  typing, powered by a `ValueListenableBuilder` on the controller (filter
+  stays debounced).
+- `onSearchChanged(String query)` — fires with every debounced change on
+  `StatePicker`, `CityPicker`, `StateDropdownField`, `CityDropdownField`,
+  and `GeoItemPicker`.
+- `onResultsChanged(List<T> results)` — fires whenever the filtered list
+  changes (including initial load). Useful for rendering "N results"
+  counters outside the picker.
+- `customMatcher` — overridable matching function on all four state / city
+  widgets. Receives a pre-normalized query so custom matchers focus purely
+  on comparison logic.
+- `GeoPickerConfig.initialSearchText` — pre-populates the search field on
+  open.
+- `GeoPickerConfig.autofocusSearch` — requests keyboard focus on mount
+  (ideal for full-screen mode).
+- `SearchNormalizer` — public utility exposing `.basic()` (trim +
+  lower-case) and `.foldAccents()` for use in custom matchers and external
+  logic.
+
+### Testing
+
+- Added test coverage for models, `GeoRepository`, `SearchNormalizer`,
+  `GeoPickerTheme` / `GeoPickerConfig`, and every new widget
+  (`StatePicker`, `CityPicker`, `StateDropdownField`, `CityDropdownField`,
+  `CountryStateCityField`).
+
 ## 2.1.0
 
 ### Breaking Changes

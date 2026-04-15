@@ -1,10 +1,11 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:countrify/countrify.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('PhoneMetadata', () {
     test('isValidLength returns true for valid length', () {
-      const meta = PhoneMetadata(minLength: 10, maxLength: 10, exampleNumber: '2025551234');
+      const meta = PhoneMetadata(
+          minLength: 10, maxLength: 10, exampleNumber: '2025551234');
       expect(meta.isValidLength('2025551234'), isTrue);
     });
 

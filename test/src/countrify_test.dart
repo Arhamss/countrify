@@ -1,11 +1,11 @@
+import 'package:countrify/countrify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:countrify/countrify.dart';
 
 void main() {
   group('Country Model Tests', () {
     test('should create a country with all properties', () {
-      final country = Country(
+      const country = Country(
         name: 'United States',
         nameTranslations: {'en': 'United States'},
         alpha2Code: 'US',
@@ -17,11 +17,19 @@ void main() {
         region: 'Americas',
         subregion: 'Northern America',
         population: 331002651,
-        area: 9833517.0,
+        area: 9833517,
         callingCodes: ['1'],
         topLevelDomains: ['.us'],
-        currencies: [Currency(code: 'USD', name: 'United States dollar', symbol: '\$')],
-        languages: [Language(iso6391: 'en', iso6392: 'eng', name: 'English', nativeName: 'English')],
+        currencies: [
+          Currency(code: 'USD', name: 'United States dollar', symbol: r'$')
+        ],
+        languages: [
+          Language(
+              iso6391: 'en',
+              iso6392: 'eng',
+              name: 'English',
+              nativeName: 'English')
+        ],
         timezones: ['UTC-05:00'],
         borders: ['CAN', 'MEX'],
         isIndependent: true,
@@ -49,7 +57,7 @@ void main() {
     });
 
     test('copyWith should handle largestCity correctly', () {
-      final country = Country(
+      const country = Country(
         name: 'United States',
         nameTranslations: {'en': 'United States'},
         alpha2Code: 'US',
@@ -61,7 +69,7 @@ void main() {
         region: 'Americas',
         subregion: 'Northern America',
         population: 331002651,
-        area: 9833517.0,
+        area: 9833517,
         callingCodes: ['1'],
         topLevelDomains: ['.us'],
         currencies: [],
@@ -83,7 +91,7 @@ void main() {
     });
 
     test('should support equality comparison', () {
-      final country1 = Country(
+      const country1 = Country(
         name: 'United States',
         nameTranslations: {'en': 'United States'},
         alpha2Code: 'US',
@@ -95,7 +103,7 @@ void main() {
         region: 'Americas',
         subregion: 'Northern America',
         population: 331002651,
-        area: 9833517.0,
+        area: 9833517,
         callingCodes: ['1'],
         topLevelDomains: ['.us'],
         currencies: [],
@@ -106,7 +114,7 @@ void main() {
         isUnMember: true,
       );
 
-      final country2 = Country(
+      const country2 = Country(
         name: 'United States',
         nameTranslations: {'en': 'United States'},
         alpha2Code: 'US',
@@ -118,7 +126,7 @@ void main() {
         region: 'Americas',
         subregion: 'Northern America',
         population: 331002651,
-        area: 9833517.0,
+        area: 9833517,
         callingCodes: ['1'],
         topLevelDomains: ['.us'],
         currencies: [],
@@ -171,19 +179,24 @@ void main() {
     test('should search countries by name', () {
       final results = CountryUtils.searchCountries('united');
       expect(results, isNotEmpty);
-      expect(results.any((country) => country.name.toLowerCase().contains('united')), isTrue);
+      expect(
+          results
+              .any((country) => country.name.toLowerCase().contains('united')),
+          isTrue);
     });
 
     test('should get countries by region', () {
       final europeanCountries = CountryUtils.getCountriesByRegion('Europe');
       expect(europeanCountries, isNotEmpty);
-      expect(europeanCountries.every((country) => country.region == 'Europe'), isTrue);
+      expect(europeanCountries.every((country) => country.region == 'Europe'),
+          isTrue);
     });
 
     test('should get independent countries', () {
       final independentCountries = CountryUtils.getIndependentCountries();
       expect(independentCountries, isNotEmpty);
-      expect(independentCountries.every((country) => country.isIndependent), isTrue);
+      expect(independentCountries.every((country) => country.isIndependent),
+          isTrue);
     });
 
     test('should get UN member countries', () {
@@ -209,9 +222,9 @@ void main() {
     });
 
     test('should format area', () {
-      expect(CountryUtils.formatArea(1000.0), '1,000');
-      expect(CountryUtils.formatArea(1000000.0), '1,000,000');
-      expect(CountryUtils.formatArea(1234567.0), '1,234,567');
+      expect(CountryUtils.formatArea(1000), '1,000');
+      expect(CountryUtils.formatArea(1000000), '1,000,000');
+      expect(CountryUtils.formatArea(1234567), '1,234,567');
     });
 
     test('should get country flag emoji', () {
@@ -231,13 +244,13 @@ void main() {
 
   group('CountryNameL10n Tests', () {
     test('should have 132 supported locales', () {
-      final locales = CountryNameL10n.supportedLocales;
+      const locales = CountryNameL10n.supportedLocales;
       expect(locales, isNotEmpty);
       expect(locales.length, 132);
     });
 
     test('should contain common language codes', () {
-      final locales = CountryNameL10n.supportedLocales;
+      const locales = CountryNameL10n.supportedLocales;
       expect(locales, contains('en'));
       expect(locales, contains('ar'));
       expect(locales, contains('de'));
@@ -299,16 +312,13 @@ void main() {
       final usa = CountryUtils.getCountryByAlpha2Code('US');
       expect(usa, isNotNull);
 
-      final nameInGerman =
-          CountryUtils.getCountryNameInLanguage(usa!, 'de');
+      final nameInGerman = CountryUtils.getCountryNameInLanguage(usa!, 'de');
       expect(nameInGerman, contains('Vereinigte Staaten'));
 
-      final nameInFrench =
-          CountryUtils.getCountryNameInLanguage(usa, 'fr');
+      final nameInFrench = CountryUtils.getCountryNameInLanguage(usa, 'fr');
       expect(nameInFrench, contains('États-Unis'));
 
-      final nameInSpanish =
-          CountryUtils.getCountryNameInLanguage(usa, 'es');
+      final nameInSpanish = CountryUtils.getCountryNameInLanguage(usa, 'es');
       expect(nameInSpanish, contains('Estados Unidos'));
     });
 
@@ -316,13 +326,12 @@ void main() {
       final usa = CountryUtils.getCountryByAlpha2Code('US');
       expect(usa, isNotNull);
 
-      final name =
-          CountryUtils.getCountryNameInLanguage(usa!, 'zzz');
+      final name = CountryUtils.getCountryNameInLanguage(usa!, 'zzz');
       expect(name, 'United States');
     });
 
     test('should prefer nameTranslations over built-in l10n', () {
-      final country = Country(
+      const country = Country(
         name: 'Test Country',
         nameTranslations: {'de': 'Custom German Name'},
         alpha2Code: 'US',
@@ -345,8 +354,7 @@ void main() {
         isUnMember: false,
       );
 
-      final name =
-          CountryUtils.getCountryNameInLanguage(country, 'de');
+      final name = CountryUtils.getCountryNameInLanguage(country, 'de');
       expect(name, 'Custom German Name');
     });
 
@@ -354,8 +362,7 @@ void main() {
       final usa = CountryUtils.getCountryByAlpha2Code('US');
       expect(usa, isNotNull);
 
-      final allNames =
-          CountryUtils.getCountryNamesInAllLanguages(usa!);
+      final allNames = CountryUtils.getCountryNamesInAllLanguages(usa!);
       expect(allNames, isNotEmpty);
       expect(allNames.length, greaterThanOrEqualTo(130));
       expect(allNames['de'], isNotNull);
@@ -374,21 +381,21 @@ void main() {
 
   group('Currency Model Tests', () {
     test('should create a currency with all properties', () {
-      final currency = Currency(
+      const currency = Currency(
         code: 'USD',
         name: 'United States dollar',
-        symbol: '\$',
+        symbol: r'$',
       );
 
       expect(currency.code, 'USD');
       expect(currency.name, 'United States dollar');
-      expect(currency.symbol, '\$');
+      expect(currency.symbol, r'$');
     });
 
     test('should support equality comparison', () {
-      final currency1 = Currency(code: 'USD', name: 'US Dollar', symbol: '\$');
-      final currency2 = Currency(code: 'USD', name: 'US Dollar', symbol: '\$');
-      final currency3 = Currency(code: 'EUR', name: 'Euro', symbol: '€');
+      const currency1 = Currency(code: 'USD', name: 'US Dollar', symbol: r'$');
+      const currency2 = Currency(code: 'USD', name: 'US Dollar', symbol: r'$');
+      const currency3 = Currency(code: 'EUR', name: 'Euro', symbol: '€');
 
       expect(currency1, equals(currency2));
       expect(currency1, isNot(equals(currency3)));
@@ -397,7 +404,7 @@ void main() {
 
   group('Language Model Tests', () {
     test('should create a language with all properties', () {
-      final language = Language(
+      const language = Language(
         iso6391: 'en',
         iso6392: 'eng',
         name: 'English',
@@ -411,19 +418,19 @@ void main() {
     });
 
     test('should support equality comparison', () {
-      final language1 = Language(
+      const language1 = Language(
         iso6391: 'en',
         iso6392: 'eng',
         name: 'English',
         nativeName: 'English',
       );
-      final language2 = Language(
+      const language2 = Language(
         iso6391: 'en',
         iso6392: 'eng',
         name: 'English',
         nativeName: 'English',
       );
-      final language3 = Language(
+      const language3 = Language(
         iso6391: 'es',
         iso6392: 'spa',
         name: 'Spanish',
@@ -443,7 +450,7 @@ void main() {
         focusedFillColor: Colors.blue.shade50,
       );
 
-      final decoration = style.toInputDecoration(isFocused: false);
+      final decoration = style.toInputDecoration();
       expect(decoration.fillColor, Colors.white);
     });
 
@@ -458,7 +465,9 @@ void main() {
       expect(decoration.fillColor, Colors.blue.shade50);
     });
 
-    test('toInputDecoration falls back to fillColor when focusedFillColor is null', () {
+    test(
+        'toInputDecoration falls back to fillColor when focusedFillColor is null',
+        () {
       const style = CountrifyFieldStyle(
         filled: true,
         fillColor: Colors.white,

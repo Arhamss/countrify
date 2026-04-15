@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:countrify/src/l10n/country_name_l10n.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('CountryNameL10n', () {

@@ -1,7 +1,7 @@
 import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:countrify/src/models/country.dart';
-import 'package:countrify/src/widgets/country_picker_mode.dart';
 import 'package:countrify/src/widgets/countrify_field_style.dart';
+import 'package:countrify/src/widgets/country_picker_mode.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
 import 'package:countrify/src/widgets/shared/country_flag.dart';
 import 'package:flutter/material.dart';
@@ -96,8 +96,7 @@ class PhonePrefix extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
               ),
-            if (showDropdownIcon &&
-                pickerMode != CountryPickerMode.none) ...[
+            if (showDropdownIcon && pickerMode != CountryPickerMode.none) ...[
               const SizedBox(width: 4),
               Semantics(
                 label: 'Open country picker',

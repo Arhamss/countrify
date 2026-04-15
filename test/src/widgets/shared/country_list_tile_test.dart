@@ -1,6 +1,4 @@
 import 'package:countrify/countrify.dart';
-import 'package:countrify/src/widgets/shared/country_flag.dart';
-import 'package:countrify/src/widgets/shared/country_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -45,8 +43,7 @@ void main() {
       expect(find.byType(CountryFlag), findsOneWidget);
     });
 
-    testWidgets('shows checkmark icon when isSelected is true',
-        (tester) async {
+    testWidgets('shows checkmark icon when isSelected is true', (tester) async {
       await tester.pumpWidget(buildSubject(isSelected: true));
 
       expect(find.byIcon(Icons.check), findsOneWidget);

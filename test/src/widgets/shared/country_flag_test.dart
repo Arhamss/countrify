@@ -1,5 +1,4 @@
 import 'package:countrify/countrify.dart';
-import 'package:countrify/src/widgets/shared/country_flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

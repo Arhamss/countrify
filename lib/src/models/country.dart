@@ -1,4 +1,4 @@
-import 'phone_metadata.dart';
+import 'package:countrify/src/models/phone_metadata.dart';
 
 /// {@template country}
 /// A model representing a country with all its relevant information
@@ -14,7 +14,20 @@ class Country {
     required this.flagEmoji,
     required this.flagImagePath,
     required this.capital,
-    required this.region, required this.subregion, required this.population, required this.area, required this.callingCodes, required this.topLevelDomains, required this.currencies, required this.languages, required this.timezones, required this.borders, required this.isIndependent, required this.isUnMember, this.largestCity, this.phoneMetadata,
+    required this.region,
+    required this.subregion,
+    required this.population,
+    required this.area,
+    required this.callingCodes,
+    required this.topLevelDomains,
+    required this.currencies,
+    required this.languages,
+    required this.timezones,
+    required this.borders,
+    required this.isIndependent,
+    required this.isUnMember,
+    this.largestCity,
+    this.phoneMetadata,
   });
 
   /// The common name of the country

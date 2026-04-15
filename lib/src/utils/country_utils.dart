@@ -1,7 +1,7 @@
-import '../data/all_countries.dart';
-import '../l10n/country_name_l10n.dart';
-import '../models/country.dart';
-import '../models/country_code.dart';
+import 'package:countrify/src/data/all_countries.dart';
+import 'package:countrify/src/l10n/country_name_l10n.dart';
+import 'package:countrify/src/models/country.dart';
+import 'package:countrify/src/models/country_code.dart';
 
 /// {@template country_utils}
 /// Utility functions for working with country data
@@ -123,7 +123,7 @@ class CountryUtils {
     if (country == null) return [];
 
     return country.borders
-        .map((borderCode) => getCountryByAlpha3Code(borderCode))
+        .map(getCountryByAlpha3Code)
         .where((borderCountry) => borderCountry != null)
         .cast<Country>()
         .toList();
@@ -145,22 +145,22 @@ class CountryUtils {
 
   /// Get countries sorted by population (descending)
   static List<Country> getCountriesSortedByPopulation() {
-    final countries = List<Country>.from(AllCountries.all);
-    countries.sort((a, b) => b.population.compareTo(a.population));
+    final countries = List<Country>.from(AllCountries.all)
+      ..sort((a, b) => b.population.compareTo(a.population));
     return countries;
   }
 
   /// Get countries sorted by area (descending)
   static List<Country> getCountriesSortedByArea() {
-    final countries = List<Country>.from(AllCountries.all);
-    countries.sort((a, b) => b.area.compareTo(a.area));
+    final countries = List<Country>.from(AllCountries.all)
+      ..sort((a, b) => b.area.compareTo(a.area));
     return countries;
   }
 
   /// Get countries sorted by name (ascending)
   static List<Country> getCountriesSortedByName() {
-    final countries = List<Country>.from(AllCountries.all);
-    countries.sort((a, b) => a.name.compareTo(b.name));
+    final countries = List<Country>.from(AllCountries.all)
+      ..sort((a, b) => a.name.compareTo(b.name));
     return countries;
   }
 
@@ -360,7 +360,7 @@ class CountryUtils {
   /// Get country calling code
   static String? getCountryCallingCode(String alpha2Code) {
     final country = getCountryByAlpha2Code(alpha2Code);
-    return country?.callingCodes.isNotEmpty == true
+    return country?.callingCodes.isNotEmpty ?? false
         ? country!.callingCodes.first
         : null;
   }
@@ -368,7 +368,7 @@ class CountryUtils {
   /// Get country currency
   static Currency? getCountryCurrency(String alpha2Code) {
     final country = getCountryByAlpha2Code(alpha2Code);
-    return country?.currencies.isNotEmpty == true
+    return country?.currencies.isNotEmpty ?? false
         ? country!.currencies.first
         : null;
   }
@@ -376,7 +376,7 @@ class CountryUtils {
   /// Get country primary language
   static Language? getCountryPrimaryLanguage(String alpha2Code) {
     final country = getCountryByAlpha2Code(alpha2Code);
-    return country?.languages.isNotEmpty == true
+    return country?.languages.isNotEmpty ?? false
         ? country!.languages.first
         : null;
   }
@@ -384,7 +384,7 @@ class CountryUtils {
   /// Get country timezone
   static String? getCountryTimezone(String alpha2Code) {
     final country = getCountryByAlpha2Code(alpha2Code);
-    return country?.timezones.isNotEmpty == true
+    return country?.timezones.isNotEmpty ?? false
         ? country!.timezones.first
         : null;
   }

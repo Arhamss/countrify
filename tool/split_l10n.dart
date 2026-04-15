@@ -7,14 +7,14 @@ void main() {
 
   // Extract supportedLocales list
   final supportedLocalesMatch = RegExp(
-    r"static const supportedLocales = <String>\[\s*([\s\S]*?)\s*\];",
+    r'static const supportedLocales = <String>\[\s*([\s\S]*?)\s*\];',
   ).firstMatch(content);
   if (supportedLocalesMatch == null) {
     print('ERROR: Could not find supportedLocales');
     exit(1);
   }
   final localeListRaw = supportedLocalesMatch.group(1)!;
-  final locales = RegExp(r"'([^']+)'")
+  final locales = RegExp("'([^']+)'")
       .allMatches(localeListRaw)
       .map((m) => m.group(1)!)
       .toList();
@@ -30,7 +30,9 @@ void main() {
     // Build regex to match the static const block
     final escapedLocale = RegExp.escape(locale);
     final pattern = RegExp(
-      r"static const _" + escapedLocale + r"\s*=\s*<String,\s*String>\{([\s\S]*?)\};",
+      'static const _' +
+          escapedLocale +
+          r'\s*=\s*<String,\s*String>\{([\s\S]*?)\};',
     );
     final match = pattern.firstMatch(content);
     if (match == null) {
@@ -44,85 +46,96 @@ void main() {
     final varName = 'l10n$varSuffix';
     final fileName = 'l10n_$locale.dart';
 
-    final fileContent = StringBuffer();
-    fileContent.writeln('// Generated — do not edit by hand.');
-    fileContent.writeln('/// Country name translations for $locale.');
-    fileContent.writeln('const Map<String, String> $varName = <String, String>{$mapEntries};');
+    final fileContent = StringBuffer()
+      ..writeln('// Generated — do not edit by hand.')
+      ..writeln('/// Country name translations for $locale.')
+      ..writeln(
+          'const Map<String, String> $varName = <String, String>{$mapEntries};');
 
-    File('${localeDir.path}/$fileName').writeAsStringSync(fileContent.toString());
+    File('${localeDir.path}/$fileName')
+        .writeAsStringSync(fileContent.toString());
     print('  Created locales/$fileName');
   }
 
   // Generate the new registry file
-  final registry = StringBuffer();
-  registry.writeln('// GENERATED FILE — DO NOT EDIT BY HAND.');
-  registry.writeln('// ignore_for_file: lines_longer_than_80_chars');
-  registry.writeln();
+  final registry = StringBuffer()
+    ..writeln('// GENERATED FILE — DO NOT EDIT BY HAND.')
+    ..writeln('// ignore_for_file: lines_longer_than_80_chars')
+    ..writeln();
 
   // Imports
   for (final locale in locales) {
-    registry.writeln("import 'package:countrify/src/l10n/locales/l10n_$locale.dart';");
+    registry.writeln(
+        "import 'package:countrify/src/l10n/locales/l10n_$locale.dart';");
   }
-  registry.writeln();
+  registry
+    ..writeln()
+    ..writeln('/// Provides country name translations keyed by')
+    ..writeln(
+        '/// ISO 639-1 language code and ISO 3166-1 alpha-2 country code.')
+    ..writeln('///')
+    ..writeln(
+        '/// All data is compile-time constant and has zero runtime dependencies.')
+    ..writeln('class CountryNameL10n {')
+    ..writeln('  CountryNameL10n._();')
+    ..writeln()
 
-  registry.writeln('/// Provides country name translations keyed by');
-  registry.writeln('/// ISO 639-1 language code and ISO 3166-1 alpha-2 country code.');
-  registry.writeln('///');
-  registry.writeln('/// All data is compile-time constant and has zero runtime dependencies.');
-  registry.writeln('class CountryNameL10n {');
-  registry.writeln('  CountryNameL10n._();');
-  registry.writeln();
-
-  // supportedLocales
-  registry.writeln('  /// All supported language / locale codes.');
-  registry.writeln('  static const supportedLocales = <String>[');
+    // supportedLocales
+    ..writeln('  /// All supported language / locale codes.')
+    ..writeln('  static const supportedLocales = <String>[');
   for (final locale in locales) {
     registry.writeln("    '$locale',");
   }
-  registry.writeln('  ];');
-  registry.writeln();
+  registry
+    ..writeln('  ];')
+    ..writeln()
 
-  // Cache
-  registry.writeln('  static final _cache = <String, Map<String, String>>{};');
-  registry.writeln();
+    // Cache
+    ..writeln('  static final _cache = <String, Map<String, String>>{};')
+    ..writeln()
 
-  // getTranslations
-  registry.writeln('  /// Returns the full translation map for a given locale code.');
-  registry.writeln('  /// Falls back to English for unknown locales. Results are cached.');
-  registry.writeln('  static Map<String, String> getTranslations(String locale) {');
-  registry.writeln('    return _cache[locale] ??= _loadLocale(locale);');
-  registry.writeln('  }');
-  registry.writeln();
+    // getTranslations
+    ..writeln('  /// Returns the full translation map for a given locale code.')
+    ..writeln(
+        '  /// Falls back to English for unknown locales. Results are cached.')
+    ..writeln('  static Map<String, String> getTranslations(String locale) {')
+    ..writeln('    return _cache[locale] ??= _loadLocale(locale);')
+    ..writeln('  }')
+    ..writeln()
 
-  // getLocalizedName (preserve existing API)
-  registry.writeln('  /// Returns the localized country name, or `null` if unavailable.');
-  registry.writeln('  static String? getLocalizedName(String alpha2Code, String languageCode) {');
-  registry.writeln('    if (!supportedLocales.contains(languageCode)) return null;');
-  registry.writeln('    return getTranslations(languageCode)[alpha2Code];');
-  registry.writeln('  }');
-  registry.writeln();
+    // getLocalizedName (preserve existing API)
+    ..writeln(
+        '  /// Returns the localized country name, or `null` if unavailable.')
+    ..writeln(
+        '  static String? getLocalizedName(String alpha2Code, String languageCode) {')
+    ..writeln('    if (!supportedLocales.contains(languageCode)) return null;')
+    ..writeln('    return getTranslations(languageCode)[alpha2Code];')
+    ..writeln('  }')
+    ..writeln()
 
-  // getTranslationsForLocale (preserve existing API)
-  registry.writeln('  /// Returns the full translation map for a given language code,');
-  registry.writeln('  /// or `null` if the locale is not supported.');
-  registry.writeln('  static Map<String, String>? getTranslationsForLocale(String languageCode) {');
-  registry.writeln('    if (!supportedLocales.contains(languageCode)) return null;');
-  registry.writeln('    return getTranslations(languageCode);');
-  registry.writeln('  }');
-  registry.writeln();
+    // getTranslationsForLocale (preserve existing API)
+    ..writeln(
+        '  /// Returns the full translation map for a given language code,')
+    ..writeln('  /// or `null` if the locale is not supported.')
+    ..writeln(
+        '  static Map<String, String>? getTranslationsForLocale(String languageCode) {')
+    ..writeln('    if (!supportedLocales.contains(languageCode)) return null;')
+    ..writeln('    return getTranslations(languageCode);')
+    ..writeln('  }')
+    ..writeln()
 
-  // _loadLocale
-  registry.writeln('  static Map<String, String> _loadLocale(String locale) {');
-  registry.writeln('    return switch (locale) {');
+    // _loadLocale
+    ..writeln('  static Map<String, String> _loadLocale(String locale) {')
+    ..writeln('    return switch (locale) {');
   for (final locale in locales) {
     final varSuffix = _localeToVarSuffix(locale);
     registry.writeln("      '$locale' => l10n$varSuffix,");
   }
-  registry.writeln("      _ => l10nEn, // fallback to English");
-  registry.writeln('    };');
-  registry.writeln('  }');
-
-  registry.writeln('}');
+  registry
+    ..writeln('      _ => l10nEn, // fallback to English')
+    ..writeln('    };')
+    ..writeln('  }')
+    ..writeln('}');
 
   sourceFile.writeAsStringSync(registry.toString());
   print('\nRewrote country_name_l10n.dart as lazy registry');

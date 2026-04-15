@@ -1,15 +1,16 @@
 import 'dart:async';
+
 import 'package:countrify/src/icons/countrify_icons.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:countrify/src/models/country.dart';
 import 'package:countrify/src/models/country_code.dart';
 import 'package:countrify/src/utils/country_utils.dart';
-import 'package:countrify/src/widgets/country_picker_theme.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart'
     as picker_config;
 import 'package:countrify/src/widgets/country_picker_mode.dart';
+import 'package:countrify/src/widgets/country_picker_theme.dart';
 import 'package:countrify/src/widgets/shared/country_list_tile.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// {@template phone_code_picker}
 /// A specialized country picker for phone code selection with modern UI.

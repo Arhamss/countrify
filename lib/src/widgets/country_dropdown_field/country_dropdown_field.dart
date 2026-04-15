@@ -2,11 +2,11 @@ import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:countrify/src/models/country.dart';
 import 'package:countrify/src/models/country_code.dart';
 import 'package:countrify/src/utils/country_utils.dart';
+import 'package:countrify/src/widgets/countrify_field_style.dart';
 import 'package:countrify/src/widgets/country_picker/country_picker.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 import 'package:countrify/src/widgets/country_picker_mode.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
-import 'package:countrify/src/widgets/countrify_field_style.dart';
 import 'package:countrify/src/widgets/shared/country_flag.dart';
 import 'package:flutter/material.dart';
 
@@ -222,8 +222,7 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
   @override
   Widget build(BuildContext context) {
     final theme = widget.theme ?? CountryPickerTheme.defaultTheme();
-    final effectiveStyle =
-        widget.style ?? CountrifyFieldStyle.defaultStyle();
+    final effectiveStyle = widget.style ?? CountrifyFieldStyle.defaultStyle();
 
     final prefixWidget = _selectedCountry != null && widget.showFlag
         ? Padding(
@@ -231,8 +230,8 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
             child: CountryFlag(
               country: _selectedCountry!,
               size: const Size(32, 24),
-              borderRadius:
-                  (widget.config ?? const CountryPickerConfig()).flagBorderRadius,
+              borderRadius: (widget.config ?? const CountryPickerConfig())
+                  .flagBorderRadius,
               borderColor: (widget.config ?? const CountryPickerConfig())
                   .flagBorderColor,
               borderWidth: (widget.config ?? const CountryPickerConfig())
