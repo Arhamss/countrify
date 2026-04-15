@@ -5,6 +5,7 @@ import 'package:countrify/src/models/country.dart';
 import 'package:countrify/src/utils/country_utils.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
+import 'package:countrify/src/widgets/shared/countrify_check_icon.dart';
 import 'package:countrify/src/widgets/shared/country_flag.dart';
 import 'package:countrify/src/widgets/shared/empty_state.dart';
 import 'package:flutter/material.dart';
@@ -153,13 +154,31 @@ class _PhoneModalCountryListState extends State<PhoneModalCountryList> {
     );
 
     if (widget.isBottomSheet) {
-      return Container(
-        height: MediaQuery.of(context).size.height * 0.55,
-        decoration: BoxDecoration(
-          color: theme.backgroundColor ?? Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      final mediaQuery = MediaQuery.of(context);
+      final screenHeight = mediaQuery.size.height;
+      final keyboardInset = mediaQuery.viewInsets.bottom;
+      final availableHeight = screenHeight - mediaQuery.padding.top;
+      final requestedHeight = screenHeight * 0.55;
+      final targetHeight = availableHeight - keyboardInset < requestedHeight
+          ? availableHeight - keyboardInset
+          : requestedHeight;
+
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: AnimatedPadding(
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.only(bottom: keyboardInset),
+          child: Container(
+            height: targetHeight,
+            decoration: BoxDecoration(
+              color: theme.backgroundColor ?? Colors.white,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: body,
+          ),
         ),
-        child: body,
       );
     }
 
@@ -201,8 +220,12 @@ class _PhoneModalCountryListState extends State<PhoneModalCountryList> {
           hintText: theme.searchHintText ??
               (widget.config ?? const CountryPickerConfig()).searchHintText,
           hintStyle: theme.searchHintStyle,
-          prefixIcon: Icon(theme.searchIcon ?? CountrifyIcons.search,
-              color: theme.searchIconColor),
+          prefixIcon: theme.searchIcon != null
+              ? Icon(theme.searchIcon, color: theme.searchIconColor)
+              : Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: CountrifySearchIcon(color: theme.searchIconColor),
+                ),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
                   tooltip: 'Clear search',

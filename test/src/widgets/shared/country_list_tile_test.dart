@@ -1,4 +1,5 @@
 import 'package:countrify/countrify.dart';
+import 'package:countrify/src/widgets/shared/countrify_check_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -46,14 +47,14 @@ void main() {
     testWidgets('shows checkmark icon when isSelected is true', (tester) async {
       await tester.pumpWidget(buildSubject(isSelected: true));
 
-      expect(find.byIcon(Icons.check), findsOneWidget);
+      expect(find.byType(CountrifyCheckIcon), findsOneWidget);
     });
 
     testWidgets('does not show checkmark icon when isSelected is false',
         (tester) async {
       await tester.pumpWidget(buildSubject());
 
-      expect(find.byIcon(Icons.check), findsNothing);
+      expect(find.byType(CountrifyCheckIcon), findsNothing);
     });
 
     testWidgets('fires onTap callback when tapped', (tester) async {

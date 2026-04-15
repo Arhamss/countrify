@@ -1,4 +1,5 @@
 import 'package:countrify/src/models/country.dart';
+import 'package:countrify/src/widgets/shared/countrify_check_icon.dart';
 import 'package:countrify/src/widgets/shared/country_flag.dart';
 import 'package:flutter/material.dart';
 
@@ -28,9 +29,15 @@ class CountryListTile extends StatelessWidget {
     this.countryNameStyle,
     this.dialCodeStyle,
     this.selectedColor,
+    this.selectedBorderColor,
     this.selectedIconColor,
     this.selectedIcon,
     this.displayName,
+    this.borderRadius = const BorderRadius.all(Radius.circular(10)),
+    this.contentPadding,
+    this.splashColor,
+    this.highlightColor,
+    this.enableSplash = true,
   });
 
   /// The country to display.
@@ -66,6 +73,9 @@ class CountryListTile extends StatelessWidget {
   /// Background color when selected.
   final Color? selectedColor;
 
+  /// Border color when selected. Defaults to primary at 20% opacity.
+  final Color? selectedBorderColor;
+
   /// Color of the selected checkmark icon.
   final Color? selectedIconColor;
 
@@ -75,6 +85,21 @@ class CountryListTile extends StatelessWidget {
   /// Pre-localized display name. Falls back to [Country.name].
   final String? displayName;
 
+  /// Border radius of the tile. Defaults to `BorderRadius.circular(10)`.
+  final BorderRadius borderRadius;
+
+  /// Padding inside the tile. Defaults to `EdgeInsets.symmetric(horizontal: 14, vertical: 12)`.
+  final EdgeInsetsGeometry? contentPadding;
+
+  /// Splash color when tapped. Set to [Colors.transparent] to disable.
+  final Color? splashColor;
+
+  /// Highlight color when long-pressed.
+  final Color? highlightColor;
+
+  /// Whether to show ink splash on tap. Defaults to `true`.
+  final bool enableSplash;
+
   String get _effectiveName => displayName ?? country.name;
 
   String get _dialCode =>
@@ -83,51 +108,85 @@ class CountryListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
+
+    final effectiveSelectedColor =
+        selectedColor ?? primary.withValues(alpha: 0.08);
+    final effectiveBorderColor =
+        selectedBorderColor ?? primary.withValues(alpha: 0.2);
 
     return Semantics(
       label: '$_effectiveName, dial code $_dialCode',
-      child: InkWell(
-        onTap: () => onTap(country),
-        child: Container(
-          color: isSelected ? (selectedColor ?? theme.highlightColor) : null,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            children: [
-              if (showFlag) ...[
-                CountryFlag(
-                  country: country,
-                  size: flagSize,
-                  borderRadius: flagBorderRadius,
-                ),
-                const SizedBox(width: 12),
-              ],
-              if (showDialCode && _dialCode.isNotEmpty) ...[
-                Text(
-                  _dialCode,
-                  style: dialCodeStyle ??
-                      theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const SizedBox(width: 8),
-              ],
-              if (showCountryName)
-                Expanded(
-                  child: Text(
-                    _effectiveName,
-                    overflow: TextOverflow.ellipsis,
-                    style: countryNameStyle ?? theme.textTheme.bodyMedium,
+      child: Material(
+        color: isSelected ? effectiveSelectedColor : Colors.transparent,
+        borderRadius: borderRadius,
+        child: InkWell(
+          onTap: () => onTap(country),
+          borderRadius: borderRadius,
+          splashColor: enableSplash ? splashColor : Colors.transparent,
+          highlightColor: enableSplash ? highlightColor : Colors.transparent,
+          splashFactory: enableSplash ? null : NoSplash.splashFactory,
+          child: Container(
+            decoration: isSelected
+                ? BoxDecoration(
+                    borderRadius: borderRadius,
+                    border: Border.all(color: effectiveBorderColor),
+                  )
+                : null,
+            padding: contentPadding ??
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Row(
+              children: [
+                if (showFlag) ...[
+                  CountryFlag(
+                    country: country,
+                    size: flagSize,
+                    borderRadius: flagBorderRadius,
                   ),
-                )
-              else
-                const Spacer(),
-              if (isSelected)
-                Icon(
-                  selectedIcon ?? Icons.check,
-                  color: selectedIconColor ?? theme.colorScheme.primary,
-                  size: 20,
-                ),
-            ],
+                  const SizedBox(width: 12),
+                ],
+                if (showDialCode && _dialCode.isNotEmpty) ...[
+                  Text(
+                    _dialCode,
+                    style: dialCodeStyle ??
+                        TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: isSelected
+                              ? primary
+                              : theme.textTheme.bodyMedium?.color,
+                        ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                if (showCountryName)
+                  Expanded(
+                    child: Text(
+                      _effectiveName,
+                      overflow: TextOverflow.ellipsis,
+                      style: countryNameStyle ??
+                          TextStyle(
+                            fontSize: 14,
+                            fontWeight:
+                                isSelected ? FontWeight.w600 : FontWeight.w400,
+                            color: isSelected
+                                ? primary
+                                : theme.textTheme.bodyMedium?.color,
+                          ),
+                    ),
+                  )
+                else
+                  const Spacer(),
+                if (isSelected)
+                  if (selectedIcon != null)
+                    Icon(selectedIcon, color: selectedIconColor ?? primary, size: 18)
+                  else
+                    CountrifyCheckIcon(
+                      size: 18,
+                      color: selectedIconColor ?? primary,
+                    ),
+              ],
+            ),
           ),
         ),
       ),

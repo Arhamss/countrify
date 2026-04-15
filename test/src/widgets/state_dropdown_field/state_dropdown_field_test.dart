@@ -12,6 +12,7 @@ void main() {
       required String? countryIso2,
       required GeoRepository repo,
       ValueChanged<CountryState?>? onChanged,
+      bool searchable = false,
     }) {
       return MaterialApp(
         home: Scaffold(
@@ -19,6 +20,7 @@ void main() {
             countryIso2: countryIso2,
             repository: repo,
             onChanged: onChanged,
+            searchable: searchable,
           ),
         ),
       );
@@ -65,6 +67,7 @@ void main() {
             builder: (_, value, __) => StateDropdownField(
               countryIso2: value,
               repository: repo,
+              searchable: false,
               onChanged: (s) => last = s,
             ),
           ),

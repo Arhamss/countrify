@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:countrify/src/data/geo_repository.dart';
@@ -82,7 +81,11 @@ void main() {
     });
 
     test('statesOf deduplicates concurrent loads', () async {
-      final futures = [repo.statesOf('PK'), repo.statesOf('PK'), repo.statesOf('PK')];
+      final futures = [
+        repo.statesOf('PK'),
+        repo.statesOf('PK'),
+        repo.statesOf('PK')
+      ];
       await Future.wait(futures);
       expect(bundle.loadCount, 1);
     });

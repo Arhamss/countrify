@@ -97,9 +97,9 @@ class PhoneNumberField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
 
   /// Modular style for the field. Controls every aspect of the
-  /// [InputDecoration] plus field-specific extras like [phoneTextStyle],
-  /// [dialCodeTextStyle], [dividerColor], [prefixPadding], [cursorColor],
-  /// and [fieldBorderRadius].
+  /// `InputDecoration` plus field-specific extras like `phoneTextStyle`,
+  /// `dialCodeTextStyle`, `dividerColor`, `prefixPadding`, `cursorColor`,
+  /// and `fieldBorderRadius`.
   ///
   /// When null, a default style matching [CountrifyFieldStyle.defaultStyle]
   /// is used.
@@ -313,6 +313,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
     _overlayEntry = OverlayEntry(
       builder: (context) => PhoneDropdownOverlay(
         link: _layerLink,
+        fieldKey: _fieldKey,
         fieldWidth: fieldSize.width,
         maxHeight: widget.dropdownMaxHeight,
         theme: pickerTheme,
@@ -348,6 +349,10 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
   // --- Modal pickers (bottom sheet / dialog / full screen) ---
 
   Future<void> _openModalPicker() async {
+    // Dismiss keyboard from the phone number field before opening the modal
+    // so the sheet is not partially covered by the keyboard on first open.
+    _focusNode.unfocus();
+
     Country? selected;
 
     switch (widget.pickerMode) {
@@ -501,7 +506,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       isFocused: _isFocused,
     );
 
-    return CompositedTransformTarget(
+    final field = CompositedTransformTarget(
       link: _layerLink,
       child: TextFormField(
         key: _fieldKey,
@@ -524,5 +529,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         decoration: decoration,
       ),
     );
+
+    return resolvedStyle.wrapWithExternalLabel(context, child: field);
   }
 }

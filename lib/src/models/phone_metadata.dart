@@ -23,7 +23,7 @@ class PhoneMetadata {
   final int maxLength;
 
   /// An example phone number for this country (digits only, no country code).
-  /// Used as hint text in [PhoneNumberField].
+  /// Used as hint text in `PhoneNumberField`.
   final String? exampleNumber;
 
   /// Returns true if [phoneNumber] has a valid number of digits.

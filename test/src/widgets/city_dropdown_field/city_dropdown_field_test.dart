@@ -12,6 +12,7 @@ void main() {
       required int? stateId,
       required GeoRepository repo,
       ValueChanged<City?>? onChanged,
+      bool searchable = false,
     }) {
       return MaterialApp(
         home: Scaffold(
@@ -19,6 +20,7 @@ void main() {
             stateId: stateId,
             repository: repo,
             onChanged: onChanged,
+            searchable: searchable,
           ),
         ),
       );
@@ -60,6 +62,7 @@ void main() {
             builder: (_, value, __) => CityDropdownField(
               stateId: value,
               repository: repo,
+              searchable: false,
               onChanged: (c) => last = c,
             ),
           ),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
+import 'package:countrify/src/widgets/shared/countrify_check_icon.dart';
 import 'package:flutter/material.dart';
 
 /// {@template country_search_bar}
@@ -98,11 +99,15 @@ class _CountrySearchBarState extends State<CountrySearchBar> {
       filled: theme?.searchBarColor != null,
       fillColor: theme?.searchBarColor,
       contentPadding: theme?.searchContentPadding ??
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      prefixIcon: Icon(
-        theme?.searchIcon ?? CountrifyIcons.search,
-        color: theme?.searchIconColor,
-      ),
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      prefixIcon: theme?.searchIcon != null
+          ? Icon(theme!.searchIcon, color: theme.searchIconColor, size: 18)
+          : Padding(
+              padding: const EdgeInsets.only(left: 12, right: 8),
+              child: CountrifySearchIcon(
+                  size: 18, color: theme?.searchIconColor),
+            ),
+      prefixIconConstraints: const BoxConstraints(),
       suffixIcon: _controller.text.isNotEmpty
           ? Tooltip(
               message: 'Clear search',

@@ -7,8 +7,10 @@ import 'package:countrify/src/widgets/country_picker/country_picker.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 import 'package:countrify/src/widgets/country_picker_mode.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
+import 'package:countrify/src/widgets/shared/countrify_check_icon.dart';
 import 'package:countrify/src/widgets/shared/country_flag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// {@template country_dropdown_field}
 /// A text field-style dropdown for selecting countries with consistent styling.
@@ -41,7 +43,12 @@ class CountryDropdownField extends StatefulWidget {
     this.searchEnabled = true,
     this.filterEnabled = false,
     this.pickerMode = CountryPickerMode.bottomSheet,
+    this.focusNode,
   });
+
+  /// Optional external focus node. Lets callers wire this field into form
+  /// focus chains (e.g. `FocusScope.of(context).nextFocus()`).
+  final FocusNode? focusNode;
 
   /// Initial selected country by enum code.
   final CountryCode? initialCountryCode;
@@ -109,6 +116,10 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
   Future<void> _showPicker() async {
     if (!widget.enabled || widget.pickerMode == CountryPickerMode.none) return;
 
+    // Dismiss any currently-focused keyboard (e.g. a sibling TextField)
+    // before opening the picker so the modal is not partially covered.
+    FocusScope.of(context).unfocus();
+
     Country? selectedCountry;
 
     switch (widget.pickerMode) {
@@ -136,22 +147,15 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (sheetContext) => Container(
-        height: MediaQuery.of(sheetContext).size.height * 0.8,
-        decoration: BoxDecoration(
-          color: widget.theme?.backgroundColor ?? Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: CountryPicker(
-          initialCountryCode: CountryCodeExtension.fromAlpha2Code(
-              _selectedCountry?.alpha2Code ?? ''),
-          theme: widget.theme,
-          config: widget.config,
-          showPhoneCode: widget.showPhoneCode,
-          showFlag: widget.showFlag,
-          searchEnabled: widget.searchEnabled,
-          filterEnabled: widget.filterEnabled,
-        ),
+      builder: (sheetContext) => CountryPicker(
+        initialCountryCode: CountryCodeExtension.fromAlpha2Code(
+            _selectedCountry?.alpha2Code ?? ''),
+        theme: widget.theme,
+        config: widget.config,
+        showPhoneCode: widget.showPhoneCode,
+        showFlag: widget.showFlag,
+        searchEnabled: widget.searchEnabled,
+        filterEnabled: widget.filterEnabled,
       ),
     );
   }
@@ -226,10 +230,10 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
 
     final prefixWidget = _selectedCountry != null && widget.showFlag
         ? Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.only(left: 12, right: 8),
             child: CountryFlag(
               country: _selectedCountry!,
-              size: const Size(32, 24),
+              size: const Size(28, 20),
               borderRadius: (widget.config ?? const CountryPickerConfig())
                   .flagBorderRadius,
               borderColor: (widget.config ?? const CountryPickerConfig())
@@ -239,11 +243,29 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
               emojiTextStyle: theme.flagEmojiTextStyle,
             ),
           )
-        : Icon(theme.defaultCountryIcon ?? CountrifyIcons.globe);
+        : Padding(
+            padding: const EdgeInsets.only(left: 12, right: 8),
+            child: Icon(
+              theme.defaultCountryIcon ?? CountrifyIcons.globe,
+              size: 20,
+              color: theme.headerIconColor ?? Colors.grey.shade600,
+            ),
+          );
 
-    final suffixWidget = Icon(
-      theme.dropdownIcon ?? CountrifyIcons.chevronDown,
-      color: widget.enabled ? null : Colors.grey,
+    final Widget suffixWidget = Padding(
+      padding: const EdgeInsets.only(right: 12),
+      child: theme.dropdownIcon != null
+          ? Icon(
+              theme.dropdownIcon,
+              size: 18,
+              color: widget.enabled ? null : Colors.grey,
+            )
+          : CountrifyDownArrowIcon(
+              size: 20,
+              color: widget.enabled
+                  ? (theme.borderColor ?? Colors.grey.shade500)
+                  : Colors.grey,
+            ),
     );
 
     final borderRadius =
@@ -254,22 +276,37 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
       suffixIconOverride: suffixWidget,
     );
 
-    return InkWell(
-      onTap: widget.enabled && widget.pickerMode != CountryPickerMode.none
-          ? _showPicker
-          : null,
-      borderRadius: borderRadius,
-      child: InputDecorator(
-        decoration: decoration,
-        isEmpty: _selectedCountry == null,
-        child: _selectedCountry != null
-            ? Text(
-                _getDisplayText(),
-                style: effectiveStyle.selectedCountryTextStyle ??
-                    theme.countryNameTextStyle,
-              )
+    final field = Focus(
+      focusNode: widget.focusNode,
+      canRequestFocus: widget.enabled,
+      onKeyEvent: (node, event) {
+        if (event is KeyDownEvent &&
+            (event.logicalKey == LogicalKeyboardKey.space ||
+                event.logicalKey == LogicalKeyboardKey.enter)) {
+          _showPicker();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: InkWell(
+        onTap: widget.enabled && widget.pickerMode != CountryPickerMode.none
+            ? _showPicker
             : null,
+        borderRadius: borderRadius,
+        child: InputDecorator(
+          decoration: decoration,
+          isEmpty: _selectedCountry == null,
+          child: _selectedCountry != null
+              ? Text(
+                  _getDisplayText(),
+                  style: effectiveStyle.selectedCountryTextStyle ??
+                      theme.countryNameTextStyle,
+                )
+              : null,
+        ),
       ),
     );
+
+    return effectiveStyle.wrapWithExternalLabel(context, child: field);
   }
 }

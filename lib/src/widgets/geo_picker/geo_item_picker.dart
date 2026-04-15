@@ -6,6 +6,7 @@ import 'package:countrify/src/utils/search_normalizer.dart';
 import 'package:countrify/src/widgets/country_picker_mode.dart';
 import 'package:countrify/src/widgets/geo_picker/geo_picker_config.dart';
 import 'package:countrify/src/widgets/geo_picker/geo_picker_theme.dart';
+import 'package:countrify/src/widgets/shared/countrify_check_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -238,27 +239,46 @@ class _GeoItemPickerState<T> extends State<GeoItemPicker<T>> {
     final bg = _theme.backgroundColor ?? Theme.of(context).colorScheme.surface;
     final radius = _theme.borderRadius ?? const BorderRadius.vertical(top: Radius.circular(20));
     final shape = RoundedRectangleBorder(borderRadius: radius);
-    return Material(
-      color: bg,
-      shape: shape,
-      elevation: _theme.elevation ?? 0,
-      shadowColor: _theme.shadowColor,
-      clipBehavior: Clip.antiAlias,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: _config.minHeight,
-          maxHeight: _config.maxHeight ?? MediaQuery.sizeOf(context).height * 0.85,
-        ),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildGrabber(),
-              _buildHeader(),
-              if (_config.searchEnabled) _buildSearch(),
-              Expanded(child: _buildBody()),
-            ],
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+    final keyboardInset = mediaQuery.viewInsets.bottom;
+    final availableHeight = screenHeight - mediaQuery.padding.top;
+    final requestedMax = _config.maxHeight ?? screenHeight * 0.85;
+    final maxHeight = availableHeight - keyboardInset < requestedMax
+        ? availableHeight - keyboardInset
+        : requestedMax;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: AnimatedPadding(
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeOut,
+        padding: EdgeInsets.only(bottom: keyboardInset),
+        child: Material(
+          color: bg,
+          shape: shape,
+          elevation: _theme.elevation ?? 0,
+          shadowColor: _theme.shadowColor,
+          clipBehavior: Clip.antiAlias,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: _config.minHeight,
+              maxHeight: maxHeight < _config.minHeight
+                  ? _config.minHeight
+                  : maxHeight,
+            ),
+            child: SafeArea(
+              top: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildGrabber(),
+                  _buildHeader(),
+                  if (_config.searchEnabled) _buildSearch(),
+                  Expanded(child: _buildBody()),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -345,14 +365,17 @@ class _GeoItemPickerState<T> extends State<GeoItemPicker<T>> {
       return widget.headerBuilder!(context, () => Navigator.of(context).maybePop());
     }
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 8, 4),
+      padding: const EdgeInsets.fromLTRB(20, 14, 8, 6),
       child: Row(
         children: [
           Expanded(
             child: Text(
               widget.title,
               style: _theme.headerTextStyle ??
-                  Theme.of(context).textTheme.titleMedium,
+                  Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 17,
+                      ),
             ),
           ),
           IconButton(
@@ -399,8 +422,15 @@ class _GeoItemPickerState<T> extends State<GeoItemPicker<T>> {
           filled: _theme.searchBarColor != null,
           fillColor: _theme.searchBarColor,
           contentPadding: _theme.searchContentPadding ??
-              const EdgeInsets.symmetric(horizontal: 12),
-          prefixIcon: Icon(_theme.resolvedSearchIcon, color: _theme.searchIconColor, size: 18),
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          prefixIcon: _theme.searchIcon != null
+              ? Icon(_theme.searchIcon, color: _theme.searchIconColor, size: 18)
+              : Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 8),
+                  child: CountrifySearchIcon(
+                      size: 18, color: _theme.searchIconColor),
+                ),
+          prefixIconConstraints: const BoxConstraints(),
           // ValueListenableBuilder keeps the clear button in sync with every
           // keystroke without waiting for the debounced filter to fire.
           suffixIcon: ValueListenableBuilder<TextEditingValue>(
@@ -465,7 +495,7 @@ class _GeoItemPickerState<T> extends State<GeoItemPicker<T>> {
         ? Border.all(color: _theme.itemSelectedBorderColor!)
         : null;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
+      padding: const EdgeInsets.symmetric(vertical: 1),
       child: Semantics(
         button: true,
         label: widget.semanticLabelOf?.call(item),
@@ -479,17 +509,24 @@ class _GeoItemPickerState<T> extends State<GeoItemPicker<T>> {
             child: Container(
               decoration: BoxDecoration(borderRadius: radius, border: border),
               padding: _theme.itemContentPadding ??
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Row(
                 children: [
                   Expanded(child: widget.itemBuilder(context, item, isSelected)),
                   if (isSelected && _config.showSelectedIcon)
-                    Icon(
-                      _theme.resolvedSelectedIcon,
-                      size: 18,
-                      color: _theme.itemSelectedIconColor ??
-                          Theme.of(context).colorScheme.primary,
-                    ),
+                    if (_theme.selectedIcon != null)
+                      Icon(
+                        _theme.selectedIcon,
+                        size: 18,
+                        color: _theme.itemSelectedIconColor ??
+                            Theme.of(context).colorScheme.primary,
+                      )
+                    else
+                      CountrifyCheckIcon(
+                        size: 18,
+                        color: _theme.itemSelectedIconColor ??
+                            Theme.of(context).colorScheme.primary,
+                      ),
                 ],
               ),
             ),

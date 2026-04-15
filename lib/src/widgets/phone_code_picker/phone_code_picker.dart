@@ -8,6 +8,7 @@ import 'package:countrify/src/widgets/country_picker_config.dart'
     as picker_config;
 import 'package:countrify/src/widgets/country_picker_mode.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
+import 'package:countrify/src/widgets/shared/countrify_check_icon.dart';
 import 'package:countrify/src/widgets/shared/country_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -316,19 +317,37 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
 
   Widget _buildBottomSheetPicker(
       CountryPickerTheme theme, picker_config.CountryPickerConfig config) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.6,
-      decoration: BoxDecoration(
-        color: theme.backgroundColor,
-        borderRadius: theme.borderRadius ??
-            const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        children: [
-          _buildHeader(theme, config),
-          if (_effectiveSearchEnabled) _buildSearchBar(theme, config),
-          Expanded(child: _buildCountryList(theme, config)),
-        ],
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+    final keyboardInset = mediaQuery.viewInsets.bottom;
+    final availableHeight = screenHeight - mediaQuery.padding.top;
+    final requestedHeight = screenHeight * 0.6;
+    final targetHeight = availableHeight - keyboardInset < requestedHeight
+        ? availableHeight - keyboardInset
+        : requestedHeight;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: AnimatedPadding(
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeOut,
+        padding: EdgeInsets.only(bottom: keyboardInset),
+        child: Container(
+          height: targetHeight,
+          decoration: BoxDecoration(
+            color: theme.backgroundColor,
+            borderRadius: theme.borderRadius ??
+                const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              _buildHeader(theme, config),
+              if (_effectiveSearchEnabled) _buildSearchBar(theme, config),
+              Expanded(child: _buildCountryList(theme, config)),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -414,27 +433,16 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
 
   Widget _buildHeader(
       CountryPickerTheme theme, picker_config.CountryPickerConfig config) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.headerColor,
-        borderRadius: theme.borderRadius ??
-            const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Row(
-        children: [
-          Text(
-            config.titleText,
-            style: theme.headerTextStyle,
-          ),
-          const Spacer(),
-          IconButton(
-            tooltip: 'Close',
-            icon: Icon(theme.closeIcon ?? CountrifyIcons.x,
-                color: theme.headerIconColor),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 14, 8, 6),
+      child: Text(
+        config.titleText,
+        style: theme.headerTextStyle?.copyWith(fontSize: 17) ??
+            const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
       ),
     );
   }
@@ -447,8 +455,14 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
         InputDecoration(
           hintText: theme.searchHintText ?? config.searchHintText,
           hintStyle: theme.searchHintStyle,
-          prefixIcon: Icon(theme.searchIcon ?? CountrifyIcons.search,
-              color: theme.searchIconColor),
+          prefixIcon: theme.searchIcon != null
+              ? Icon(theme.searchIcon, color: theme.searchIconColor, size: 18)
+              : Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 8),
+                  child: CountrifySearchIcon(
+                      size: 18, color: theme.searchIconColor),
+                ),
+          prefixIconConstraints: const BoxConstraints(),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
                   tooltip: 'Clear search',
@@ -482,8 +496,8 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
           ),
         );
 
-    return Container(
-      padding: const EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
       child: Semantics(
         label: 'Search countries',
         child: TextField(
@@ -545,7 +559,7 @@ class _PhoneCodePickerState extends State<PhoneCodePicker>
       dialCodeStyle: theme.countrySubtitleTextStyle,
       selectedColor: theme.countryItemSelectedColor,
       selectedIconColor: theme.countryItemSelectedIconColor,
-      selectedIcon: theme.selectedIcon ?? CountrifyIcons.circleCheckBig,
+      selectedIcon: theme.selectedIcon,
       displayName: _displayName(country),
     );
   }

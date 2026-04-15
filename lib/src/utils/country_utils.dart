@@ -298,7 +298,7 @@ class CountryUtils {
 
   /// Get country name in a specific language.
   ///
-  /// Checks the country's [nameTranslations] first, then falls back to the
+  /// Checks the country's `nameTranslations` first, then falls back to the
   /// built-in l10n data (132 languages via CLDR).
   static String getCountryNameInLanguage(
     Country country,
@@ -311,7 +311,7 @@ class CountryUtils {
 
   /// Get country names in all available languages.
   ///
-  /// Merges the country's [nameTranslations] with the built-in l10n data.
+  /// Merges the country's `nameTranslations` with the built-in l10n data.
   static Map<String, String> getCountryNamesInAllLanguages(Country country) {
     final merged = <String, String>{...country.nameTranslations};
     for (final locale in CountryNameL10n.supportedLocales) {

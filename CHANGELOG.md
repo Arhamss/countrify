@@ -1,3 +1,64 @@
+## 2.3.0
+
+Searchable dropdown fields, external labels, improved default styling, and
+bug fixes across all picker and field widgets.
+
+### Added
+
+- **Searchable state & city fields** — `StateDropdownField` and
+  `CityDropdownField` now default to `searchable: true`, rendering as text
+  inputs that filter results in a dropdown overlay as the user types. Set
+  `searchable: false` to restore the tap-to-open picker behavior.
+- **`GeoSearchOverlay<T>`** — generic animated dropdown overlay used by the
+  searchable fields. Supports auto-flip (opens above when keyboard covers
+  below), fade-in/out animation, and dismiss-on-tap-outside.
+- **External labels** — `CountrifyFieldStyle` gains `externalLabel`,
+  `externalLabelStyle`, and `externalLabelPadding` for rendering labels above
+  the field (outside `InputDecoration`). All field widgets call the new
+  `wrapWithExternalLabel()` helper. `CountryStateCityField` uses external
+  labels by default.
+- **`CountryListTile` customization** — new parameters: `borderRadius`,
+  `contentPadding`, `selectedBorderColor`, `splashColor`, `highlightColor`,
+  and `enableSplash` for full control over tile appearance and tap feedback.
+
+### Changed
+
+- **Down arrow icon** — redesigned `CountrifyDownArrowIcon` with a cleaner,
+  proportional chevron path (`M6,9 L12,15 L18,9`) and 2px stroke. All
+  dropdown fields now render the arrow at size 20 with proper right padding.
+- **Suffix icon constraints** — added `suffixIconConstraints: BoxConstraints()`
+  to all four factory styles (`defaultStyle`, `darkStyle`, `outlineStyle`,
+  `filledStyle`) so the suffix area no longer inflates to Flutter's default
+  48×48 minimum.
+- **Search bar compactness** — reduced prefix icon padding from
+  `EdgeInsets.all(12)` to `EdgeInsets.only(left: 12, right: 8)` and added
+  `prefixIconConstraints: BoxConstraints()` across all search bars (country
+  picker, geo picker, country search bar, phone code picker). Fields are now
+  ~38px tall instead of ~48px.
+- **Country dropdown prefix** — globe icon now has explicit `size: 20` with
+  compact padding; flag reduced from 32×24 to 28×20.
+- **Geo picker list rows** — tighter vertical gaps, refined typography with
+  primary-color highlighting on selected items, and improved header styling.
+- **`CountryListTile` styling** — selected state now uses rounded `Material`
+  with subtle primary-tinted background and border instead of a flat
+  `Container` with `highlightColor`.
+- **`PhoneCodePicker` header** — removed the close (X) button that called
+  `Navigator.pop` (broke inline usage). Simplified to a clean title-only header.
+- **Example app** — complete redesign with indigo/teal palette, 6 tabs
+  (Phone, Country, Address, Themes, i18n, Blocks), `SliverAppBar`,
+  showcase cards, and interactive demos. Added `GestureDetector` for keyboard
+  dismissal on tap outside.
+
+### Fixed
+
+- **`_dirty` assertion crash** — `StateDropdownField.didUpdateWidget` and
+  `CityDropdownField.didUpdateWidget` were calling `setState` during the build
+  phase, causing `'!_dirty': is not true` when cascading selections. Fixed by
+  mutating fields directly and deferring `onChanged` callbacks via
+  `addPostFrameCallback`.
+- **Pubspec description** — shortened from 215 to 152 characters to pass the
+  pub.dev 60–180 character check.
+
 ## 2.2.0
 
 Full country → state → city support with standalone pickers, cascading form

@@ -6,6 +6,7 @@ import 'package:countrify/src/models/country_code.dart';
 import 'package:countrify/src/utils/country_utils.dart';
 import 'package:countrify/src/widgets/country_picker_config.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
+import 'package:countrify/src/widgets/shared/countrify_check_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -223,6 +224,8 @@ class _CountryPickerState extends State<CountryPicker>
   final LayerLink _dropdownLayerLink = LayerLink();
   OverlayEntry? _dropdownOverlay;
   bool _isDropdownOpen = false;
+  final GlobalKey<_AnimatedDropdownCardState> _dropdownCardKey =
+      GlobalKey<_AnimatedDropdownCardState>();
 
   late String _effectiveLocale;
 
@@ -290,6 +293,16 @@ class _CountryPickerState extends State<CountryPicker>
   }
 
   void _removeDropdownOverlay() {
+    final card = _dropdownCardKey.currentState;
+    if (card != null && !card._closing) {
+      // Play the reverse animation, then actually remove the overlay entry.
+      card._close().then((_) => _disposeDropdownOverlay());
+    } else {
+      _disposeDropdownOverlay();
+    }
+  }
+
+  void _disposeDropdownOverlay() {
     _dropdownOverlay?.remove();
     _dropdownOverlay = null;
     if (_isDropdownOpen && mounted) {
@@ -485,25 +498,41 @@ class _CountryPickerState extends State<CountryPicker>
 
   Widget _buildBottomSheetPicker(
       CountryPickerTheme theme, CountryPickerConfig config) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final targetHeight = (widget.maxHeight ?? screenHeight * 0.8)
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+    final keyboardInset = mediaQuery.viewInsets.bottom;
+    final availableHeight = screenHeight - mediaQuery.padding.top;
+    final requestedHeight = (widget.maxHeight ?? screenHeight * 0.8)
         .clamp(widget.minHeight, screenHeight);
+    final targetHeight = (availableHeight - keyboardInset < requestedHeight
+            ? availableHeight - keyboardInset
+            : requestedHeight)
+        .clamp(widget.minHeight, availableHeight);
 
-    return Container(
-      height: targetHeight,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: theme.backgroundColor,
-        borderRadius: theme.borderRadius ??
-            const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        children: [
-          _buildHeader(theme, config),
-          if (widget.searchEnabled) _buildSearchBar(theme, config),
-          if (widget.filterEnabled) _buildFilterBar(theme, config),
-          Expanded(child: _buildCountryList(theme, config)),
-        ],
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: AnimatedPadding(
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeOut,
+        padding: EdgeInsets.only(bottom: keyboardInset),
+        child: Container(
+          height: targetHeight,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: theme.backgroundColor,
+            borderRadius: theme.borderRadius ??
+                const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              _buildHeader(theme, config),
+              if (widget.searchEnabled) _buildSearchBar(theme, config),
+              if (widget.filterEnabled) _buildFilterBar(theme, config),
+              Expanded(child: _buildCountryList(theme, config)),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -608,10 +637,15 @@ class _CountryPickerState extends State<CountryPicker>
               AnimatedRotation(
                 turns: _isDropdownOpen ? 0.5 : 0,
                 duration: const Duration(milliseconds: 200),
-                child: Icon(
-                  theme.dropdownIcon ?? CountrifyIcons.chevronDown,
-                  color: theme.borderColor ?? Colors.grey.shade600,
-                ),
+                child: theme.dropdownIcon != null
+                    ? Icon(
+                        theme.dropdownIcon,
+                        color: theme.borderColor ?? Colors.grey.shade600,
+                      )
+                    : CountrifyDownArrowIcon(
+                        color: theme.borderColor ?? Colors.grey.shade600,
+                        size: 24,
+                      ),
               ),
             ],
           ),
@@ -659,53 +693,57 @@ class _CountryPickerState extends State<CountryPicker>
               link: _dropdownLayerLink,
               showWhenUnlinked: false,
               targetAnchor: Alignment.bottomLeft,
-              child: Container(
-                width: buttonWidth,
-                constraints: BoxConstraints(
-                  maxHeight: widget.dropdownMaxHeight ?? 400,
-                ),
-                margin: const EdgeInsets.only(top: 4),
-                decoration: BoxDecoration(
-                  color: theme.dropdownMenuBackgroundColor ?? Colors.white,
-                  borderRadius: theme.dropdownMenuBorderRadius ??
-                      BorderRadius.circular(12),
-                  border: theme.dropdownMenuBorderColor != null
-                      ? Border.all(
-                          color: theme.dropdownMenuBorderColor!,
-                          width: theme.dropdownMenuBorderWidth ?? 1,
-                        )
-                      : null,
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.shadowColor ?? Colors.black26,
-                      blurRadius: theme.dropdownMenuElevation ?? 8,
-                      offset: const Offset(0, 4),
+              child: _AnimatedDropdownCard(
+                key: _dropdownCardKey,
+                child: Container(
+                  width: buttonWidth,
+                  constraints: BoxConstraints(
+                    maxHeight: widget.dropdownMaxHeight ?? 400,
+                  ),
+                  margin: const EdgeInsets.only(top: 4),
+                  decoration: BoxDecoration(
+                    color: theme.dropdownMenuBackgroundColor ?? Colors.white,
+                    borderRadius: theme.dropdownMenuBorderRadius ??
+                        BorderRadius.circular(12),
+                    border: theme.dropdownMenuBorderColor != null
+                        ? Border.all(
+                            color: theme.dropdownMenuBorderColor!,
+                            width: theme.dropdownMenuBorderWidth ?? 1,
+                          )
+                        : null,
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.shadowColor ?? Colors.black26,
+                        blurRadius: theme.dropdownMenuElevation ?? 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: theme.dropdownMenuBorderRadius ??
+                        BorderRadius.circular(12),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: orderedCountries.isEmpty
+                          ? _buildEmptyState(theme, config)
+                          : ListView.builder(
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              itemCount: orderedCountries.length,
+                              itemBuilder: (context, index) {
+                                final country = orderedCountries[index];
+                                return InkWell(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    _removeDropdownOverlay();
+                                    _onCountrySelected(country);
+                                  },
+                                  child: _buildSimpleCountryItem(
+                                      country, theme, config),
+                                );
+                              },
+                            ),
                     ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: theme.dropdownMenuBorderRadius ??
-                      BorderRadius.circular(12),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: orderedCountries.isEmpty
-                        ? _buildEmptyState(theme, config)
-                        : ListView.builder(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            itemCount: orderedCountries.length,
-                            itemBuilder: (context, index) {
-                              final country = orderedCountries[index];
-                              return InkWell(
-                                onTap: () {
-                                  _removeDropdownOverlay();
-                                  _onCountrySelected(country);
-                                },
-                                child: _buildSimpleCountryItem(
-                                    country, theme, config),
-                              );
-                            },
-                          ),
                   ),
                 ),
               ),
@@ -778,11 +816,16 @@ class _CountryPickerState extends State<CountryPicker>
           ),
           if (isSelected && showBackground) ...[
             const SizedBox(width: 8),
-            Icon(
-              theme.selectedIcon ?? CountrifyIcons.circleCheckBig,
-              color: theme.countryItemSelectedIconColor ?? Colors.blue,
-              size: 20,
-            ),
+            if (theme.selectedIcon != null)
+              Icon(
+                theme.selectedIcon,
+                color: theme.countryItemSelectedIconColor ?? Colors.blue,
+                size: 20,
+              )
+            else
+              CountrifyCheckIcon(
+                color: theme.countryItemSelectedIconColor ?? Colors.blue,
+              ),
           ],
         ],
       ),
@@ -858,8 +901,14 @@ class _CountryPickerState extends State<CountryPicker>
         InputDecoration(
           hintText: theme.searchHintText ?? config.searchHintText,
           hintStyle: theme.searchHintStyle,
-          prefixIcon: Icon(theme.searchIcon ?? CountrifyIcons.search,
-              color: theme.searchIconColor),
+          prefixIcon: theme.searchIcon != null
+              ? Icon(theme.searchIcon, color: theme.searchIconColor, size: 18)
+              : Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 8),
+                  child: CountrifySearchIcon(
+                      size: 18, color: theme.searchIconColor),
+                ),
+          prefixIconConstraints: const BoxConstraints(),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
                   tooltip: 'Clear search',
@@ -1053,8 +1102,13 @@ class _CountryPickerState extends State<CountryPicker>
             widget.showCountryName ? _buildCountryName(country, theme) : null,
         subtitle: _buildCountrySubtitle(country, theme, config),
         trailing: isSelected
-            ? Icon(theme.selectedIcon ?? CountrifyIcons.circleCheckBig,
-                color: theme.countryItemSelectedIconColor)
+            ? (theme.selectedIcon != null
+                ? Icon(theme.selectedIcon,
+                    color: theme.countryItemSelectedIconColor)
+                : CountrifyCheckIcon(
+                    color: theme.countryItemSelectedIconColor ?? Colors.blue,
+                    size: 24,
+                  ))
             : null,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       ),
@@ -1320,6 +1374,64 @@ class _FilterDialogState extends State<_FilterDialog> {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Internal wrapper that slides + fades the dropdown card on enter/exit.
+class _AnimatedDropdownCard extends StatefulWidget {
+  const _AnimatedDropdownCard({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  State<_AnimatedDropdownCard> createState() => _AnimatedDropdownCardState();
+}
+
+class _AnimatedDropdownCardState extends State<_AnimatedDropdownCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _fade;
+  late final Animation<Offset> _slide;
+  bool _closing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+      reverseDuration: const Duration(milliseconds: 170),
+    );
+    _fade = CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic);
+    _slide = Tween<Offset>(
+      begin: const Offset(0, -0.08),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _controller.forward();
+    });
+  }
+
+  Future<void> _close() async {
+    if (_closing) return;
+    _closing = true;
+    if (mounted) await _controller.reverse();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _fade,
+      child: SlideTransition(position: _slide, child: widget.child),
     );
   }
 }

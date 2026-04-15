@@ -1,8 +1,8 @@
-import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:countrify/src/models/country.dart';
 import 'package:countrify/src/widgets/countrify_field_style.dart';
 import 'package:countrify/src/widgets/country_picker_mode.dart';
 import 'package:countrify/src/widgets/country_picker_theme.dart';
+import 'package:countrify/src/widgets/shared/countrify_check_icon.dart';
 import 'package:countrify/src/widgets/shared/country_flag.dart';
 import 'package:flutter/material.dart';
 
@@ -103,13 +103,19 @@ class PhonePrefix extends StatelessWidget {
                 child: AnimatedRotation(
                   turns: isDropdownOpen ? 0.5 : 0,
                   duration: const Duration(milliseconds: 200),
-                  child: Icon(
-                    theme.dropdownIcon ?? CountrifyIcons.chevronDown,
-                    size: 20,
-                    color: enabled
-                        ? theme.headerIconColor ?? Colors.black54
-                        : Colors.grey,
-                  ),
+                  child: theme.dropdownIcon != null
+                      ? Icon(
+                          theme.dropdownIcon,
+                          size: 20,
+                          color: enabled
+                              ? theme.headerIconColor ?? Colors.black54
+                              : Colors.grey,
+                        )
+                      : CountrifyDownArrowIcon(
+                          color: enabled
+                              ? theme.headerIconColor ?? Colors.black54
+                              : Colors.grey,
+                        ),
                 ),
               ),
             ],

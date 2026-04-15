@@ -173,24 +173,43 @@ class StatePicker extends StatelessWidget {
   Widget _buildRow(BuildContext context, CountryState state, bool selected) {
     if (customStateBuilder != null) return customStateBuilder!(context, state, selected);
     final t = theme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+    return Row(
       children: [
-        Text(
-          state.name,
-          style: t?.itemNameTextStyle ?? const TextStyle(fontWeight: FontWeight.w500),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        if (showType && state.type != null)
-          Text(
-            state.type!,
-            style: t?.itemSubtitleTextStyle ??
-                TextStyle(fontSize: 12, color: Theme.of(context).hintColor),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                state.name,
+                style: t?.itemNameTextStyle ??
+                    TextStyle(
+                      fontSize: 15,
+                      fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                      color: selected
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).textTheme.bodyLarge?.color,
+                    ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              if (showType && state.type != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    state.type!,
+                    style: t?.itemSubtitleTextStyle ??
+                        TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).hintColor,
+                        ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+            ],
           ),
+        ),
       ],
     );
   }

@@ -205,8 +205,12 @@ class _CountryStateCityFieldState extends State<CountryStateCityField> {
     final base = override ??
         widget.fieldStyle ??
         CountrifyFieldStyle.defaultStyle();
+    // Use external label by default; fall back to in-field labelText only
+    // if the caller explicitly set it via the style override.
+    final useExternal = base.externalLabel == null && base.labelText == null;
     return base.copyWith(
-      labelText: base.labelText ?? label,
+      externalLabel: useExternal ? label : base.externalLabel,
+      labelText: useExternal ? null : base.labelText,
       enabled: widget.enabled,
     );
   }

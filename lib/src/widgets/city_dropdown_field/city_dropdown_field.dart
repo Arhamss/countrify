@@ -1,12 +1,14 @@
 import 'package:countrify/src/data/geo_repository.dart';
-import 'package:countrify/src/icons/countrify_icons.dart';
 import 'package:countrify/src/models/city.dart';
+import 'package:countrify/src/utils/search_normalizer.dart';
 import 'package:countrify/src/widgets/city_picker/city_picker.dart';
 import 'package:countrify/src/widgets/countrify_field_style.dart';
 import 'package:countrify/src/widgets/country_picker_mode.dart';
 import 'package:countrify/src/widgets/geo_picker/geo_picker_config.dart';
 import 'package:countrify/src/widgets/geo_picker/geo_picker_theme.dart';
+import 'package:countrify/src/widgets/geo_picker/geo_search_overlay.dart';
 import 'package:countrify/src/widgets/geo_picker/geo_sort_by.dart';
+import 'package:countrify/src/widgets/shared/countrify_check_icon.dart';
 import 'package:flutter/material.dart';
 
 /// {@template city_dropdown_field}
@@ -33,6 +35,7 @@ class CityDropdownField extends StatefulWidget {
     this.pickerMode = CountryPickerMode.bottomSheet,
     this.sortBy = CitySortBy.name,
     this.enabled = true,
+    this.searchable = true,
     this.searchEnabled = true,
     this.showCoordinates = false,
     this.placeholder,
@@ -46,7 +49,12 @@ class CityDropdownField extends StatefulWidget {
     this.onSearchChanged,
     this.onResultsChanged,
     this.repository,
+    this.focusNode,
   });
+
+  /// Optional external focus node. Lets callers wire this field into form
+  /// focus chains (e.g. `FocusScope.of(context).nextFocus()`).
+  final FocusNode? focusNode;
 
   /// Id of the parent state. Changing this prop clears any current selection
   /// and refetches cities.
@@ -76,7 +84,10 @@ class CityDropdownField extends StatefulWidget {
   /// Whether the field accepts input.
   final bool enabled;
 
-  /// Whether the picker shows a search field.
+  /// When true (the default), the field becomes a searchable text field.
+  final bool searchable;
+
+  /// Whether the picker shows a search field (when [searchable] is false).
   final bool searchEnabled;
 
   /// Whether to show lat/lng as a subtitle in the default city row.
@@ -124,26 +135,114 @@ class CityDropdownField extends StatefulWidget {
 class _CityDropdownFieldState extends State<CityDropdownField> {
   City? _selected;
   List<City> _available = const [];
+  List<City> _filtered = const [];
   bool _loading = false;
   GeoRepository get _repo => widget.repository ?? GeoRepository.instance;
+
+  // Searchable mode state
+  final TextEditingController _searchController = TextEditingController();
+  final LayerLink _layerLink = LayerLink();
+  final GlobalKey _fieldKey = GlobalKey();
+  OverlayEntry? _overlayEntry;
+  FocusNode? _internalFocusNode;
+  FocusNode get _focusNode => widget.focusNode ?? (_internalFocusNode ??= FocusNode());
 
   @override
   void initState() {
     super.initState();
     if (widget.stateId != null) _hydrate(widget.stateId!);
+    if (widget.searchable) {
+      _focusNode.addListener(_onFocusChanged);
+    }
   }
 
   @override
   void didUpdateWidget(CityDropdownField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.stateId != oldWidget.stateId) {
-      setState(() {
-        _selected = null;
-        _available = const [];
+      _selected = null;
+      _available = const [];
+      _filtered = const [];
+      _searchController.clear();
+      _removeOverlay();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        widget.onChanged?.call(null);
       });
-      widget.onChanged?.call(null);
       if (widget.stateId != null) _hydrate(widget.stateId!);
     }
+  }
+
+  @override
+  void dispose() {
+    _removeOverlay();
+    _searchController.dispose();
+    _focusNode.removeListener(_onFocusChanged);
+    _internalFocusNode?.dispose();
+    super.dispose();
+  }
+
+  void _onFocusChanged() {
+    if (_focusNode.hasFocus && widget.searchable && _available.isNotEmpty) {
+      _filterAndShowOverlay(_searchController.text);
+    } else if (!_focusNode.hasFocus) {
+      Future.delayed(const Duration(milliseconds: 150), () {
+        if (!_focusNode.hasFocus && mounted) _removeOverlay();
+      });
+    }
+  }
+
+  void _onSearchTextChanged(String query) {
+    _filterAndShowOverlay(query);
+  }
+
+  void _filterAndShowOverlay(String query) {
+    final q = SearchNormalizer.basic(query);
+    setState(() {
+      _filtered = q.isEmpty
+          ? _available
+          : _available
+              .where((c) => SearchNormalizer.basic(c.name).contains(q))
+              .toList();
+    });
+    _showOverlay();
+  }
+
+  void _showOverlay() {
+    _removeOverlay();
+    final box = _fieldKey.currentContext?.findRenderObject() as RenderBox?;
+    if (box == null) return;
+
+    _overlayEntry = OverlayEntry(
+      builder: (_) => GeoSearchOverlay<City>(
+        link: _layerLink,
+        fieldKey: _fieldKey,
+        fieldWidth: box.size.width,
+        items: _filtered,
+        query: _searchController.text,
+        nameOf: (c) => c.name,
+        selected: _selected,
+        theme: widget.pickerTheme,
+        onSelected: _onItemSelected,
+        onDismiss: () {
+          _removeOverlay();
+          _focusNode.unfocus();
+        },
+      ),
+    );
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  void _onItemSelected(City city) {
+    _removeOverlay();
+    _searchController.text = city.name;
+    setState(() => _selected = city);
+    widget.onChanged?.call(city);
   }
 
   Future<void> _hydrate(int stateId) async {
@@ -166,6 +265,9 @@ class _CityDropdownFieldState extends State<CityDropdownField> {
   Future<void> _openPicker() async {
     final id = widget.stateId;
     if (!widget.enabled || id == null || _available.isEmpty) return;
+
+    // Dismiss any currently-focused keyboard before opening the picker.
+    FocusScope.of(context).unfocus();
 
     City? picked;
     final picker = CityPicker(
@@ -242,32 +344,69 @@ class _CityDropdownFieldState extends State<CityDropdownField> {
             ? (widget.emptyPlaceholder ?? 'No cities available')
             : (widget.placeholder ?? 'Select city'));
 
-    final suffix = _loading
-        ? (widget.loadingIndicatorBuilder?.call(context) ??
-            const SizedBox(
-              width: 18,
-              height: 18,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ))
-        : const Icon(CountrifyIcons.chevronDown, size: 18);
+    final suffix = Padding(
+      padding: const EdgeInsets.only(right: 12),
+      child: _loading
+          ? (widget.loadingIndicatorBuilder?.call(context) ??
+              const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ))
+          : const CountrifyDownArrowIcon(size: 20),
+    );
 
+    // ── Searchable mode ────────────────────────────────────────────────
+    if (widget.searchable) {
+      final searchSuffix = _loading ? suffix : null;
+      final field = CompositedTransformTarget(
+        link: _layerLink,
+        child: Opacity(
+          opacity: disabled ? 0.55 : 1,
+          child: IgnorePointer(
+            ignoring: disabled || _loading,
+            child: TextField(
+              key: _fieldKey,
+              controller: _searchController,
+              focusNode: _focusNode,
+              enabled: !disabled && !_loading,
+              onChanged: _onSearchTextChanged,
+              style: style.selectedCountryTextStyle,
+              cursorColor: style.cursorColor,
+              decoration: style.toInputDecoration(
+                suffixIconOverride: searchSuffix,
+              ).copyWith(hintText: placeholder),
+            ),
+          ),
+        ),
+      );
+      return style.wrapWithExternalLabel(context, child: field);
+    }
+
+    // ── Tap-to-open picker mode ────────────────────────────────────────
     final content = _selected == null
         ? Text(placeholder, style: style.hintStyle ?? const TextStyle(color: Colors.grey))
         : Text(_selected!.name, style: style.selectedCountryTextStyle);
 
-    return Opacity(
-      opacity: disabled ? 0.55 : 1,
-      child: IgnorePointer(
-        ignoring: disabled || _loading,
-        child: InkWell(
-          borderRadius: style.fieldBorderRadius ?? BorderRadius.circular(12),
-          onTap: _openPicker,
-          child: InputDecorator(
-            decoration: style.toInputDecoration(suffixIconOverride: suffix),
-            child: content,
+    final field = Focus(
+      focusNode: widget.focusNode,
+      canRequestFocus: !disabled,
+      child: Opacity(
+        opacity: disabled ? 0.55 : 1,
+        child: IgnorePointer(
+          ignoring: disabled || _loading,
+          child: InkWell(
+            borderRadius: style.fieldBorderRadius ?? BorderRadius.circular(12),
+            onTap: _openPicker,
+            child: InputDecorator(
+              decoration: style.toInputDecoration(suffixIconOverride: suffix),
+              child: content,
+            ),
           ),
         ),
       ),
     );
+
+    return style.wrapWithExternalLabel(context, child: field);
   }
 }

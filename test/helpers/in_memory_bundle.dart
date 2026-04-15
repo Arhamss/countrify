@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:countrify/src/data/geo_repository.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 /// Test-only [AssetBundle] that serves pre-seeded strings instead of reading
 /// real asset files. Combined with a fresh [GeoRepository] (not the global

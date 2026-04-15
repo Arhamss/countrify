@@ -85,6 +85,10 @@ class CountrifyFieldStyle {
     this.cursorColor,
     this.fieldBorderRadius,
     this.focusedFillColor,
+    // ── External label ──────────────────────────────────────────────
+    this.externalLabel,
+    this.externalLabelStyle,
+    this.externalLabelPadding,
   });
 
   /// Default light style that matches the current built-in field defaults.
@@ -119,6 +123,7 @@ class CountrifyFieldStyle {
       ),
       border: const OutlineInputBorder(borderRadius: radius),
       prefixIconConstraints: const BoxConstraints(),
+      suffixIconConstraints: const BoxConstraints(),
       cursorColor: Colors.blue,
       dividerColor: const Color(0xFFE0E0E0),
       prefixPadding:
@@ -165,6 +170,7 @@ class CountrifyFieldStyle {
       ),
       selectedCountryTextStyle: TextStyle(color: Colors.white),
       prefixIconConstraints: BoxConstraints(),
+      suffixIconConstraints: BoxConstraints(),
       cursorColor: Color(0xFF64B5F6),
       dividerColor: Color(0xFF404040),
       prefixPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -209,6 +215,7 @@ class CountrifyFieldStyle {
       ),
       border: OutlineInputBorder(borderRadius: borderRadius),
       prefixIconConstraints: const BoxConstraints(),
+      suffixIconConstraints: const BoxConstraints(),
       dividerColor: borderColor,
       prefixPadding:
           const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -253,6 +260,7 @@ class CountrifyFieldStyle {
         borderSide: BorderSide.none,
       ),
       prefixIconConstraints: const BoxConstraints(),
+      suffixIconConstraints: const BoxConstraints(),
       dividerColor: const Color(0xFFE0E0E0),
       prefixPadding:
           const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -462,6 +470,29 @@ class CountrifyFieldStyle {
   final Color? focusedFillColor;
 
   // ═══════════════════════════════════════════════════════════════════════
+  // External label
+  // ═══════════════════════════════════════════════════════════════════════
+
+  /// Text shown as an external label above the field.
+  ///
+  /// When non-null, a [Text] widget with this string is rendered above the
+  /// input field (outside the [InputDecoration]). This is an alternative to
+  /// the built-in [labelText] which renders inside the field border.
+  ///
+  /// Set to an empty string or null to hide the external label.
+  final String? externalLabel;
+
+  /// Style applied to the [externalLabel] text.
+  ///
+  /// Defaults to a 13px medium-weight style in a muted colour when null.
+  final TextStyle? externalLabelStyle;
+
+  /// Padding between the external label and the input field.
+  ///
+  /// Defaults to `EdgeInsets.only(bottom: 6)`.
+  final EdgeInsetsGeometry? externalLabelPadding;
+
+  // ═══════════════════════════════════════════════════════════════════════
   // toInputDecoration
   // ═══════════════════════════════════════════════════════════════════════
 
@@ -628,6 +659,10 @@ class CountrifyFieldStyle {
     Color? cursorColor,
     BorderRadius? fieldBorderRadius,
     Color? focusedFillColor,
+    // External label
+    String? externalLabel,
+    TextStyle? externalLabelStyle,
+    EdgeInsetsGeometry? externalLabelPadding,
   }) {
     return CountrifyFieldStyle(
       icon: icon ?? this.icon,
@@ -696,6 +731,46 @@ class CountrifyFieldStyle {
       cursorColor: cursorColor ?? this.cursorColor,
       fieldBorderRadius: fieldBorderRadius ?? this.fieldBorderRadius,
       focusedFillColor: focusedFillColor ?? this.focusedFillColor,
+      externalLabel: externalLabel ?? this.externalLabel,
+      externalLabelStyle: externalLabelStyle ?? this.externalLabelStyle,
+      externalLabelPadding:
+          externalLabelPadding ?? this.externalLabelPadding,
+    );
+  }
+
+  /// Wraps [child] with an external label if [externalLabel] is set.
+  ///
+  /// Call this in widget `build` methods:
+  /// ```dart
+  /// return style.wrapWithExternalLabel(
+  ///   context,
+  ///   child: InputDecorator(...),
+  /// );
+  /// ```
+  Widget wrapWithExternalLabel(
+    BuildContext context, {
+    required Widget child,
+  }) {
+    final label = externalLabel;
+    if (label == null || label.isEmpty) return child;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: externalLabelPadding ?? const EdgeInsets.only(bottom: 6),
+          child: Text(
+            label,
+            style: externalLabelStyle ??
+                TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade700,
+                ),
+          ),
+        ),
+        child,
+      ],
     );
   }
 }
