@@ -1,3 +1,21 @@
+## 2.5.1
+
+### Added
+
+- **`GeoPickerTheme.itemSelectedNameTextStyle`** — text style for the
+  primary label when a row is selected in `GeoSearchOverlay`. Falls back to
+  `itemNameTextStyle` for unselected rows.
+- **`GeoPickerTheme.selectedIconWidget`** — custom widget for the selected
+  row indicator. Takes precedence over `selectedIcon` when provided.
+- **`GeoPickerTheme.selectedIconSize`** — size of the default selected
+  check icon. Defaults to 20 (was hardcoded at 16).
+
+### Fixed
+
+- **CitySearchField** — `initialCityName` now resolves to a full
+  `CitySearchResult` via `searchCities` after preload, so the matching city
+  appears selected in the overlay dropdown.
+
 ## 2.5.0
 
 Name-based pre-fill for edit flows — populate fields from backend strings

@@ -45,6 +45,7 @@ class GeoPickerTheme {
     this.itemBorderRadius,
     this.itemContentPadding,
     this.itemNameTextStyle,
+    this.itemSelectedNameTextStyle,
     this.itemSubtitleTextStyle,
     this.dialogOptionTextStyle,
     this.borderColor,
@@ -57,6 +58,8 @@ class GeoPickerTheme {
     this.searchIcon,
     this.clearIcon,
     this.selectedIcon,
+    this.selectedIconWidget,
+    this.selectedIconSize,
     this.emptyStateIcon,
     this.emptyStateTextStyle,
   });
@@ -151,6 +154,9 @@ class GeoPickerTheme {
   /// Text style of the primary label inside an item row.
   final TextStyle? itemNameTextStyle;
 
+  /// Text style of the primary label when the row is selected.
+  final TextStyle? itemSelectedNameTextStyle;
+
   /// Text style of the secondary label (subtitle) inside an item row.
   final TextStyle? itemSubtitleTextStyle;
 
@@ -186,6 +192,13 @@ class GeoPickerTheme {
 
   /// Icon shown next to the currently selected row.
   final IconData? selectedIcon;
+
+  /// Custom widget shown next to the currently selected row.
+  /// Takes precedence over [selectedIcon] when provided.
+  final Widget? selectedIconWidget;
+
+  /// Size of the default selected icon. Defaults to 20.
+  final double? selectedIconSize;
 
   /// Icon shown on the empty-results state.
   final IconData? emptyStateIcon;
@@ -231,6 +244,7 @@ class GeoPickerTheme {
     BorderRadius? itemBorderRadius,
     EdgeInsetsGeometry? itemContentPadding,
     TextStyle? itemNameTextStyle,
+    TextStyle? itemSelectedNameTextStyle,
     TextStyle? itemSubtitleTextStyle,
     TextStyle? dialogOptionTextStyle,
     Color? borderColor,
@@ -243,6 +257,8 @@ class GeoPickerTheme {
     IconData? searchIcon,
     IconData? clearIcon,
     IconData? selectedIcon,
+    Widget? selectedIconWidget,
+    double? selectedIconSize,
     IconData? emptyStateIcon,
     TextStyle? emptyStateTextStyle,
   }) {
@@ -268,6 +284,7 @@ class GeoPickerTheme {
       itemBorderRadius: itemBorderRadius ?? this.itemBorderRadius,
       itemContentPadding: itemContentPadding ?? this.itemContentPadding,
       itemNameTextStyle: itemNameTextStyle ?? this.itemNameTextStyle,
+      itemSelectedNameTextStyle: itemSelectedNameTextStyle ?? this.itemSelectedNameTextStyle,
       itemSubtitleTextStyle: itemSubtitleTextStyle ?? this.itemSubtitleTextStyle,
       dialogOptionTextStyle: dialogOptionTextStyle ?? this.dialogOptionTextStyle,
       borderColor: borderColor ?? this.borderColor,
@@ -280,6 +297,8 @@ class GeoPickerTheme {
       searchIcon: searchIcon ?? this.searchIcon,
       clearIcon: clearIcon ?? this.clearIcon,
       selectedIcon: selectedIcon ?? this.selectedIcon,
+      selectedIconWidget: selectedIconWidget ?? this.selectedIconWidget,
+      selectedIconSize: selectedIconSize ?? this.selectedIconSize,
       emptyStateIcon: emptyStateIcon ?? this.emptyStateIcon,
       emptyStateTextStyle: emptyStateTextStyle ?? this.emptyStateTextStyle,
     );

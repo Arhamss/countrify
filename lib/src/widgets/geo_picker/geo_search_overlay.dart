@@ -209,14 +209,18 @@ class _GeoSearchOverlayState<T> extends State<GeoSearchOverlay<T>>
                     children: [
                       Text(
                         name,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight:
-                              isSelected ? FontWeight.w600 : FontWeight.w500,
-                          color: isSelected
-                              ? Theme.of(context).colorScheme.primary
-                              : null,
-                        ),
+                        style: isSelected
+                            ? (widget.theme?.itemSelectedNameTextStyle ??
+                                TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color:
+                                      Theme.of(context).colorScheme.primary,
+                                ))
+                            : (widget.theme?.itemNameTextStyle ??
+                                const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500)),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -234,11 +238,12 @@ class _GeoSearchOverlayState<T> extends State<GeoSearchOverlay<T>>
                   ),
                 ),
                 if (isSelected)
-                  CountrifyCheckIcon(
-                    size: 16,
-                    color: widget.theme?.itemSelectedIconColor ??
-                        Theme.of(context).colorScheme.primary,
-                  ),
+                  widget.theme?.selectedIconWidget ??
+                      CountrifyCheckIcon(
+                        size: widget.theme?.selectedIconSize ?? 20,
+                        color: widget.theme?.itemSelectedIconColor ??
+                            Theme.of(context).colorScheme.primary,
+                      ),
               ],
             ),
           ),

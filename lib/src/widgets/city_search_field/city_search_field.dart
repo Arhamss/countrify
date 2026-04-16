@@ -120,6 +120,7 @@ class _CitySearchFieldState extends State<CitySearchField> {
     } else if (widget.initialCityName != null &&
         widget.initialCityName!.isNotEmpty) {
       _searchController.text = widget.initialCityName!;
+      _hydrateByName(widget.initialCityName!);
     }
   }
 
@@ -262,6 +263,25 @@ class _CitySearchFieldState extends State<CitySearchField> {
   }
 
   // ── Initial hydration ──────────────────────────────────────────────────
+
+  Future<void> _hydrateByName(String cityName) async {
+    final results = await _repo.searchCities(
+      countryIso2: widget.countryIso2,
+      query: cityName,
+    );
+    if (!mounted || results.isEmpty) return;
+
+    // Find exact match (case-insensitive).
+    final match = results.cast<CitySearchResult?>().firstWhere(
+          (r) => r!.city.name.toLowerCase() == cityName.toLowerCase(),
+          orElse: () => null,
+        );
+
+    if (match != null) {
+      setState(() => _selected = match);
+      // Don't call onChanged — this is restoring state, not a user action.
+    }
+  }
 
   Future<void> _hydrateInitial() async {
     final states = await _repo.statesOf(widget.countryIso2);
