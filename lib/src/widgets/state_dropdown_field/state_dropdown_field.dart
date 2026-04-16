@@ -33,6 +33,7 @@ class StateDropdownField extends StatefulWidget {
     required this.countryIso2,
     super.key,
     this.initialStateId,
+    this.initialStateName,
     this.onChanged,
     this.style,
     this.pickerTheme,
@@ -67,6 +68,12 @@ class StateDropdownField extends StatefulWidget {
 
   /// Initially selected state id.
   final int? initialStateId;
+
+  /// Initial state name to pre-fill the field without needing a state ID.
+  /// When provided and [initialStateId] is null, the field attempts to match
+  /// by name after loading states. Useful in edit flows where the backend
+  /// provides a name string.
+  final String? initialStateName;
 
   /// Called when the user picks a state. The callback receives `null` only
   /// when the selection is cleared by an external prop change (e.g. when
@@ -196,6 +203,23 @@ class _StateDropdownFieldState extends State<StateDropdownField> {
         widget.onChanged?.call(match);
       }
     }
+
+    // React to external initialStateName changes (when no ID is set).
+    if (widget.initialStateName != oldWidget.initialStateName &&
+        widget.initialStateName != null &&
+        widget.initialStateName!.isNotEmpty &&
+        widget.initialStateId == null) {
+      final q = widget.initialStateName!.toLowerCase();
+      final match = _available.cast<CountryState?>().firstWhere(
+            (s) => s!.name.toLowerCase() == q,
+            orElse: () => null,
+          );
+      if (match != null && match != _selected) {
+        setState(() => _selected = match);
+        if (widget.searchable) _searchController.text = match.name;
+        widget.onChanged?.call(match);
+      }
+    }
   }
 
   @override
@@ -283,12 +307,27 @@ class _StateDropdownFieldState extends State<StateDropdownField> {
     setState(() {
       _available = states;
       _loading = false;
+
+      // Try ID-based match first, then fall back to name-based match.
       if (widget.initialStateId != null) {
         _selected = states.cast<CountryState?>().firstWhere(
               (s) => s!.id == widget.initialStateId,
               orElse: () => null,
             );
-        if (_selected != null) widget.onChanged?.call(_selected);
+      }
+      if (_selected == null &&
+          widget.initialStateName != null &&
+          widget.initialStateName!.isNotEmpty) {
+        final q = widget.initialStateName!.toLowerCase();
+        _selected = states.cast<CountryState?>().firstWhere(
+              (s) => s!.name.toLowerCase() == q,
+              orElse: () => null,
+            );
+      }
+
+      if (_selected != null) {
+        if (widget.searchable) _searchController.text = _selected!.name;
+        widget.onChanged?.call(_selected);
       }
     });
   }

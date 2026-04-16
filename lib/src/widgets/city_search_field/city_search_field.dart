@@ -34,6 +34,7 @@ class CitySearchField extends StatefulWidget {
     required this.countryIso2,
     super.key,
     this.initialCityId,
+    this.initialCityName,
     this.onChanged,
     this.style,
     this.pickerTheme,
@@ -51,6 +52,10 @@ class CitySearchField extends StatefulWidget {
   /// Initially selected city id. On hydration the field resolves the city and
   /// its parent state, then updates the display text.
   final int? initialCityId;
+
+  /// Initial city name to pre-fill the text field without needing a city ID.
+  /// Useful in edit flows where the backend provides a name string.
+  final String? initialCityName;
 
   /// Called when the user picks a city. Receives `null` when the field is
   /// cleared.
@@ -110,7 +115,12 @@ class _CitySearchFieldState extends State<CitySearchField> {
     _focusNode.addListener(_onFocusChanged);
     // Kick off background preload so subsequent searches are instant.
     _repo.preloadCities(widget.countryIso2);
-    if (widget.initialCityId != null) _hydrateInitial();
+    if (widget.initialCityId != null) {
+      _hydrateInitial();
+    } else if (widget.initialCityName != null &&
+        widget.initialCityName!.isNotEmpty) {
+      _searchController.text = widget.initialCityName!;
+    }
   }
 
   @override
@@ -119,6 +129,15 @@ class _CitySearchFieldState extends State<CitySearchField> {
     if (widget.countryIso2 != oldWidget.countryIso2) {
       _clear(notify: true);
       _repo.preloadCities(widget.countryIso2);
+    }
+
+    // React to external initialCityName changes (when no ID is set).
+    if (widget.initialCityName != oldWidget.initialCityName &&
+        widget.initialCityName != null &&
+        widget.initialCityName!.isNotEmpty &&
+        widget.initialCityId == null &&
+        _selected == null) {
+      _searchController.text = widget.initialCityName!;
     }
   }
 

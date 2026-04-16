@@ -568,6 +568,17 @@ StateDropdownField(
 Changing `countryIso2` automatically clears the selection and refetches
 states. The field shows an inline spinner while loading.
 
+**Pre-filling in edit mode** — pass `initialStateName` to pre-fill from a
+backend string without needing a state ID:
+
+```dart
+StateDropdownField(
+  countryIso2: 'US',
+  initialStateName: member.state,  // e.g. "California"
+  onChanged: (s) => setState(() => _state = s),
+)
+```
+
 ---
 
 ### CityDropdownField
@@ -619,6 +630,17 @@ provides a `CitySearchResult` record containing both the `City` and its
 parent `CountryState`. City files are pre-loaded in the background on init
 for snappy search. Changing `countryIso2` clears the selection and
 re-preloads.
+
+**Pre-filling in edit mode** — pass `initialCityName` to pre-fill from a
+backend string without needing a city ID:
+
+```dart
+CitySearchField(
+  countryIso2: 'US',
+  initialCityName: member.city,   // e.g. "San Francisco"
+  onChanged: (result) { ... },
+)
+```
 
 ---
 

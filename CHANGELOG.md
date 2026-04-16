@@ -1,3 +1,30 @@
+## 2.5.0
+
+Name-based pre-fill for edit flows — populate fields from backend strings
+without needing IDs.
+
+### Added
+
+- **`CitySearchField.initialCityName`** (`String?`) — pre-fills the text
+  field with a city name without requiring a city ID. When both
+  `initialCityId` and `initialCityName` are provided, the ID takes priority.
+  Reactive via `didUpdateWidget` when no ID is set.
+- **`StateDropdownField.initialStateName`** (`String?`) — pre-fills the
+  field and attempts to match a loaded state by name (case-insensitive).
+  When `initialStateId` is null and `initialStateName` is set, the field
+  matches against loaded states after hydration. ID-based matching always
+  takes priority. Reactive via `didUpdateWidget`.
+
+### Edge cases handled
+
+- **ID + name both provided** — ID match takes priority; name is only used
+  as a fallback if no ID match is found.
+- **Name doesn't match any loaded state/city** — field shows the pre-filled
+  text (city) or placeholder (state), no crash or empty state.
+- **`didUpdateWidget` reactivity** — both fields react to external name
+  changes, but only when no ID is set and no selection has been made.
+- **Empty or null name** — silently ignored, no pre-fill.
+
 ## 2.4.1
 
 ### Fixed
