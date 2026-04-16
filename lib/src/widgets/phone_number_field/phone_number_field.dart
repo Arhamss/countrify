@@ -506,27 +506,36 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       isFocused: _isFocused,
     );
 
-    final field = CompositedTransformTarget(
-      link: _layerLink,
-      child: TextFormField(
-        key: _fieldKey,
-        controller: _controller,
-        focusNode: _focusNode,
-        cursorColor:
-            resolvedStyle.cursorColor ?? pickerTheme.searchCursorColor,
-        enabled: widget.enabled,
-        readOnly: widget.readOnly,
-        autofocus: widget.autofocus,
-        keyboardType: widget.keyboardType,
-        textInputAction: widget.textInputAction,
-        maxLength: effectiveMaxLength,
-        style:
-            resolvedStyle.phoneTextStyle ?? pickerTheme.countryNameTextStyle,
-        inputFormatters: widget.inputFormatters,
-        validator: _autoValidator,
-        onFieldSubmitted: widget.onSubmitted,
-        onEditingComplete: widget.onEditingComplete,
-        decoration: decoration,
+    final field = DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius:
+            resolvedStyle.fieldBorderRadius ?? BorderRadius.circular(12),
+        boxShadow: _isFocused && resolvedStyle.focusedBoxShadow != null
+            ? resolvedStyle.focusedBoxShadow!
+            : const [],
+      ),
+      child: CompositedTransformTarget(
+        link: _layerLink,
+        child: TextFormField(
+          key: _fieldKey,
+          controller: _controller,
+          focusNode: _focusNode,
+          cursorColor:
+              resolvedStyle.cursorColor ?? pickerTheme.searchCursorColor,
+          enabled: widget.enabled,
+          readOnly: widget.readOnly,
+          autofocus: widget.autofocus,
+          keyboardType: widget.keyboardType,
+          textInputAction: widget.textInputAction,
+          maxLength: effectiveMaxLength,
+          style:
+              resolvedStyle.phoneTextStyle ?? pickerTheme.countryNameTextStyle,
+          inputFormatters: widget.inputFormatters,
+          validator: _autoValidator,
+          onFieldSubmitted: widget.onSubmitted,
+          onEditingComplete: widget.onEditingComplete,
+          decoration: decoration,
+        ),
       ),
     );
 

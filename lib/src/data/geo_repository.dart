@@ -93,6 +93,78 @@ class GeoRepository {
     });
   }
 
+  /// Searches all cities across all states for [countryIso2].
+  ///
+  /// Loads state files lazily and caches them. Returns matching cities
+  /// (capped at [limit]) sorted by relevance — exact prefix matches first,
+  /// then contains matches, each group alphabetical.
+  ///
+  /// ```dart
+  /// final results = await GeoRepository.instance.searchCities(
+  ///   countryIso2: 'US',
+  ///   query: 'san',
+  /// );
+  /// for (final (:city, :state) in results) {
+  ///   print('${city.name}, ${state.name}');
+  /// }
+  /// ```
+  Future<List<({City city, CountryState state})>> searchCities({
+    required String countryIso2,
+    required String query,
+    int limit = 20,
+  }) async {
+    final q = query.trim().toLowerCase();
+    if (q.isEmpty) return const [];
+
+    final states = await statesOf(countryIso2);
+    if (states.isEmpty) return const [];
+
+    final results = <({City city, CountryState state})>[];
+
+    // Load cities in batches of 10 states to avoid loading all files at once
+    // on the first search. Cached states resolve instantly on subsequent calls.
+    const batchSize = 10;
+    for (var i = 0; i < states.length; i += batchSize) {
+      final batch = states.sublist(
+        i,
+        (i + batchSize).clamp(0, states.length),
+      );
+      final cityLists = await Future.wait(
+        batch.map((s) => citiesOf(s.id)),
+      );
+      for (var j = 0; j < batch.length; j++) {
+        final state = batch[j];
+        for (final city in cityLists[j]) {
+          if (city.name.toLowerCase().contains(q)) {
+            results.add((city: city, state: state));
+          }
+        }
+      }
+      // Stop early if we already have more than enough results.
+      if (results.length >= limit * 2) break;
+    }
+
+    // Sort: prefix matches first, then contains, each group alphabetical.
+    results.sort((a, b) {
+      final aPrefix = a.city.name.toLowerCase().startsWith(q);
+      final bPrefix = b.city.name.toLowerCase().startsWith(q);
+      if (aPrefix != bPrefix) return aPrefix ? -1 : 1;
+      return a.city.name.compareTo(b.city.name);
+    });
+
+    return results.length > limit ? results.sublist(0, limit) : results;
+  }
+
+  /// Pre-loads all city files for [countryIso2] in the background.
+  ///
+  /// Call this on screen init so that subsequent [searchCities] calls are
+  /// instant. Safe to call multiple times — already-cached states are skipped.
+  Future<void> preloadCities(String countryIso2) async {
+    final states = await statesOf(countryIso2);
+    // Fire all loads concurrently; citiesOf deduplicates in-flight requests.
+    await Future.wait(states.map((s) => citiesOf(s.id)));
+  }
+
   /// Drops every cached states / cities entry. Useful in long-running tests
   /// or when memory pressure makes the ~10 MB worst-case footprint a concern.
   void clearCache() {

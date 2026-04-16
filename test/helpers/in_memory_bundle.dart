@@ -72,6 +72,10 @@ GeoRepository buildFixtureRepository() {
         {'id': 300, 'name': 'San Francisco'},
         {'id': 301, 'name': 'Los Angeles'},
       ]),
+      'packages/countrify/assets/geo/cities/2.json': jsonEncode([
+        {'id': 400, 'name': 'Las Vegas'},
+        {'id': 401, 'name': 'Reno'},
+      ]),
     }),
   );
 }

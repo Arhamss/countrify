@@ -146,14 +146,13 @@ class _CityDropdownFieldState extends State<CityDropdownField> {
   OverlayEntry? _overlayEntry;
   FocusNode? _internalFocusNode;
   FocusNode get _focusNode => widget.focusNode ?? (_internalFocusNode ??= FocusNode());
+  bool _isFocused = false;
 
   @override
   void initState() {
     super.initState();
     if (widget.stateId != null) _hydrate(widget.stateId!);
-    if (widget.searchable) {
-      _focusNode.addListener(_onFocusChanged);
-    }
+    _focusNode.addListener(_onFocusChanged);
   }
 
   @override
@@ -183,6 +182,7 @@ class _CityDropdownFieldState extends State<CityDropdownField> {
   }
 
   void _onFocusChanged() {
+    setState(() => _isFocused = _focusNode.hasFocus);
     if (_focusNode.hasFocus && widget.searchable && _available.isNotEmpty) {
       _filterAndShowOverlay(_searchController.text);
     } else if (!_focusNode.hasFocus) {
@@ -356,26 +356,36 @@ class _CityDropdownFieldState extends State<CityDropdownField> {
           : const CountrifyDownArrowIcon(size: 20),
     );
 
+    final shadowDecoration = BoxDecoration(
+      borderRadius: style.fieldBorderRadius ?? BorderRadius.circular(12),
+      boxShadow: _isFocused && style.focusedBoxShadow != null
+          ? style.focusedBoxShadow!
+          : const [],
+    );
+
     // ── Searchable mode ────────────────────────────────────────────────
     if (widget.searchable) {
       final searchSuffix = _loading ? suffix : null;
-      final field = CompositedTransformTarget(
-        link: _layerLink,
-        child: Opacity(
-          opacity: disabled ? 0.55 : 1,
-          child: IgnorePointer(
-            ignoring: disabled || _loading,
-            child: TextField(
-              key: _fieldKey,
-              controller: _searchController,
-              focusNode: _focusNode,
-              enabled: !disabled && !_loading,
-              onChanged: _onSearchTextChanged,
-              style: style.selectedCountryTextStyle,
-              cursorColor: style.cursorColor,
-              decoration: style.toInputDecoration(
-                suffixIconOverride: searchSuffix,
-              ).copyWith(hintText: placeholder),
+      final field = DecoratedBox(
+        decoration: shadowDecoration,
+        child: CompositedTransformTarget(
+          link: _layerLink,
+          child: Opacity(
+            opacity: disabled ? 0.55 : 1,
+            child: IgnorePointer(
+              ignoring: disabled || _loading,
+              child: TextField(
+                key: _fieldKey,
+                controller: _searchController,
+                focusNode: _focusNode,
+                enabled: !disabled && !_loading,
+                onChanged: _onSearchTextChanged,
+                style: style.selectedCountryTextStyle,
+                cursorColor: style.cursorColor,
+                decoration: style.toInputDecoration(
+                  suffixIconOverride: searchSuffix,
+                ).copyWith(hintText: placeholder),
+              ),
             ),
           ),
         ),
@@ -388,19 +398,22 @@ class _CityDropdownFieldState extends State<CityDropdownField> {
         ? Text(placeholder, style: style.hintStyle ?? const TextStyle(color: Colors.grey))
         : Text(_selected!.name, style: style.selectedCountryTextStyle);
 
-    final field = Focus(
-      focusNode: widget.focusNode,
-      canRequestFocus: !disabled,
-      child: Opacity(
-        opacity: disabled ? 0.55 : 1,
-        child: IgnorePointer(
-          ignoring: disabled || _loading,
-          child: InkWell(
-            borderRadius: style.fieldBorderRadius ?? BorderRadius.circular(12),
-            onTap: _openPicker,
-            child: InputDecorator(
-              decoration: style.toInputDecoration(suffixIconOverride: suffix),
-              child: content,
+    final field = DecoratedBox(
+      decoration: shadowDecoration,
+      child: Focus(
+        focusNode: widget.focusNode,
+        canRequestFocus: !disabled,
+        child: Opacity(
+          opacity: disabled ? 0.55 : 1,
+          child: IgnorePointer(
+            ignoring: disabled || _loading,
+            child: InkWell(
+              borderRadius: style.fieldBorderRadius ?? BorderRadius.circular(12),
+              onTap: _openPicker,
+              child: InputDecorator(
+                decoration: style.toInputDecoration(suffixIconOverride: suffix),
+                child: content,
+              ),
             ),
           ),
         ),

@@ -92,6 +92,10 @@ class CountryDropdownField extends StatefulWidget {
 
 class _CountryDropdownFieldState extends State<CountryDropdownField> {
   Country? _selectedCountry;
+  FocusNode? _internalFocusNode;
+  FocusNode get _focusNode =>
+      widget.focusNode ?? (_internalFocusNode ??= FocusNode());
+  bool _isFocused = false;
 
   @override
   void initState() {
@@ -99,6 +103,7 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
     _selectedCountry = CountryUtils.resolveInitialCountry(
       initialCountryCode: widget.initialCountryCode,
     );
+    _focusNode.addListener(_onFocusChanged);
   }
 
   @override
@@ -111,6 +116,17 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
         );
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_onFocusChanged);
+    _internalFocusNode?.dispose();
+    super.dispose();
+  }
+
+  void _onFocusChanged() {
+    setState(() => _isFocused = _focusNode.hasFocus);
   }
 
   Future<void> _showPicker() async {
@@ -276,33 +292,41 @@ class _CountryDropdownFieldState extends State<CountryDropdownField> {
       suffixIconOverride: suffixWidget,
     );
 
-    final field = Focus(
-      focusNode: widget.focusNode,
-      canRequestFocus: widget.enabled,
-      onKeyEvent: (node, event) {
-        if (event is KeyDownEvent &&
-            (event.logicalKey == LogicalKeyboardKey.space ||
-                event.logicalKey == LogicalKeyboardKey.enter)) {
-          _showPicker();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
-      },
-      child: InkWell(
-        onTap: widget.enabled && widget.pickerMode != CountryPickerMode.none
-            ? _showPicker
-            : null,
+    final field = DecoratedBox(
+      decoration: BoxDecoration(
         borderRadius: borderRadius,
-        child: InputDecorator(
-          decoration: decoration,
-          isEmpty: _selectedCountry == null,
-          child: _selectedCountry != null
-              ? Text(
-                  _getDisplayText(),
-                  style: effectiveStyle.selectedCountryTextStyle ??
-                      theme.countryNameTextStyle,
-                )
+        boxShadow: _isFocused && effectiveStyle.focusedBoxShadow != null
+            ? effectiveStyle.focusedBoxShadow!
+            : const [],
+      ),
+      child: Focus(
+        focusNode: _focusNode,
+        canRequestFocus: widget.enabled,
+        onKeyEvent: (node, event) {
+          if (event is KeyDownEvent &&
+              (event.logicalKey == LogicalKeyboardKey.space ||
+                  event.logicalKey == LogicalKeyboardKey.enter)) {
+            _showPicker();
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+        child: InkWell(
+          onTap: widget.enabled && widget.pickerMode != CountryPickerMode.none
+              ? _showPicker
               : null,
+          borderRadius: borderRadius,
+          child: InputDecorator(
+            decoration: decoration,
+            isEmpty: _selectedCountry == null,
+            child: _selectedCountry != null
+                ? Text(
+                    _getDisplayText(),
+                    style: effectiveStyle.selectedCountryTextStyle ??
+                        theme.countryNameTextStyle,
+                  )
+                : null,
+          ),
         ),
       ),
     );

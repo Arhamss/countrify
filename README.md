@@ -44,6 +44,7 @@ A comprehensive Flutter package for country selection with **250 countries**, **
   - [CityPicker](#citypicker)
   - [StateDropdownField](#statedropdownfield)
   - [CityDropdownField](#citydropdownfield)
+  - [CitySearchField](#citysearchfield)
   - [Shared Building Blocks](#shared-building-blocks)
 - [Theming](#theming)
   - [Built-in Themes](#built-in-themes)
@@ -108,6 +109,8 @@ Countrify is the most feature-rich country picker for Flutter. It ships with **2
 - **Phone Validation** — Lightweight `PhoneMetadata` with auto-validation on `PhoneNumberField`
 - **Accessibility** — `Semantics` labels and `Tooltip` on all interactive elements
 - **focusedFillColor** — Separate fill color when field has focus via `CountrifyFieldStyle`
+- **focusedBoxShadow** — Box shadow when field has focus via `CountrifyFieldStyle`
+- **CitySearchField** — Global city search with auto-state resolution — search all cities for a country without pre-selecting a state
 
 ---
 
@@ -581,6 +584,41 @@ CityDropdownField(
   onChanged: (c) => setState(() => _city = c),
 )
 ```
+
+---
+
+### CitySearchField
+
+Searchable text field that searches across **all** cities for a country
+without requiring a pre-selected state. When a city is selected the parent
+state is resolved automatically.
+
+```dart
+CitySearchField(
+  countryIso2: 'US',
+  style: CountrifyFieldStyle.defaultStyle().copyWith(
+    focusedBoxShadow: [
+      BoxShadow(
+        color: Colors.blue.withValues(alpha: 0.15),
+        blurRadius: 8,
+        spreadRadius: 2,
+      ),
+    ],
+  ),
+  onChanged: (result) {
+    if (result != null) {
+      print('${result.city.name}, ${result.state.name}');
+      // e.g. "San Francisco, California"
+    }
+  },
+)
+```
+
+The field displays results as "City, State" and the `onChanged` callback
+provides a `CitySearchResult` record containing both the `City` and its
+parent `CountryState`. City files are pre-loaded in the background on init
+for snappy search. Changing `countryIso2` clears the selection and
+re-preloads.
 
 ---
 

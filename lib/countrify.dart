@@ -22,6 +22,7 @@ export 'src/models/state.dart';
 export 'src/utils/country_utils.dart';
 export 'src/utils/search_normalizer.dart';
 export 'src/widgets/city_dropdown_field/city_dropdown_field.dart';
+export 'src/widgets/city_search_field/city_search_field.dart';
 export 'src/widgets/city_picker/city_picker.dart';
 export 'src/widgets/countrify_field_style.dart';
 export 'src/widgets/country_dropdown_field/country_dropdown_field.dart';

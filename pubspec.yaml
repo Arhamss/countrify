@@ -1,6 +1,6 @@
 name: countrify
 description: "A beautiful, customizable country picker for Flutter with 250 countries, 5,300+ states, 150,000+ cities, 5 display modes, theming, and 132 translations."
-version: 2.3.0
+version: 2.4.0
 homepage: https://gocodeable.com
 repository: https://github.com/Arhamss/countrify
 issue_tracker: https://github.com/Arhamss/countrify/issues

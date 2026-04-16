@@ -1,3 +1,46 @@
+## 2.4.0
+
+Global city search with auto-state resolution, and focus box shadow support
+across all field widgets.
+
+### Added
+
+- **`CitySearchField`** — new searchable text field that searches across all
+  cities for a given country without pre-selecting a state. When a city is
+  selected the parent state is resolved automatically. The field displays
+  results as "City, State" (e.g. "San Francisco, California") and the
+  `onChanged` callback provides both the `City` and its parent
+  `CountryState` via a `CitySearchResult` record.
+- **`GeoRepository.searchCities()`** — searches all cities across all states
+  for a country. Loads state city files in batches of 10 (lazy + cached),
+  filters by `contains`, sorts prefix matches first, and caps results at a
+  configurable `limit` (default 20).
+- **`GeoRepository.preloadCities()`** — pre-loads all city files for a
+  country in the background so subsequent `searchCities` calls are instant.
+  `CitySearchField` calls this automatically on init.
+- **`focusedBoxShadow`** on `CountrifyFieldStyle` — `List<BoxShadow>?`
+  property that applies a box shadow around the field when focused. Supported
+  by `PhoneNumberField`, `CountryDropdownField`, `StateDropdownField`,
+  `CityDropdownField`, and `CitySearchField`. Default is `null` (no shadow).
+
+### Changed
+
+- **Focus tracking** — `StateDropdownField`, `CityDropdownField`,
+  `CountryDropdownField`, and `CitySearchField` now track focus state
+  internally via `setState` to support the new `focusedBoxShadow` property.
+  All field widgets wrap their outermost container in a `DecoratedBox` that
+  applies the shadow when focused and an empty shadow list when unfocused,
+  avoiding widget tree instability on focus change.
+
+### Testing
+
+- Added 8 unit tests for `GeoRepository.searchCities` (matching, empty
+  query, country boundaries, prefix sorting, limit, case insensitivity).
+- Added 5 widget tests for `CitySearchField` (placeholder, multi-state
+  results, selection with "City, State" display, clear behavior, country
+  isolation).
+- Added Nevada cities to test fixture for cross-state search testing.
+
 ## 2.3.0
 
 Searchable dropdown fields, external labels, improved default styling, and

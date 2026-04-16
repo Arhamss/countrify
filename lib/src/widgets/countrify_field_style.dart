@@ -85,6 +85,7 @@ class CountrifyFieldStyle {
     this.cursorColor,
     this.fieldBorderRadius,
     this.focusedFillColor,
+    this.focusedBoxShadow,
     // ── External label ──────────────────────────────────────────────
     this.externalLabel,
     this.externalLabelStyle,
@@ -469,6 +470,10 @@ class CountrifyFieldStyle {
   /// focus. When null, [fillColor] is used regardless of focus state.
   final Color? focusedFillColor;
 
+  /// Box shadow applied around the field when it has input focus.
+  /// When null, no shadow is shown.
+  final List<BoxShadow>? focusedBoxShadow;
+
   // ═══════════════════════════════════════════════════════════════════════
   // External label
   // ═══════════════════════════════════════════════════════════════════════
@@ -659,6 +664,7 @@ class CountrifyFieldStyle {
     Color? cursorColor,
     BorderRadius? fieldBorderRadius,
     Color? focusedFillColor,
+    List<BoxShadow>? focusedBoxShadow,
     // External label
     String? externalLabel,
     TextStyle? externalLabelStyle,
@@ -731,6 +737,7 @@ class CountrifyFieldStyle {
       cursorColor: cursorColor ?? this.cursorColor,
       fieldBorderRadius: fieldBorderRadius ?? this.fieldBorderRadius,
       focusedFillColor: focusedFillColor ?? this.focusedFillColor,
+      focusedBoxShadow: focusedBoxShadow ?? this.focusedBoxShadow,
       externalLabel: externalLabel ?? this.externalLabel,
       externalLabelStyle: externalLabelStyle ?? this.externalLabelStyle,
       externalLabelPadding:
