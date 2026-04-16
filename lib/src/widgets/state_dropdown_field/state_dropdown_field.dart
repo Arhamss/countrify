@@ -181,6 +181,21 @@ class _StateDropdownFieldState extends State<StateDropdownField> {
       });
       if (widget.countryIso2 != null) _hydrate(widget.countryIso2!);
     }
+
+    // React to external initialStateId changes.
+    if (widget.initialStateId != oldWidget.initialStateId &&
+        widget.initialStateId != null &&
+        widget.initialStateId != _selected?.id) {
+      final match = _available.cast<CountryState?>().firstWhere(
+            (s) => s!.id == widget.initialStateId,
+            orElse: () => null,
+          );
+      if (match != null) {
+        setState(() => _selected = match);
+        if (widget.searchable) _searchController.text = match.name;
+        widget.onChanged?.call(match);
+      }
+    }
   }
 
   @override

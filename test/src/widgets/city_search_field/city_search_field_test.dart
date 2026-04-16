@@ -163,7 +163,7 @@ void main() {
       expect(result, isNotNull);
       expect(result!.city.name, 'San Francisco');
       expect(result!.state.name, 'California');
-      expect(find.text('San Francisco, California'), findsOneWidget);
+      expect(find.text('San Francisco'), findsOneWidget);
     });
 
     testWidgets('empty query clears selection', (tester) async {

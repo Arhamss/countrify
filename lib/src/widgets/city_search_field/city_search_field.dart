@@ -221,7 +221,7 @@ class _CitySearchFieldState extends State<CitySearchField> {
   void _onItemSelected(CitySearchResult result) {
     _selecting = true;
     _removeOverlay();
-    _searchController.text = '${result.city.name}, ${result.state.name}';
+    _searchController.text = result.city.name;
     setState(() => _selected = result);
     widget.onChanged?.call(result);
     _selecting = false;
@@ -252,7 +252,7 @@ class _CitySearchFieldState extends State<CitySearchField> {
         if (city.id == widget.initialCityId) {
           if (!mounted) return;
           final result = (city: city, state: state);
-          _searchController.text = '${city.name}, ${state.name}';
+          _searchController.text = city.name;
           setState(() => _selected = result);
           widget.onChanged?.call(result);
           return;
