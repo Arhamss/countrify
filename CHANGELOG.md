@@ -1,3 +1,18 @@
+## 2.4.1
+
+### Fixed
+
+- **CitySearchField** — field text now shows just the city name after
+  selection instead of "City, State". The state is still available via the
+  `onChanged` callback's `CitySearchResult` record.
+- **City search matching** — `GeoRepository.searchCities()` now uses
+  `SearchNormalizer.foldAccents()` for accent-insensitive, whitespace-trimmed
+  matching (e.g. "sao" matches "S\u00e3o Paulo", "lodz" matches "\u0141\u00f3d\u017a"),
+  consistent with all other picker search.
+- **StateDropdownField** — `initialStateId` is now reactive. When it changes
+  via `didUpdateWidget`, the internal selection updates and `onChanged` fires
+  without requiring a full `countryIso2` change.
+
 ## 2.4.0
 
 Global city search with auto-state resolution, and focus box shadow support

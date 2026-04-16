@@ -614,7 +614,7 @@ CitySearchField(
 )
 ```
 
-The field displays results as "City, State" and the `onChanged` callback
+After selection the field shows the city name and the `onChanged` callback
 provides a `CitySearchResult` record containing both the `City` and its
 parent `CountryState`. City files are pre-loaded in the background on init
 for snappy search. Changing `countryIso2` clears the selection and
