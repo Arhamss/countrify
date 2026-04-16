@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:countrify/src/models/city.dart';
 import 'package:countrify/src/models/state.dart';
+import 'package:countrify/src/utils/search_normalizer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -113,7 +114,7 @@ class GeoRepository {
     required String query,
     int limit = 20,
   }) async {
-    final q = query.trim().toLowerCase();
+    final q = SearchNormalizer.foldAccents(query);
     if (q.isEmpty) return const [];
 
     final states = await statesOf(countryIso2);
@@ -135,7 +136,7 @@ class GeoRepository {
       for (var j = 0; j < batch.length; j++) {
         final state = batch[j];
         for (final city in cityLists[j]) {
-          if (city.name.toLowerCase().contains(q)) {
+          if (SearchNormalizer.foldAccents(city.name).contains(q)) {
             results.add((city: city, state: state));
           }
         }
@@ -146,8 +147,10 @@ class GeoRepository {
 
     // Sort: prefix matches first, then contains, each group alphabetical.
     results.sort((a, b) {
-      final aPrefix = a.city.name.toLowerCase().startsWith(q);
-      final bPrefix = b.city.name.toLowerCase().startsWith(q);
+      final aNorm = SearchNormalizer.foldAccents(a.city.name);
+      final bNorm = SearchNormalizer.foldAccents(b.city.name);
+      final aPrefix = aNorm.startsWith(q);
+      final bPrefix = bNorm.startsWith(q);
       if (aPrefix != bPrefix) return aPrefix ? -1 : 1;
       return a.city.name.compareTo(b.city.name);
     });
