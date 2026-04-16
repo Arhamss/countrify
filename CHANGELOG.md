@@ -1,7 +1,21 @@
-## 2.5.1
+## 2.5.0
+
+Name-based pre-fill for edit flows, overlay theming, and city name
+hydration.
 
 ### Added
 
+- **`CitySearchField.initialCityName`** (`String?`) — pre-fills the text
+  field with a city name without requiring a city ID. Resolves to a full
+  `CitySearchResult` via `searchCities` after preload so the matching city
+  appears selected in the overlay. When both `initialCityId` and
+  `initialCityName` are provided, the ID takes priority. Reactive via
+  `didUpdateWidget` when no ID is set.
+- **`StateDropdownField.initialStateName`** (`String?`) — pre-fills the
+  field and attempts to match a loaded state by name (case-insensitive).
+  When `initialStateId` is null and `initialStateName` is set, the field
+  matches against loaded states after hydration. ID-based matching always
+  takes priority. Reactive via `didUpdateWidget`.
 - **`GeoPickerTheme.itemSelectedNameTextStyle`** — text style for the
   primary label when a row is selected in `GeoSearchOverlay`. Falls back to
   `itemNameTextStyle` for unselected rows.
@@ -9,39 +23,6 @@
   row indicator. Takes precedence over `selectedIcon` when provided.
 - **`GeoPickerTheme.selectedIconSize`** — size of the default selected
   check icon. Defaults to 20 (was hardcoded at 16).
-
-### Fixed
-
-- **CitySearchField** — `initialCityName` now resolves to a full
-  `CitySearchResult` via `searchCities` after preload, so the matching city
-  appears selected in the overlay dropdown.
-
-## 2.5.0
-
-Name-based pre-fill for edit flows — populate fields from backend strings
-without needing IDs.
-
-### Added
-
-- **`CitySearchField.initialCityName`** (`String?`) — pre-fills the text
-  field with a city name without requiring a city ID. When both
-  `initialCityId` and `initialCityName` are provided, the ID takes priority.
-  Reactive via `didUpdateWidget` when no ID is set.
-- **`StateDropdownField.initialStateName`** (`String?`) — pre-fills the
-  field and attempts to match a loaded state by name (case-insensitive).
-  When `initialStateId` is null and `initialStateName` is set, the field
-  matches against loaded states after hydration. ID-based matching always
-  takes priority. Reactive via `didUpdateWidget`.
-
-### Edge cases handled
-
-- **ID + name both provided** — ID match takes priority; name is only used
-  as a fallback if no ID match is found.
-- **Name doesn't match any loaded state/city** — field shows the pre-filled
-  text (city) or placeholder (state), no crash or empty state.
-- **`didUpdateWidget` reactivity** — both fields react to external name
-  changes, but only when no ID is set and no selection has been made.
-- **Empty or null name** — silently ignored, no pre-fill.
 
 ## 2.4.1
 
